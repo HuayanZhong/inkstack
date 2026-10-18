@@ -34,9 +34,9 @@ pnpm install
 pnpm dev
 ```
 
-> 当前为骨架阶段：各包只有 `package.json`，尚无 `dev` / `build` 等脚本，
-> 运行对应命令会提示没有可执行任务。工具链随后按里程碑逐步接入。
-> 首个应用落地后重写本节。
+> 当前为骨架阶段：`apps/shell` 已能启动与构建，`apps/canvas`、`apps/gateway`、
+> `apps/bff` 仍只有 `package.json`。`pnpm dev` 会拉起 shell 与 contracts 的
+> 监听任务，访问 <http://localhost:3000>；其余应用按里程碑逐个接入。
 
 ## 文档
 

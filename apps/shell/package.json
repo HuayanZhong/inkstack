@@ -2,6 +2,26 @@
   "name": "@inkstack/shell",
   "version": "0.0.0",
   "private": true,
-  "description": "Next.js application shell that hosts the Inkstack canvas.",
-  "license": "ISC"
+  "description": "Next.js 应用外壳，承载墨栈的产品页面、布局与后续的画布嵌入，是用户访问的入口应用。",
+  "license": "ISC",
+  "type": "module",
+  "scripts": {
+    "dev": "next dev -p 3000",
+    "build": "next build",
+    "start": "next start -p 3000",
+    "lint": "oxlint --config ../../.oxlintrc.json --type-aware .",
+    "typecheck": "next typegen && tsc --noEmit"
+  },
+  "dependencies": {
+    "next": "catalog:runtime",
+    "react": "catalog:runtime",
+    "react-dom": "catalog:runtime"
+  },
+  "devDependencies": {
+    "@inkstack/tsconfig": "workspace:*",
+    "@types/node": "catalog:dev",
+    "@types/react": "catalog:dev",
+    "@types/react-dom": "catalog:dev",
+    "typescript": "catalog:toolchain"
+  }
 }

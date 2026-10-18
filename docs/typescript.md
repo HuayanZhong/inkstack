@@ -42,6 +42,8 @@ base.json            语言与严格性，不直接使用
 - **`nest.json` 关闭 `strictPropertyInitialization`**。Nest 的构造器注入与 DTO 在该选项下噪音过大；这是 Nest 平面专属取舍，不影响其他平面。
 - **`next.json` 不设置 `include` / `exclude`**。Next 会改写 `apps/shell/tsconfig.json` 并加入 `next-env.d.ts`、`.next/types/**`；应用负责 `paths` 与 `include`。
 - **`next.json` 使用 `types: ["node"]`**。服务端代码需要 `process` 等全局类型；代价是客户端文件也能看到 Node 全局，当前接受。
+- **Next 应用在应用级关闭 `noUnusedLocals` / `noUnusedParameters`**（见 `apps/shell/tsconfig.json`）。Next 生成的 `.next/**/validator.ts` 自带未使用的导入与类型别名，开启后 `typecheck` 会在跑过 `dev` 之后失败；未使用检查由 oxlint 的 `no-unused-vars` 承担。
+- **Next 应用把 `tsBuildInfoFile` 指向 `.next/cache/`**，避免增量类型检查的缓存文件落在应用根目录。
 - **`library.json` 只负责声明文件与 sourcemap**。暂不设置 `composite`；project references 等跨包 `tsc -b` 有真实收益时再引入。
 - **测试与构建分文件**。有测试后，`tsconfig.json` 纳入测试做类型检查，`tsconfig.build.json` 只 emit `src`；当前没有测试，不预建。
 - **不引入根 solution tsconfig**。Turborepo 按包执行 `typecheck` / `build`；跨包顺序由 `dependsOn: ["^build"]` 保证。

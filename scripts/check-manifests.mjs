@@ -21,11 +21,64 @@ function readJson(relativePath) {
   return JSON.parse(readFileSync(resolve(root, relativePath), 'utf8'))
 }
 
+// 正则无法区分字符串与注释：tsconfig 的 "**/*.ts" 会被误当成块注释，必须按字符扫描。
+function stripJsonComments(text) {
+  let result = ''
+  let inString = false
+  let inLineComment = false
+  let inBlockComment = false
+
+  for (let index = 0; index < text.length; index += 1) {
+    const current = text[index]
+    const next = text[index + 1]
+
+    if (inLineComment) {
+      if (current === '\n') {
+        inLineComment = false
+        result += current
+      }
+      continue
+    }
+    if (inBlockComment) {
+      if (current === '*' && next === '/') {
+        inBlockComment = false
+        index += 1
+      }
+      continue
+    }
+    if (inString) {
+      result += current
+      if (current === '\\') {
+        result += text[index + 1] ?? ''
+        index += 1
+      } else if (current === '"') {
+        inString = false
+      }
+      continue
+    }
+    if (current === '"') {
+      inString = true
+      result += current
+      continue
+    }
+    if (current === '/' && next === '/') {
+      inLineComment = true
+      index += 1
+      continue
+    }
+    if (current === '/' && next === '*') {
+      inBlockComment = true
+      index += 1
+      continue
+    }
+    result += current
+  }
+
+  return result
+}
+
 function readJsonc(relativePath) {
-  const text = readFileSync(resolve(root, relativePath), 'utf8')
-    .replace(/\/\*[\s\S]*?\*\//g, '')
-    .replace(/^\s*\/\/.*$/gm, '')
-  return JSON.parse(text)
+  return JSON.parse(stripJsonComments(readFileSync(resolve(root, relativePath), 'utf8')))
 }
 
 function collectManifests() {
