@@ -1,1 +1,1 @@
-export type ActionId = string;
+export type ActionId = string

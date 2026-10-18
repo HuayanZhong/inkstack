@@ -8,12 +8,12 @@
 
 四张图分别回答四个问题：
 
-| 图 | 回答的问题 | 图片 | 交互版 | 源文件 |
-|---|---|---|---|---|
-| 业务架构 | 谁在用、做什么、需要哪些能力与资产 | `images/business-architecture.png` | `interactive/business-architecture.html` | `source/business-architecture.json` |
-| 技术栈架构 | 按层分解的技术栈（含微前端、BFF、Supabase、AI SDK、多 Agent 编排、CI/CD 工具），连线表示归属 | `images/tech-stack-architecture.png` | `interactive/tech-stack-architecture.html` | `source/tech-stack-architecture.json` |
-| 运行时架构 | 三条主流程、BFF 边界，以及谁写谁执行 | `images/combined-architecture.png` | `interactive/combined-architecture.html` | `source/combined-architecture.json` |
-| CI/CD 流水线 | 从 PR 到生产的质量门禁、部署环境与回滚 | `images/cicd-workflow.png` | `interactive/cicd-workflow.html` | `source/cicd-workflow.json` |
+| 图           | 回答的问题                                                                                   | 图片                                 | 交互版                                     | 源文件                                |
+| ------------ | -------------------------------------------------------------------------------------------- | ------------------------------------ | ------------------------------------------ | ------------------------------------- |
+| 业务架构     | 谁在用、做什么、需要哪些能力与资产                                                           | `images/business-architecture.png`   | `interactive/business-architecture.html`   | `source/business-architecture.json`   |
+| 技术栈架构   | 按层分解的技术栈（含微前端、BFF、Supabase、AI SDK、多 Agent 编排、CI/CD 工具），连线表示归属 | `images/tech-stack-architecture.png` | `interactive/tech-stack-architecture.html` | `source/tech-stack-architecture.json` |
+| 运行时架构   | 三条主流程、BFF 边界，以及谁写谁执行                                                         | `images/combined-architecture.png`   | `interactive/combined-architecture.html`   | `source/combined-architecture.json`   |
+| CI/CD 流水线 | 从 PR 到生产的质量门禁、部署环境与回滚                                                       | `images/cicd-workflow.png`           | `interactive/cicd-workflow.html`           | `source/cicd-workflow.json`           |
 
 ## 目录
 

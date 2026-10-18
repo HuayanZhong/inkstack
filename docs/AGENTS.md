@@ -2,16 +2,17 @@
 
 ## 权威归属
 
-| 事实 | 权威 | 性质 |
-|---|---|---|
-| 行为要求 | `openspec/specs/` | 规范 |
-| Agent 规则 | `AGENTS.md` 手写区、`.claude/rules/` | 规范 |
-| 架构决策 | `DESIGN-RECORD.md` | 规范 + 历史 |
-| 图源 | `docs/architecture/source/*.json` | 规范 |
-| 状态与目录 | `README.md` | 信息性 |
-| 代码现实 | 源码 + 测试 | 事实 |
+| 事实                  | 权威                                              | 性质                                       |
+| --------------------- | ------------------------------------------------- | ------------------------------------------ |
+| 行为要求              | `openspec/specs/`                                 | 规范                                       |
+| Agent 规则            | `AGENTS.md` 手写区、`.claude/rules/`              | 规范                                       |
+| 架构决策              | `DESIGN-RECORD.md`                                | 规范 + 历史                                |
+| 图源                  | `docs/architecture/source/*.json`                 | 规范                                       |
+| 状态与目录            | `README.md`                                       | 信息性                                     |
+| 代码现实              | 源码 + 测试                                       | 事实                                       |
 | 生成物（含 OpenWiki） | `openwiki/`、`interactive/*.html`、`images/*.png` | 派生、非规范、可选上下文；未知项是验证缺口 |
-| 包元数据与版本 | `docs/package-metadata.md` | 规范 |
+| 包元数据与版本        | `docs/package-metadata.md`                        | 规范                                       |
+| 工具链配置            | `docs/toolchain.md`                               | 规范                                       |
 
 ## 规则
 

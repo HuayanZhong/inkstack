@@ -7,18 +7,27 @@ catalogs:
   # 精确 pin：影响构建或类型，升级时只改这里。
   toolchain:
     '@fission-ai/openspec': 1.14.3
+    oxfmt: 0.73.0
+    oxlint: 1.88.0
+    oxlint-tsgolint: 7.0.2004
     typescript: 6.0.3
   # 开发工具与类型包，允许 minor/patch 浮动。
   dev:
-    "@commitlint/config-conventional": ^21.2.3
+    '@commitlint/config-conventional': ^21.2.3
     '@types/node': ^24.19.2
     commitlint: ^21.2.3
+    eslint-plugin-turbo: ^2.11.9
     husky: ^9.1.7
     turbo: ^2.11.9
     yaml: ^2.9.1
   # 运行时库：Next / tldraw / Nest / AI SDK 等；首个依赖进入时创建。
   # runtime:
   #   next: ^16
+
+# oxlint 提供 ESLint v9 兼容的插件运行时；eslint-plugin-turbo 只在类型层引用 eslint。
+peerDependencyRules:
+  ignoreMissing:
+    - eslint
 
 # 依赖含 install / postinstall 脚本时（如 esbuild、sharp），
 # 运行 `pnpm approve-builds`，pnpm 11+ 会把包名写入这里。

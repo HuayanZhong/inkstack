@@ -44,7 +44,8 @@ const depFields = ['dependencies', 'devDependencies', 'peerDependencies', 'optio
 
 for (const { path, json, isRoot } of manifests) {
   if (isRoot) {
-    if (json.name !== 'inkstack') fail(path, `root name must be "inkstack", got ${JSON.stringify(json.name)}`)
+    if (json.name !== 'inkstack')
+      fail(path, `root name must be "inkstack", got ${JSON.stringify(json.name)}`)
   } else if (!/^@inkstack\/[a-z0-9-]+$/.test(json.name ?? '')) {
     fail(path, `name must match @inkstack/<kebab-case>, got ${JSON.stringify(json.name)}`)
   }
@@ -61,18 +62,25 @@ for (const { path, json, isRoot } of manifests) {
     if (description === json.name) fail(path, 'description must not repeat the package name')
   }
 
-  if (json.license !== 'ISC') fail(path, `license must be "ISC", got ${JSON.stringify(json.license)}`)
+  if (json.license !== 'ISC')
+    fail(path, `license must be "ISC", got ${JSON.stringify(json.license)}`)
 
   for (const field of depFields) {
     for (const [dependency, specifier] of Object.entries(json[field] ?? {})) {
       if (dependency.startsWith('@inkstack/')) {
         if (specifier !== 'workspace:*') {
-          fail(path, `${field}.${dependency} must use "workspace:*", got ${JSON.stringify(specifier)}`)
+          fail(
+            path,
+            `${field}.${dependency} must use "workspace:*", got ${JSON.stringify(specifier)}`,
+          )
         }
         continue
       }
       if (typeof specifier !== 'string' || !specifier.startsWith('catalog:')) {
-        fail(path, `${field}.${dependency} must use catalog:<name>, got ${JSON.stringify(specifier)}`)
+        fail(
+          path,
+          `${field}.${dependency} must use catalog:<name>, got ${JSON.stringify(specifier)}`,
+        )
         continue
       }
       const catalog = specifier.slice('catalog:'.length)
@@ -83,7 +91,10 @@ for (const { path, json, isRoot } of manifests) {
   }
 
   if (!isRoot && json.version !== '0.0.0') {
-    warn(path, `private package version is ${JSON.stringify(json.version)}; expected 0.0.0 until a release process exists`)
+    warn(
+      path,
+      `private package version is ${JSON.stringify(json.version)}; expected 0.0.0 until a release process exists`,
+    )
   }
 
   if (isRoot) {
@@ -99,16 +110,22 @@ for (const { path, json, isRoot } of manifests) {
 
 for (const [name, specifier] of Object.entries(catalogs.toolchain ?? {})) {
   if (typeof specifier !== 'string' || !/^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/.test(specifier)) {
-    fail('pnpm-workspace.yaml', `toolchain.${name} must be an exact version, got ${JSON.stringify(specifier)}`)
+    fail(
+      'pnpm-workspace.yaml',
+      `toolchain.${name} must be an exact version, got ${JSON.stringify(specifier)}`,
+    )
   }
 }
 
 const rootJson = readJson('package.json')
-const nvmrc = existsSync(resolve(root, '.nvmrc')) ? readFileSync(resolve(root, '.nvmrc'), 'utf8').trim() : ''
+const nvmrc = existsSync(resolve(root, '.nvmrc'))
+  ? readFileSync(resolve(root, '.nvmrc'), 'utf8').trim()
+  : ''
 const nodeLowerBound = /(?:>=|\^|~)?\s*(\d+\.\d+\.\d+)/.exec(rootJson.engines?.node ?? '')?.[1]
 
 if (!nvmrc) fail('.nvmrc', 'file is missing')
-if (!nodeLowerBound) fail('package.json', 'engines.node must declare a concrete lower bound like >=24.14.1')
+if (!nodeLowerBound)
+  fail('package.json', 'engines.node must declare a concrete lower bound like >=24.14.1')
 if (nvmrc && nodeLowerBound && nvmrc !== nodeLowerBound) {
   fail('.nvmrc', `version ${nvmrc} does not match engines.node lower bound ${nodeLowerBound}`)
 }
@@ -118,14 +135,21 @@ const devEnginesPackageManager = rootJson.devEngines?.packageManager?.version
 if (!packageManager) {
   fail('package.json', 'packageManager must be "pnpm@<version>"')
 } else if (packageManager !== devEnginesPackageManager) {
-  fail('package.json', `packageManager ${packageManager} does not match devEngines.packageManager.version ${devEnginesPackageManager}`)
+  fail(
+    'package.json',
+    `packageManager ${packageManager} does not match devEngines.packageManager.version ${devEnginesPackageManager}`,
+  )
 }
 
 for (const warning of warnings) console.warn(`warning: ${warning}`)
 if (errors.length > 0) {
-  console.error(`check-manifests: ${manifests.length} manifest(s) checked, ${errors.length} error(s), ${warnings.length} warning(s)`)
+  console.error(
+    `check-manifests: ${manifests.length} manifest(s) checked, ${errors.length} error(s), ${warnings.length} warning(s)`,
+  )
   for (const error of errors) console.error(`  error: ${error}`)
   process.exit(1)
 }
 
-console.log(`check-manifests: ${manifests.length} manifest(s) checked, 0 errors, ${warnings.length} warning(s)`)
+console.log(
+  `check-manifests: ${manifests.length} manifest(s) checked, 0 errors, ${warnings.length} warning(s)`,
+)

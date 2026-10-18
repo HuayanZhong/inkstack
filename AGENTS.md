@@ -37,6 +37,7 @@ pnpm lint:commit    # commitlint，从 stdin 读取提交信息
 - pnpm 11+ 的构建脚本白名单是 `allowBuilds`；遇到 `ERR_PNPM_IGNORED_BUILDS` 时用 `pnpm approve-builds`。
 - Node `>=24.14.1`、pnpm `12.14.0`、TypeScript `6.0.3` 已固定（catalog `toolchain` 精确 pin）。不要升级到 TS 7：Next.js 16 的类型检查依赖 `typescript/lib/typescript.js`，该文件在 TS 7 已移除。`@types/node` 的主版本跟随 Node 主版本。
 - 包内 `tsconfig.json` 继承 `@inkstack/config` 的 `tsconfig.<env>.json`，并在 devDependencies 声明 `"@inkstack/config": "workspace:*"`。Turborepo 任务定义在 `turbo.json`，`ui` 固定为 `tui`；新增包要补 `dev`、`build`、`lint`、`typecheck` scripts。
+- format 与 lint 由根目录的 oxfmt / oxlint 负责：`pnpm format`、`pnpm format:check`、`pnpm lint`。环境差异用 `.oxlintrc.json` 的 `overrides` 表达，不要在包内新建规则文件；规则见 [`docs/toolchain.md`](docs/toolchain.md)。
 
 ## OpenSpec
 

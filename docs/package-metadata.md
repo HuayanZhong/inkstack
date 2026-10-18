@@ -4,19 +4,19 @@
 
 ## 三层版本
 
-| 层 | 位置 | 当前策略 |
-|---|---|---|
-| 发布版本 | `package.json` 的 `version` | 私有包统一 `0.0.0`，不手动 bump；发布流程属于 CD 里程碑 |
-| 依赖版本 | `pnpm-workspace.yaml` catalog + `pnpm-lock.yaml` | 外部依赖只写 `catalog:*`；内部依赖只写 `workspace:*` |
-| 工具链版本 | `.nvmrc`、`engines`、`packageManager`、`devEngines` | 多处声明，必须一致；由 `pnpm check:manifests` 校验 |
+| 层         | 位置                                                | 当前策略                                                |
+| ---------- | --------------------------------------------------- | ------------------------------------------------------- |
+| 发布版本   | `package.json` 的 `version`                         | 私有包统一 `0.0.0`，不手动 bump；发布流程属于 CD 里程碑 |
+| 依赖版本   | `pnpm-workspace.yaml` catalog + `pnpm-lock.yaml`    | 外部依赖只写 `catalog:*`；内部依赖只写 `workspace:*`    |
+| 工具链版本 | `.nvmrc`、`engines`、`packageManager`、`devEngines` | 多处声明，必须一致；由 `pnpm check:manifests` 校验      |
 
 ## Catalog 分类
 
-| catalog | 内容 | 范围 |
-|---|---|---|
-| `toolchain` | TypeScript、openspec | 精确 pin |
-| `dev` | turbo、commitlint、husky、`@types/node`、yaml 等开发工具与类型包 | 允许 `^`；`@types/node` 主版本跟随 Node |
-| `runtime` | Next、React、tldraw、Nest、AI SDK 等运行时依赖；首个依赖进入时创建 | 允许 `^` |
+| catalog     | 内容                                                               | 范围                                    |
+| ----------- | ------------------------------------------------------------------ | --------------------------------------- |
+| `toolchain` | TypeScript、openspec                                               | 精确 pin                                |
+| `dev`       | turbo、commitlint、husky、`@types/node`、yaml 等开发工具与类型包   | 允许 `^`；`@types/node` 主版本跟随 Node |
+| `runtime`   | Next、React、tldraw、Nest、AI SDK 等运行时依赖；首个依赖进入时创建 | 允许 `^`                                |
 
 安装示例：
 
@@ -27,16 +27,16 @@ pnpm add --filter @inkstack/<pkg> --save-catalog-name runtime <pkg>
 
 ## 字段标准
 
-| 字段 | 根 | app（私有） | package（私有） |
-|---|---|---|---|
-| `name` | `inkstack` | `@inkstack/*` | `@inkstack/*` |
-| `version` | 当前 `0.0.1`，暂不修改 | `0.0.0` | `0.0.0` |
-| `private` | `true` | `true` | `true` |
-| `description` | 必填 | 必填 | 必填 |
-| `license` | `ISC` | `ISC` | `ISC` |
-| `type` | `module` | 实现时决定 | `@inkstack/contracts` 为 `commonjs`；config 暂不声明 |
-| `exports` / `files` | — | — | 可被导入时必填 |
-| `scripts` | 必填 | 实现时补 | 有代码时补 |
+| 字段                | 根         | app（私有）   | package（私有）                                      |
+| ------------------- | ---------- | ------------- | ---------------------------------------------------- |
+| `name`              | `inkstack` | `@inkstack/*` | `@inkstack/*`                                        |
+| `version`           | `0.0.0`    | `0.0.0`       | `0.0.0`                                              |
+| `private`           | `true`     | `true`        | `true`                                               |
+| `description`       | 必填       | 必填          | 必填                                                 |
+| `license`           | `ISC`      | `ISC`         | `ISC`                                                |
+| `type`              | `module`   | 实现时决定    | `@inkstack/contracts` 为 `commonjs`；config 暂不声明 |
+| `exports` / `files` | —          | —             | 可被导入时必填                                       |
+| `scripts`           | 必填       | 实现时补      | 有代码时补                                           |
 
 ## Description 规则
 
@@ -61,7 +61,7 @@ pnpm add --filter @inkstack/<pkg> --save-catalog-name runtime <pkg>
 
 ## 非目标
 
-- tsconfig、lint、format 如何拆包、命名和分发。
+- tsconfig 的进一步拆分与对外分发。
 - 发布版本、Changesets、changelog、git tag、`publishConfig`。
 - 字段顺序、`keywords`、`author`、`repository`、包级 `engines`。
 - CI / pre-commit 接入与 OpenWiki。

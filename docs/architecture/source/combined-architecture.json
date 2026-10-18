@@ -9,25 +9,116 @@
     "quality_profile": "showcase"
   },
   "components": [
-    { "id": "chat", "type": "frontend", "label": "Chat Panel", "sublabel": "内嵌 AI 对话", "pos": [40, 40], "size": [180, 64] },
-    { "id": "claude", "type": "cloud", "label": "Claude Code", "sublabel": "外部 Agent", "pos": [40, 170], "size": [180, 64] },
-    { "id": "coze", "type": "cloud", "label": "Coze 平台", "sublabel": "未来 MCP Client", "pos": [40, 300], "size": [180, 64] },
+    {
+      "id": "chat",
+      "type": "frontend",
+      "label": "Chat Panel",
+      "sublabel": "内嵌 AI 对话",
+      "pos": [40, 40],
+      "size": [180, 64]
+    },
+    {
+      "id": "claude",
+      "type": "cloud",
+      "label": "Claude Code",
+      "sublabel": "外部 Agent",
+      "pos": [40, 170],
+      "size": [180, 64]
+    },
+    {
+      "id": "coze",
+      "type": "cloud",
+      "label": "Coze 平台",
+      "sublabel": "未来 MCP Client",
+      "pos": [40, 300],
+      "size": [180, 64]
+    },
 
-    { "id": "bff", "type": "backend", "label": "BFF 层 / Frontend API", "sublabel": "聚合 / Auth / SSE", "pos": [296, 40], "size": [180, 64] },
-    { "id": "agent", "type": "backend", "label": "Agent Service", "sublabel": "LangGraph 编排 / 流式", "pos": [260, 140], "size": [180, 64] },
-    { "id": "mcp", "type": "backend", "label": "MCP Adapter", "sublabel": "stdio / HTTP", "pos": [260, 300], "size": [180, 64] },
+    {
+      "id": "bff",
+      "type": "backend",
+      "label": "BFF 层 / Frontend API",
+      "sublabel": "聚合 / Auth / SSE",
+      "pos": [296, 40],
+      "size": [180, 64]
+    },
+    {
+      "id": "agent",
+      "type": "backend",
+      "label": "Agent Service",
+      "sublabel": "LangGraph 编排 / 流式",
+      "pos": [260, 140],
+      "size": [180, 64]
+    },
+    {
+      "id": "mcp",
+      "type": "backend",
+      "label": "MCP Adapter",
+      "sublabel": "stdio / HTTP",
+      "pos": [260, 300],
+      "size": [180, 64]
+    },
 
-    { "id": "gw", "type": "backend", "label": "Gateway", "sublabel": "Action Queue / 单一序列器", "pos": [500, 180], "size": [220, 80] },
+    {
+      "id": "gw",
+      "type": "backend",
+      "label": "Gateway",
+      "sublabel": "Action Queue / 单一序列器",
+      "pos": [500, 180],
+      "size": [220, 80]
+    },
 
-    { "id": "human", "type": "external", "label": "人工编辑", "sublabel": "拖拽 / 属性面板", "pos": [860, 30], "size": [140, 64] },
-    { "id": "canvas", "type": "frontend", "label": "Canvas / tldraw", "sublabel": "单一执行器", "pos": [780, 140], "size": [220, 72] },
-    { "id": "codegen", "type": "backend", "label": "Codegen Service", "sublabel": "IR → React + Tailwind", "pos": [510, 340], "size": [200, 64] },
+    {
+      "id": "human",
+      "type": "external",
+      "label": "人工编辑",
+      "sublabel": "拖拽 / 属性面板",
+      "pos": [860, 30],
+      "size": [140, 64]
+    },
+    {
+      "id": "canvas",
+      "type": "frontend",
+      "label": "Canvas / tldraw",
+      "sublabel": "单一执行器",
+      "pos": [780, 140],
+      "size": [220, 72]
+    },
+    {
+      "id": "codegen",
+      "type": "backend",
+      "label": "Codegen Service",
+      "sublabel": "IR → React + Tailwind",
+      "pos": [510, 340],
+      "size": [200, 64]
+    },
 
-    { "id": "json", "type": "database", "label": "design.json", "sublabel": "Git 中的设计快照", "pos": [1040, 30], "size": [160, 64] },
-    { "id": "code", "type": "frontend", "label": "代码产物", "sublabel": "预览 / 导出", "pos": [510, 460], "size": [200, 64] }
+    {
+      "id": "json",
+      "type": "database",
+      "label": "design.json",
+      "sublabel": "Git 中的设计快照",
+      "pos": [1040, 30],
+      "size": [160, 64]
+    },
+    {
+      "id": "code",
+      "type": "frontend",
+      "label": "代码产物",
+      "sublabel": "预览 / 导出",
+      "pos": [510, 460],
+      "size": [200, 64]
+    }
   ],
   "connections": [
-    { "from": "chat", "to": "bff", "label": "SSE / HTTP", "variant": "emphasis", "fromSide": "right", "toSide": "left" },
+    {
+      "from": "chat",
+      "to": "bff",
+      "label": "SSE / HTTP",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left"
+    },
     { "from": "bff", "to": "agent", "label": "聚合 / 流式", "fromSide": "bottom", "toSide": "top" },
     { "from": "bff", "to": "gw", "label": "REST / WS", "fromSide": "bottom", "toSide": "top" },
     { "from": "claude", "to": "mcp", "label": "MCP", "variant": "security" },
@@ -35,9 +126,38 @@
     { "from": "human", "to": "canvas", "label": "操作", "fromSide": "bottom", "toSide": "top" },
     { "from": "agent", "to": "gw", "label": "actions", "variant": "emphasis" },
     { "from": "mcp", "to": "gw", "label": "HTTP", "variant": "emphasis" },
-    { "from": "gw", "to": "canvas", "label": "WS apply", "variant": "emphasis", "fromSide": "right", "toSide": "left" },
-    { "from": "canvas", "to": "gw", "label": "ack + snapshot", "variant": "dashed", "fromSide": "bottom", "toSide": "bottom", "via": [[890, 300], [610, 300]] },
-    { "from": "gw", "to": "json", "label": "持久化", "variant": "dashed", "fromSide": "top", "toSide": "top", "via": [[610, 10], [1120, 10]] },
+    {
+      "from": "gw",
+      "to": "canvas",
+      "label": "WS apply",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "canvas",
+      "to": "gw",
+      "label": "ack + snapshot",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "bottom",
+      "via": [
+        [890, 300],
+        [610, 300]
+      ]
+    },
+    {
+      "from": "gw",
+      "to": "json",
+      "label": "持久化",
+      "variant": "dashed",
+      "fromSide": "top",
+      "toSide": "top",
+      "via": [
+        [610, 10],
+        [1120, 10]
+      ]
+    },
     { "from": "gw", "to": "codegen", "label": "TCP / HTTP", "fromSide": "bottom", "toSide": "top" },
     { "from": "codegen", "to": "code", "label": "生成", "variant": "emphasis" }
   ],

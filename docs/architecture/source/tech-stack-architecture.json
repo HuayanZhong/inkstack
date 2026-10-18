@@ -18,7 +18,12 @@
     { "id": "access", "label": "接入层 / Access", "parent": "inkstack" },
     { "id": "shell", "label": "Next.js Shell", "sublabel": "三栏布局", "parent": "access" },
     { "id": "canvas_app", "label": "Canvas (tldraw)", "sublabel": "画布应用", "parent": "access" },
-    { "id": "mcp_client", "label": "MCP Client", "sublabel": "Claude Code / 平台", "parent": "access" },
+    {
+      "id": "mcp_client",
+      "label": "MCP Client",
+      "sublabel": "Claude Code / 平台",
+      "parent": "access"
+    },
 
     { "id": "frontend", "label": "前端技术 / Frontend", "parent": "inkstack" },
     { "id": "react", "label": "React", "parent": "frontend" },
@@ -27,17 +32,52 @@
     { "id": "tldraw", "label": "tldraw", "parent": "frontend" },
     { "id": "tailwind", "label": "Tailwind", "parent": "frontend" },
     { "id": "radix", "label": "Radix", "parent": "frontend" },
-    { "id": "state", "label": "Zustand / Context", "sublabel": "presence / chat", "parent": "frontend" },
+    {
+      "id": "state",
+      "label": "Zustand / Context",
+      "sublabel": "presence / chat",
+      "parent": "frontend"
+    },
 
     { "id": "microfrontend", "label": "微前端 / Module Federation（候选）", "parent": "inkstack" },
-    { "id": "mf_host", "label": "Next.js Shell (Host)", "sublabel": "路由与布局", "parent": "microfrontend" },
-    { "id": "mf_remote", "label": "Canvas Remote", "sublabel": "Vite + tldraw", "parent": "microfrontend" },
-    { "id": "mf_shared", "label": "Shared React / tldraw", "sublabel": "单例依赖", "parent": "microfrontend" },
+    {
+      "id": "mf_host",
+      "label": "Next.js Shell (Host)",
+      "sublabel": "路由与布局",
+      "parent": "microfrontend"
+    },
+    {
+      "id": "mf_remote",
+      "label": "Canvas Remote",
+      "sublabel": "Vite + tldraw",
+      "parent": "microfrontend"
+    },
+    {
+      "id": "mf_shared",
+      "label": "Shared React / tldraw",
+      "sublabel": "单例依赖",
+      "parent": "microfrontend"
+    },
 
     { "id": "bff_layer", "label": "BFF 层 / Frontend API", "parent": "inkstack" },
-    { "id": "bff_service", "label": "BFF Service", "sublabel": "NestJS / Next Route Handlers", "parent": "bff_layer" },
-    { "id": "bff_auth", "label": "Auth & Session", "sublabel": "Supabase Auth", "parent": "bff_layer" },
-    { "id": "bff_agg", "label": "Aggregation & SSE", "sublabel": "chat / export / upload", "parent": "bff_layer" },
+    {
+      "id": "bff_service",
+      "label": "BFF Service",
+      "sublabel": "NestJS / Next Route Handlers",
+      "parent": "bff_layer"
+    },
+    {
+      "id": "bff_auth",
+      "label": "Auth & Session",
+      "sublabel": "Supabase Auth",
+      "parent": "bff_layer"
+    },
+    {
+      "id": "bff_agg",
+      "label": "Aggregation & SSE",
+      "sublabel": "chat / export / upload",
+      "parent": "bff_layer"
+    },
 
     { "id": "protocol", "label": "协议层 / Protocols", "parent": "inkstack" },
     { "id": "http", "label": "HTTP / REST", "parent": "protocol" },
@@ -45,25 +85,65 @@
     { "id": "mcp_proto", "label": "MCP stdio / HTTP", "parent": "protocol" },
 
     { "id": "services", "label": "后端服务 / Backend Services", "parent": "inkstack" },
-    { "id": "gateway", "label": "Gateway", "sublabel": "HTTP + WS + 动作队列", "parent": "services" },
-    { "id": "agent", "label": "Agent Service", "sublabel": "LangGraph 多 Agent 编排", "parent": "services" },
+    {
+      "id": "gateway",
+      "label": "Gateway",
+      "sublabel": "HTTP + WS + 动作队列",
+      "parent": "services"
+    },
+    {
+      "id": "agent",
+      "label": "Agent Service",
+      "sublabel": "LangGraph 多 Agent 编排",
+      "parent": "services"
+    },
     { "id": "codegen", "label": "Codegen Service", "sublabel": "IR → 代码", "parent": "services" },
     { "id": "mcp_adapter", "label": "MCP Adapter", "sublabel": "工具协议", "parent": "services" },
     { "id": "tcp", "label": "Nest TCP / Redis（候选）", "parent": "services" },
-    { "id": "supabase", "label": "Supabase（BaaS）", "sublabel": "Postgres / Auth / Storage / Realtime", "parent": "services" },
+    {
+      "id": "supabase",
+      "label": "Supabase（BaaS）",
+      "sublabel": "Postgres / Auth / Storage / Realtime",
+      "parent": "services"
+    },
 
     { "id": "data", "label": "数据层 / Data", "parent": "inkstack" },
-    { "id": "design_json", "label": "design.json", "sublabel": "tldraw snapshot", "parent": "data" },
-    { "id": "sqlite", "label": "SQLite + Drizzle", "sublabel": "本地元数据 / action log", "parent": "data" },
+    {
+      "id": "design_json",
+      "label": "design.json",
+      "sublabel": "tldraw snapshot",
+      "parent": "data"
+    },
+    {
+      "id": "sqlite",
+      "label": "SQLite + Drizzle",
+      "sublabel": "本地元数据 / action log",
+      "parent": "data"
+    },
     { "id": "git", "label": "Git", "sublabel": "版本与评审", "parent": "data" },
 
     { "id": "ai", "label": "AI 层 / AI", "parent": "inkstack" },
     { "id": "ai_sdk", "label": "Vercel AI SDK", "sublabel": "模型调用 / 流式", "parent": "ai" },
     { "id": "anthropic", "label": "Anthropic API", "sublabel": "Claude 模型调用", "parent": "ai" },
-    { "id": "langgraph", "label": "LangGraph.js", "sublabel": "多 Agent 图 / 状态 / HITL", "parent": "ai" },
-    { "id": "deepagents", "label": "Deep Agents（候选）", "sublabel": "规划 / 子 Agent / 基于 LangGraph", "parent": "ai" },
+    {
+      "id": "langgraph",
+      "label": "LangGraph.js",
+      "sublabel": "多 Agent 图 / 状态 / HITL",
+      "parent": "ai"
+    },
+    {
+      "id": "deepagents",
+      "label": "Deep Agents（候选）",
+      "sublabel": "规划 / 子 Agent / 基于 LangGraph",
+      "parent": "ai"
+    },
     { "id": "mastra", "label": "Mastra（备选）", "sublabel": "TS-native workflow", "parent": "ai" },
-    { "id": "agent_loop", "label": "tldraw Agent Kit", "sublabel": "画布 action / 上下文", "parent": "ai" },
+    {
+      "id": "agent_loop",
+      "label": "tldraw Agent Kit",
+      "sublabel": "画布 action / 上下文",
+      "parent": "ai"
+    },
     { "id": "context", "label": "Screenshot + Shape", "sublabel": "画布上下文", "parent": "ai" },
 
     { "id": "engineering", "label": "工程化 / Engineering", "parent": "inkstack" },
@@ -72,8 +152,18 @@
     { "id": "vitest", "label": "Vitest", "parent": "engineering" },
     { "id": "playwright", "label": "Playwright", "parent": "engineering" },
     { "id": "docker", "label": "Docker Compose（候选）", "parent": "engineering" },
-    { "id": "gha", "label": "GitHub Actions", "sublabel": "lint / test / build / deploy", "parent": "engineering" },
-    { "id": "changesets", "label": "Changesets", "sublabel": "版本 / changelog", "parent": "engineering" },
+    {
+      "id": "gha",
+      "label": "GitHub Actions",
+      "sublabel": "lint / test / build / deploy",
+      "parent": "engineering"
+    },
+    {
+      "id": "changesets",
+      "label": "Changesets",
+      "sublabel": "版本 / changelog",
+      "parent": "engineering"
+    },
     { "id": "sentry", "label": "Sentry", "sublabel": "错误与性能监控", "parent": "engineering" }
   ],
   "cards": [

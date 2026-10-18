@@ -1,0 +1,67 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "options": {
+    "typeAware": true,
+    "reportUnusedDisableDirectives": "warn"
+  },
+  "env": {
+    "node": true
+  },
+  "ignorePatterns": [
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/.next/**",
+    "**/coverage/**",
+    "openspec/changes/archive/**"
+  ],
+  "rules": {
+    "no-var": "error",
+    "prefer-const": "error",
+    "no-unused-vars": [
+      "error",
+      {
+        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_",
+        "caughtErrorsIgnorePattern": "^_"
+      }
+    ],
+    "typescript/no-floating-promises": "error",
+    "typescript/no-misused-promises": "error",
+    "typescript/no-explicit-any": "error",
+    "typescript/consistent-type-imports": "error"
+  },
+  "overrides": [
+    {
+      "files": ["apps/shell/**/*.{ts,tsx}"],
+      "plugins": ["typescript", "unicorn", "oxc", "react", "jsx-a11y", "nextjs"],
+      "env": {
+        "browser": true
+      }
+    },
+    {
+      "files": ["apps/canvas/**/*.{ts,tsx}"],
+      "plugins": ["typescript", "unicorn", "oxc", "react", "jsx-a11y"],
+      "env": {
+        "browser": true
+      }
+    },
+    {
+      "files": [
+        "apps/gateway/**/*.{ts,tsx}",
+        "apps/bff/**/*.{ts,tsx}",
+        "packages/ai-*/**/*.{ts,tsx}"
+      ],
+      "env": {
+        "node": true
+      }
+    },
+    {
+      "files": ["apps/gateway/**/*.{ts,tsx}"],
+      "rules": {
+        "typescript/no-extraneous-class": "off",
+        "no-useless-constructor": "off",
+        "typescript/consistent-type-imports": "off"
+      }
+    }
+  ]
+}

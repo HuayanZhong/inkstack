@@ -1,32 +1,47 @@
 {
   "name": "inkstack",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "private": true,
   "description": "Inkstack — an AI design-to-code canvas with agent pen control, manual editing, and deterministic code generation.",
-  "scripts": {
-    "check:manifests": "node scripts/check-manifests.mjs",
-    "dev": "turbo run dev",
-    "build": "turbo run build",
-    "lint": "turbo run lint",
-    "lint:commit": "commitlint",
-    "typecheck": "turbo run typecheck",
-    "prepare": "husky"
-  },
   "keywords": [
     "ai",
     "design-to-code",
-    "tldraw",
     "monorepo",
+    "tldraw",
     "turborepo"
   ],
-  "author": "huayan",
   "license": "ISC",
+  "author": "huayan",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/HuayanZhong/inkstack.git"
   },
-  "engines": {
-    "node": ">=24.14.1"
+  "type": "module",
+  "scripts": {
+    "check:manifests": "node scripts/check-manifests.mjs",
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "format": "oxfmt --write .",
+    "format:check": "oxfmt --check .",
+    "lint": "turbo run lint && oxlint --config .oxlintrc.turbo.json .",
+    "lint:env": "oxlint --config .oxlintrc.turbo.json .",
+    "lint:commit": "commitlint",
+    "typecheck": "turbo run typecheck",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@commitlint/config-conventional": "catalog:dev",
+    "@fission-ai/openspec": "catalog:toolchain",
+    "@types/node": "catalog:dev",
+    "commitlint": "catalog:dev",
+    "eslint-plugin-turbo": "catalog:dev",
+    "husky": "catalog:dev",
+    "oxfmt": "catalog:toolchain",
+    "oxlint": "catalog:toolchain",
+    "oxlint-tsgolint": "catalog:toolchain",
+    "turbo": "catalog:dev",
+    "typescript": "catalog:toolchain",
+    "yaml": "catalog:dev"
   },
   "devEngines": {
     "packageManager": {
@@ -35,16 +50,8 @@
       "onFail": "download"
     }
   },
-  "packageManager": "pnpm@12.14.0",
-  "type": "module",
-  "devDependencies": {
-    "@commitlint/config-conventional": "catalog:dev",
-    "@fission-ai/openspec": "catalog:toolchain",
-    "@types/node": "catalog:dev",
-    "commitlint": "catalog:dev",
-    "husky": "catalog:dev",
-    "turbo": "catalog:dev",
-    "typescript": "catalog:toolchain",
-    "yaml": "catalog:dev"
-  }
+  "engines": {
+    "node": ">=24.14.1"
+  },
+  "packageManager": "pnpm@12.14.0"
 }

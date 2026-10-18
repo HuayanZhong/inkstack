@@ -32,18 +32,18 @@
 
 采用下表作为唯一的权威声明；`docs/AGENTS.md` 只承载这张表和归属规则，不承载细节。
 
-| 事实 | 权威来源 | 性质 |
-|---|---|---|
-| 行为要求（应该做什么） | `openspec/specs/` | 规范 |
-| Agent 常驻规则 | 根 / 子树 `AGENTS.md` 手写区 | 规范 |
-| Claude Code 硬约束 | `.claude/rules/` | 规范 |
-| 架构决策与放弃的备选 | `docs/architecture/DESIGN-RECORD.md` | 规范 + 历史 |
-| 架构图的可编辑源 | `docs/architecture/source/*.json` | 规范 |
-| 状态、目录、开发入口 | `README.md` | 信息性 |
-| 代码实际怎么运行 | 源码 + 测试 | 事实 |
-| 代码结构地图 | `openwiki/`（未来） | 描述性、非规范 |
-| 架构图生成物 | `interactive/*.html`、`images/*.png` | 派生物 |
-| 构建/生成的目录 | `openwiki/`、`.next/`、`dist/` | 派生物 |
+| 事实                   | 权威来源                             | 性质           |
+| ---------------------- | ------------------------------------ | -------------- |
+| 行为要求（应该做什么） | `openspec/specs/`                    | 规范           |
+| Agent 常驻规则         | 根 / 子树 `AGENTS.md` 手写区         | 规范           |
+| Claude Code 硬约束     | `.claude/rules/`                     | 规范           |
+| 架构决策与放弃的备选   | `docs/architecture/DESIGN-RECORD.md` | 规范 + 历史    |
+| 架构图的可编辑源       | `docs/architecture/source/*.json`    | 规范           |
+| 状态、目录、开发入口   | `README.md`                          | 信息性         |
+| 代码实际怎么运行       | 源码 + 测试                          | 事实           |
+| 代码结构地图           | `openwiki/`（未来）                  | 描述性、非规范 |
+| 架构图生成物           | `interactive/*.html`、`images/*.png` | 派生物         |
+| 构建/生成的目录        | `openwiki/`、`.next/`、`dist/`       | 派生物         |
 
 冲突时的优先级：行为意图看 specs，Agent 行为看 AGENTS/rules，原因看 DESIGN-RECORD，实现真相看源码与测试，wiki/图只作参考。
 
@@ -71,8 +71,12 @@
 `AGENTS.md` / `CLAUDE.md` 中可能出现的生成块：
 
 ```html
-<!-- OPENWIKI:START --> ... <!-- OPENWIKI:END -->
-<!-- BEGIN:nextjs-agent-rules --> ... <!-- END:nextjs-agent-rules -->
+<!-- OPENWIKI:START -->
+...
+<!-- OPENWIKI:END -->
+<!-- BEGIN:nextjs-agent-rules -->
+...
+<!-- END:nextjs-agent-rules -->
 ```
 
 规则：
