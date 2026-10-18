@@ -11,7 +11,7 @@ catalogs:
     husky: ^9.1.7
     turbo: ^2.11.9
 
-# 依赖含 postinstall / install 脚本时（如 esbuild、sharp），
-# 运行 `pnpm approve-builds`，pnpm 会把包名写入这里。
-# onlyBuiltDependencies:
-#   - esbuild
+# 依赖含 install / postinstall 脚本时（如 esbuild、sharp），
+# 运行 `pnpm approve-builds`，pnpm 11+ 会把包名写入这里。
+# allowBuilds:
+#   esbuild: true
