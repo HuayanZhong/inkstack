@@ -8,7 +8,8 @@
     "build": "turbo run build",
     "lint": "turbo run lint",
     "lint:commit": "commitlint",
-    "typecheck": "turbo run typecheck"
+    "typecheck": "turbo run typecheck",
+    "prepare": "husky"
   },
   "keywords": [
     "ai",
@@ -38,6 +39,7 @@
   "devDependencies": {
     "@commitlint/config-conventional": "catalog:dev",
     "commitlint": "catalog:dev",
+    "husky": "catalog:dev",
     "turbo": "catalog:dev"
   }
 }

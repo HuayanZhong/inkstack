@@ -8,6 +8,7 @@ catalogs:
   dev:
     "@commitlint/config-conventional": ^21.2.3
     commitlint: ^21.2.3
+    husky: ^9.1.7
     turbo: ^2.11.9
 
 # 依赖含 postinstall / install 脚本时（如 esbuild、sharp），
