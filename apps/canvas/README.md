@@ -1,6 +1,6 @@
 # @inkstack/canvas
 
-墨栈的 tldraw 画布应用，Rspack 构建，开发端口 `:4002`。作为 Module Federation provider 暴露 `./Canvas`，由 shell 以 runtime consumer 加载。
+墨栈的 tldraw 画布应用，Rspack 构建，开发端口由 `CANVAS_PORT` 控制（默认 `:4002`）。作为 Module Federation provider 暴露 `./Canvas`，由 shell 以 runtime consumer 加载。
 
 ## 运行
 

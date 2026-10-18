@@ -21,6 +21,7 @@
     "check:manifests": "node scripts/check-manifests.mjs",
     "dev": "turbo run dev",
     "build": "turbo run build",
+    "start": "turbo run start",
     "format": "oxfmt --write .",
     "format:check": "oxfmt --check .",
     "lint": "turbo run lint && oxlint --config .oxlintrc.turbo.json .",

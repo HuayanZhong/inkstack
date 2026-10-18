@@ -4,7 +4,7 @@
 
 ## 指引分层
 
-根 `AGENTS.md` 只放跨包的常驻规则。`apps/*`、`packages/*`、`docs/`、`infra/` 可拥有自己的 `AGENTS.md`，以"补充根文件的规则"开头，只写该目录特有的内容，不重复根规则，通常不超过 25 行。占位包不创建空文件。每层 `CLAUDE.md` 只写 `@AGENTS.md`。文档归属与保鲜规则见 [`docs/AGENTS.md`](docs/AGENTS.md)。
+根 `AGENTS.md` 只放跨包的常驻规则。`apps/*`、`packages/*`、`docs/`、`infra/` 可拥有自己的 `AGENTS.md`，以"补充根文件的规则"开头，只写目录特有内容，不重复根规则，≤25 行。占位包不创建空文件。每层 `CLAUDE.md` 只写 `@AGENTS.md`；`packages/*` 需 `README.md`，见 `packages/AGENTS.md`。文档规则见 [`docs/AGENTS.md`](docs/AGENTS.md)。
 
 ## 阶段策略
 
@@ -37,7 +37,7 @@ pnpm lint:commit    # commitlint，从 stdin 读取提交信息
 - pnpm 11+ 的构建脚本白名单是 `allowBuilds`；遇到 `ERR_PNPM_IGNORED_BUILDS` 时用 `pnpm approve-builds`。
 - Node `>=26.12.0`、pnpm `12.14.0`、TypeScript `6.0.3` 已固定（catalog `toolchain` 精确 pin）。不要升级到 TS 7：Next.js 16 的类型检查依赖 `typescript/lib/typescript.js`，该文件在 TS 7 已移除。`@types/node` 的主版本跟随 Node 主版本。
 - 包内 `tsconfig.json` 继承 `@inkstack/tsconfig` 的平面预设，并在 devDependencies 声明 `"@inkstack/tsconfig": "workspace:*"`；预设与模块格式见 [`docs/typescript.md`](docs/typescript.md)。Turborepo 任务定义在 `turbo.json`，`ui` 固定为 `tui`。
-- format 与 lint 由根目录的 oxfmt / oxlint 负责：`pnpm format`、`pnpm format:check`、`pnpm lint`。环境差异用 `.oxlintrc.json` 的 `overrides` 表达，不要在包内新建规则文件；见 [`docs/toolchain.md`](docs/toolchain.md)。
+- format 与 lint 由根目录的 oxfmt / oxlint 负责；规则见 [`docs/toolchain.md`](docs/toolchain.md)。
 
 ## OpenSpec
 
@@ -56,6 +56,7 @@ pnpm lint:commit    # commitlint，从 stdin 读取提交信息
 - 工具优先：依赖、任务、检查、规格、脚手架、生成器都走官方 CLI，不手写工具产物；见 [`.claude/rules/cli-first.md`](.claude/rules/cli-first.md)。
 - Git：除非用户当次明确要求，不执行任何会改变工作区、分支或历史的命令；详见 [`.claude/rules/git.md`](.claude/rules/git.md)。
 - 注释：解释代码长期成立的事实，不复述过程或代码；详见 [`.claude/rules/comments.md`](.claude/rules/comments.md)。
+- 环境变量：端口、host、URL、凭据只通过 env 分发，规则见 [`.claude/rules/env.md`](.claude/rules/env.md)。
 - 完成前跑 `pnpm typecheck`（以及已存在的 `pnpm build`），并报告实际输出。
 
 ## 编辑本文件

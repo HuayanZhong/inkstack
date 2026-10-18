@@ -25,6 +25,7 @@ base.json            语言与严格性，不直接使用
 
 | 包                   | 预设           | 说明                              |
 | -------------------- | -------------- | --------------------------------- |
+| `packages/config`    | `library.json` | ESM 输出，带声明文件              |
 | `packages/contracts` | `library.json` | ESM 输出，带声明文件              |
 | `packages/ai-*`      | `node.json`    | 纯 Node ESM                       |
 | `apps/gateway`       | `nest.json`    | Nest 装饰器与 DI                  |
@@ -32,7 +33,7 @@ base.json            语言与严格性，不直接使用
 | `apps/shell`         | `next.json`    | Next 会接管应用级 include / paths |
 | `apps/canvas`        | `react.json`   | 浏览器环境，`types: []`           |
 
-应用尚未实现时不创建应用级 `tsconfig.json`；首个源码文件落地时再建。
+新增应用在首个源码文件落地时创建应用级 `tsconfig.json`；预设本身不提供。
 
 ## 规则
 
@@ -81,4 +82,4 @@ pnpm build
 pnpm check:manifests
 ```
 
-`nest` / `next` / `react` 尚无应用消费者时，用临时 fixture 继承对应预设并运行 `tsc --noEmit` 验证；fixture 不提交仓库。
+`nest` / `next` / `react` / `library` 当前都有消费者；新增无消费者的预设时，用临时 fixture 继承并运行 `tsc --noEmit` 验证，fixture 不提交仓库。

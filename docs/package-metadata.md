@@ -12,11 +12,11 @@
 
 ## Catalog 分类
 
-| catalog     | 内容                                                               | 范围                                    |
-| ----------- | ------------------------------------------------------------------ | --------------------------------------- |
-| `toolchain` | TypeScript、openspec                                               | 精确 pin                                |
-| `dev`       | turbo、commitlint、husky、`@types/node`、yaml 等开发工具与类型包   | 允许 `^`；`@types/node` 主版本跟随 Node |
-| `runtime`   | Next、React、tldraw、Nest、AI SDK 等运行时依赖；首个依赖进入时创建 | 允许 `^`                                |
+| catalog     | 内容                                                             | 范围                                    |
+| ----------- | ---------------------------------------------------------------- | --------------------------------------- |
+| `toolchain` | TypeScript、openspec、oxfmt、oxlint、oxlint-tsgolint             | 精确 pin                                |
+| `dev`       | turbo、commitlint、husky、`@types/node`、yaml 等开发工具与类型包 | 允许 `^`；`@types/node` 主版本跟随 Node |
+| `runtime`   | Next、React、tldraw、Nest、zod 等运行时依赖                      | 允许 `^`                                |
 
 安装示例：
 
@@ -40,10 +40,20 @@ pnpm add --filter @inkstack/<pkg> --save-catalog-name runtime <pkg>
 
 ## Description 规则
 
-- 英文，一句话，40–120 字符。
+- 一句话，40–120 字符；中英文均可。
 - 说明"做什么"，不要重复包名。
 - 不用营销词、TODO 或版本号。
 - 检查脚本只验证长度、非空和"不等于 name"；语义由评审负责。
+
+## 包文档
+
+`packages/` 目录本身与 `packages/*` 的每个包目录 MUST 同时包含：
+
+- `AGENTS.md`：以「补充根文件的规则」开头，只写该层特有约束。
+- `CLAUDE.md`：只写 `@AGENTS.md`。
+- `README.md`：职责、公开导出、命令与消费方式。
+
+检查脚本验证文件存在与 `CLAUDE.md` 的内容。
 
 ## 检查规则
 
@@ -58,6 +68,7 @@ pnpm add --filter @inkstack/<pkg> --save-catalog-name runtime <pkg>
 7. `.nvmrc`、`engines.node`、`packageManager`、`devEngines` 一致。
 8. 根 scripts 存在；有 `src` 的包有 `build` / `typecheck`。
 9. 私有包版本偏离 `0.0.0` 时输出 warning，不影响退出码。
+10. `packages/` 与 `packages/*` 的 `AGENTS.md` / `CLAUDE.md` / `README.md` 三件套存在，且 `CLAUDE.md` 只写 `@AGENTS.md`。
 
 ## 非目标
 

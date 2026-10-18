@@ -49,10 +49,12 @@ node <archify-repo>/archify/bin/archify.mjs finalize workflow source/cicd-workfl
 ## 开发工作流（暂不启用 worktree）
 
 - 当前用主 checkout + feature branch：`git switch -c feat/xxx`，完成后走 PR 合并。
-- 每个任务一个分支、一个 PR；CI 由分支 / PR 触发。
+- 每个任务一个分支、一个 PR；CI 接入后由分支 / PR 触发。
 - Git worktree 暂时不引入；等需要并行开发或多 Agent 代码隔离时再加。
 
 ## CI/CD 规划
+
+> 本节是规划，不属于当前骨架阶段；DESIGN-RECORD 中的「云部署」非目标指当前不实际部署。
 
 - **主流程**：PR → install/cache → lint/typecheck → unit/build → codegen golden → integration → E2E → preview/staging → prod approval → production → smoke/Sentry → rollback。
 - **环境**：local → preview → staging → production；production 必须经过 GitHub Environment 审批，preview 不使用生产密钥。
@@ -62,7 +64,7 @@ node <archify-repo>/archify/bin/archify.mjs finalize workflow source/cicd-workfl
   - Supabase：托管 Postgres / Auth / Storage
   - MCP：npm 包 + HTTP 服务
 - **质量门禁**：lint、typecheck、Vitest 单测、codegen golden、Nest/MCP 集成测试、Playwright E2E；Turborepo affected + 缓存。
-- **回滚与观测**：Vercel 即时回滚；Docker 按镜像 tag 回滚；Drizzle/Supabase 迁移采用 expand → migrate → contract；Sentry + smoke test + 健康检查。
+- **回滚与观测**：Vercel 即时回滚；Docker 按镜像 tag 回滚；MikroORM/Supabase 迁移采用 expand → migrate → contract；Sentry + smoke test + 健康检查。
 - **密钥**：Anthropic key 只放 agent-service；Supabase service role 只放 BFF/后端；前端只用 anon key；通过 GitHub Actions Secrets 注入。
 
 ## 说明
@@ -70,7 +72,7 @@ node <archify-repo>/archify/bin/archify.mjs finalize workflow source/cicd-workfl
 - 四张图生成时都通过了 Archify 的 validate / deliver / check / browser-check 自动校验。
 - 技术栈图的微前端分支：Canvas 作为 Module Federation provider（remote），Next.js Shell 用 `@module-federation/enhanced/runtime` 在客户端消费。
 - BFF 是独立一层，位于前端与后端服务之间：面向前端做聚合、Auth、SSE；实时 canvas WS 可直连 Gateway；action 编排仍由 Gateway 负责。
-- Supabase 作为 BaaS 放在后端服务层（Postgres / Auth / Storage / Realtime）；本地开发仍保留 SQLite + Drizzle。
+- Supabase 作为 BaaS 放在后端服务层（Postgres / Auth / Storage / Realtime）；本地开发仍保留 SQLite + MikroORM。
 - AI 层分三层：模型调用/流式用 Vercel AI SDK（`ai` + `@ai-sdk/anthropic`）；多 Agent 编排用 LangGraph.js（Deep Agents 作为基于 LangGraph 的候选 harness，Mastra 作为 TypeScript-native 备选）；画布 action 用 tldraw Agent Kit；MCP 使用 `@modelcontextprotocol/sdk`。
 - 技术栈图采用树形分解：层是父节点，组件是子节点；连线只表示归属，不表示调用关系。
 - PNG 是交互版 HTML 的全页截图；技术栈图与 CI/CD 图为避免索引过长，截图时隐藏了节点索引。

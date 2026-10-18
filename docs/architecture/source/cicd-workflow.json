@@ -203,7 +203,7 @@
       "title": "回滚与观测",
       "items": [
         "Vercel 即时回滚；Docker 部署按镜像 tag 回滚",
-        "Drizzle / Supabase 迁移采用 expand → migrate → contract",
+        "MikroORM / Supabase 迁移采用 expand → migrate → contract",
         "Sentry + smoke test + 健康检查，失败自动触发 rollback"
       ]
     },

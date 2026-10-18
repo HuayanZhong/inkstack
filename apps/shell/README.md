@@ -1,6 +1,6 @@
 # @inkstack/shell
 
-墨栈的用户入口应用，Next.js 16 App Router，默认监听 `:3000`。当前只有落地页，画布与后端服务尚未接入。
+墨栈的用户入口应用，Next.js 16 App Router，监听 `PORT`（默认 `:3000`）。画布通过 Module Federation 在客户端加载；BFF / Gateway 尚未接入页面。
 
 ## 运行
 
@@ -12,6 +12,8 @@ pnpm --filter @inkstack/shell build
 pnpm --filter @inkstack/shell typecheck
 pnpm --filter @inkstack/shell lint
 ```
+
+画布由 canvas 的 MF manifest 提供：先启动 `@inkstack/canvas`；入口可用 `NEXT_PUBLIC_CANVAS_MF_ENTRY` 覆盖。
 
 ## 相关文档
 

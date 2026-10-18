@@ -27,7 +27,7 @@
 | 命令                | 作用                                 |
 | ------------------- | ------------------------------------ |
 | `pnpm format`       | oxfmt 写入全仓库                     |
-| `pnpm format:check` | 只检查格式，CI 使用                  |
+| `pnpm format:check` | 只检查格式，供 CI 接入后使用         |
 | `pnpm lint`         | turbo 包级 lint + Turbo 环境变量检查 |
 | `pnpm lint:env`     | 只跑 Turbo 环境变量检查              |
 
@@ -50,7 +50,11 @@
 - `eslint-plugin-turbo` 通过 oxlint 的 `jsPlugins` 加载，规则为 `turbo/no-undeclared-env-vars`。
 - `eslint` peer 通过 `peerDependencyRules.ignoreMissing` 忽略。依据：插件构建产物中 `eslint` 只出现在 `import type`，运行时由 oxlint 提供 ESLint v9 兼容接口。
 - 框架前缀白名单（`NEXT_PUBLIC_*`、`VITE_*`）只用于降低噪音；缓存正确性仍以 `turbo.json` 的显式 `env` / `globalEnv` 声明为准。
-- 新增环境变量的顺序：先写入 `turbo.json`，再在代码中引用。
+- `globalEnv` 当前声明 `NODE_ENV`、`PORT`、`CANVAS_HOST`、`CANVAS_PORT`、`CANVAS_DEV_CORS_ORIGIN`、`BFF_PORT`、`NEXT_PUBLIC_CANVAS_MF_ENTRY`。`envMode: strict` 下未声明的变量不会传给任务，新增变量必须先补声明。
+- 工作区包构建到 `dist` 后，`dev` / `lint` / `typecheck` / `start` 会先执行依赖包的 `build`，保证干净检出也能直接通过。
+- 应用 scripts 通过 `dotenv-cli` 加载根目录 env 链：dev / typecheck 用 `.env.local → .env.development → .env`，build / start 用 `.env.local → .env.production → .env`。应用代码不自行读取 `.env`。
+- 变量分类、命名与四个 home 的规则见 [`.claude/rules/env.md`](../.claude/rules/env.md)；本节只记录 turbo 与加载机制。
+- 新增环境变量的顺序：`.env.example` → `turbo.json` → 应用 schema → 代码。
 
 ## Turborepo 与 AI
 
@@ -63,7 +67,7 @@
 ## 格式范围
 
 - oxfmt 覆盖仓库内所有它支持的格式；这是当前接受的策略。挂到 husky 之后，pre-commit 只处理 staged 文件。
-- `.oxfmtrc.json` 只忽略 `node_modules`、`dist`、`.next`、`coverage`。
+- `.oxfmtrc.json` 忽略 `node_modules`、`dist`、`.next`、`coverage`、`.agents`、`docs/architecture/interactive`、`openspec/changes/archive`。
 - `docs/architecture/interactive/*.html` 是生成物。格式化后如果重新生成，以生成器输出为准，不要手改。
 
 ## Git hooks
@@ -71,7 +75,7 @@
 - `commit-msg`：commitlint 校验提交信息，规则见 [`.claude/rules/git.md`](../.claude/rules/git.md)。
 - `pre-commit`：`pnpm exec lint-staged`，只处理暂存文件。TS/JS 先 `oxfmt` 格式化，再 `oxlint --config .oxlintrc.staged.json`；Markdown、JSON、YAML、CSS、HTML 只格式化。任一任务失败时 lint-staged 会还原到运行前状态，格式修复也会丢弃；先修复错误再重新提交。
 - `pre-push`：`pnpm typecheck`。Turborepo 缓存命中后开销很小；类型检查不放进 pre-commit。
-- staged lint 关闭 `typeAware`：提交路径只做格式与基础正确性；类型检查由 pre-push 与 CI 负责，且根配置文件、`.mjs` 脚本不在任何包的 tsconfig 内。
+- staged lint 关闭 `typeAware`：提交路径只做格式与基础正确性；类型检查由 pre-push 负责，CI 接入后再加入，且根配置文件、`.mjs` 脚本不在任何包的 tsconfig 内。
 - 规则仍只有根 `.oxlintrc.json` 一个 home；`.oxlintrc.staged.json` 只覆盖 `options`，不复制规则。
 - `lint-staged` 版本固定在 `dev` catalog。
 

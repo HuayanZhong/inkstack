@@ -5,9 +5,6 @@ import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import * as ReactDOMClient from 'react-dom/client'
 
-const CANVAS_ENTRY =
-  process.env.NEXT_PUBLIC_CANVAS_MF_ENTRY ?? 'http://localhost:4002/mf-manifest.json'
-
 interface CanvasModule {
   Canvas: ComponentType
 }
@@ -21,11 +18,17 @@ type CanvasState =
 let canvasPromise: Promise<CanvasModule> | null = null
 
 function loadCanvas(): Promise<CanvasModule> {
+  // next.config.ts 已在构建/启动时校验；这里兜底，让缺失变量走可见的错误状态。
+  const entry = process.env.NEXT_PUBLIC_CANVAS_MF_ENTRY
+  if (!entry) {
+    return Promise.reject(new Error('缺少 NEXT_PUBLIC_CANVAS_MF_ENTRY'))
+  }
+
   canvasPromise ??= import('@module-federation/enhanced/runtime')
     .then(async ({ createInstance }) => {
       const instance = createInstance({
         name: 'shell',
-        remotes: [{ name: 'canvas', entry: CANVAS_ENTRY }],
+        remotes: [{ name: 'canvas', entry }],
         // Next App Router 运行内置 React canary，与 remote 声明的稳定版范围不兼容；
         // 不做版本检查，优先复用已加载的 host 实例。
         shareStrategy: 'loaded-first',

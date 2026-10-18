@@ -25,20 +25,20 @@
 
 ## 4. 技术选型
 
-| 层            | 选择                                                                                     |
-| ------------- | ---------------------------------------------------------------------------------------- |
-| 前端 Shell    | Next.js + React                                                                          |
-| 画布          | tldraw + Agent starter kit（MIT）                                                        |
-| 微前端        | Module Federation：canvas 为 remote，shell 用 runtime API 消费；退路 Multi-Zones         |
-| BFF           | NestJS BFF 或 Next.js Route Handlers                                                     |
-| 后端          | NestJS：Gateway / Agent Service / Codegen Service / MCP Adapter                          |
-| 多 Agent 编排 | LangGraph.js；Deep Agents 作为基于 LangGraph 的候选；Mastra 作为 TypeScript-native 备选  |
-| 模型调用      | Vercel AI SDK（`ai` + `@ai-sdk/anthropic`）                                              |
-| 外部 Agent    | MCP SDK（stdio 现在，HTTP 给平台）                                                       |
-| 数据          | `design.json` + SQLite/Drizzle（本地）+ Supabase（BaaS：Postgres/Auth/Storage/Realtime） |
-| 测试          | Vitest + React Testing Library + Playwright + codegen golden                             |
-| 工程化        | pnpm + Turborepo + GitHub Actions + Changesets + Sentry                                  |
-| CI/CD         | PR → 质量门禁 → Preview/Staging → Prod Approval → Production → Smoke/Rollback            |
+| 层            | 选择                                                                                      |
+| ------------- | ----------------------------------------------------------------------------------------- |
+| 前端 Shell    | Next.js + React                                                                           |
+| 画布          | tldraw + Agent starter kit（MIT）                                                         |
+| 微前端        | Module Federation：canvas 为 remote，shell 用 runtime API 消费；退路 Multi-Zones          |
+| BFF           | NestJS BFF 或 Next.js Route Handlers                                                      |
+| 后端          | NestJS：Gateway / Agent Service / Codegen Service / MCP Adapter                           |
+| 多 Agent 编排 | LangGraph.js；Deep Agents 作为基于 LangGraph 的候选；Mastra 作为 TypeScript-native 备选   |
+| 模型调用      | Vercel AI SDK（`ai` + `@ai-sdk/anthropic`）                                               |
+| 外部 Agent    | MCP SDK（stdio 现在，HTTP 给平台）                                                        |
+| 数据          | `design.json` + SQLite/MikroORM（本地）+ Supabase（BaaS：Postgres/Auth/Storage/Realtime） |
+| 测试          | Vitest + React Testing Library + Playwright + codegen golden                              |
+| 工程化        | pnpm + Turborepo + GitHub Actions + Changesets + Sentry                                   |
+| CI/CD         | PR → 质量门禁 → Preview/Staging → Prod Approval → Production → Smoke/Rollback             |
 
 ## 5. 关键决策（ADR 摘要）
 
@@ -92,7 +92,7 @@
 ## 9. 未决问题
 
 - LangGraph.js、Deep Agents、Mastra 最终选哪个？先用 LangGraph.js 做最小三节点图，再评估。
-- Supabase 是否作为主数据库？本地仍用 SQLite/Drizzle，平台化时切 Supabase Postgres。
+- Supabase 是否作为主数据库？本地仍用 SQLite/MikroORM，平台化时切 Supabase Postgres。
 - 多 Agent 的角色划分与冲突策略（Planner/Designer/Critic 是否足够）。
 
 ## 10. 产物

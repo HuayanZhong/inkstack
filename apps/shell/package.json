@@ -6,13 +6,14 @@
   "license": "ISC",
   "type": "module",
   "scripts": {
-    "dev": "next dev -p 3000",
-    "build": "next build",
-    "start": "next start -p 3000",
+    "dev": "dotenv -e ../../.env.local -e ../../.env.development -e ../../.env -- next dev",
+    "build": "dotenv -e ../../.env.local -e ../../.env.production -e ../../.env -- next build",
+    "start": "dotenv -e ../../.env.local -e ../../.env.production -e ../../.env -- next start",
     "lint": "oxlint --config ../../.oxlintrc.json --type-aware .",
-    "typecheck": "next typegen && tsc --noEmit"
+    "typecheck": "dotenv -e ../../.env.local -e ../../.env.development -e ../../.env -e ../../.env.example -- next typegen && tsc --noEmit"
   },
   "dependencies": {
+    "@inkstack/config": "workspace:*",
     "@module-federation/enhanced": "catalog:runtime",
     "next": "catalog:runtime",
     "react": "catalog:runtime",
@@ -23,6 +24,7 @@
     "@types/node": "catalog:dev",
     "@types/react": "catalog:dev",
     "@types/react-dom": "catalog:dev",
+    "dotenv-cli": "catalog:dev",
     "typescript": "catalog:toolchain"
   }
 }

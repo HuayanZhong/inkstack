@@ -6,13 +6,14 @@
   "license": "ISC",
   "type": "module",
   "scripts": {
-    "dev": "nest start --watch",
-    "build": "nest build",
-    "start": "nest start",
+    "dev": "dotenv -e ../../.env.local -e ../../.env.development -e ../../.env -- nest start --watch",
+    "build": "dotenv -e ../../.env.local -e ../../.env.production -e ../../.env -- nest build",
+    "start": "dotenv -e ../../.env.local -e ../../.env.production -e ../../.env -- nest start",
     "lint": "oxlint --config ../../.oxlintrc.json --type-aware .",
     "typecheck": "tsc -p tsconfig.build.json --noEmit"
   },
   "dependencies": {
+    "@inkstack/config": "workspace:*",
     "@nestjs/common": "catalog:runtime",
     "@nestjs/core": "catalog:runtime",
     "@nestjs/platform-express": "catalog:runtime",
@@ -24,6 +25,7 @@
     "@nestjs/cli": "catalog:dev",
     "@types/express": "catalog:dev",
     "@types/node": "catalog:dev",
+    "dotenv-cli": "catalog:dev",
     "typescript": "catalog:toolchain"
   }
 }

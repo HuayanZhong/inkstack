@@ -1,6 +1,6 @@
 # @inkstack/bff
 
-墨栈的 BFF 服务，NestJS 12 + Node ESM，默认监听 `:4003`。当前只有健康检查，会话与请求聚合尚未接入。
+墨栈的 BFF 服务，NestJS 12 + Node ESM，监听 `BFF_PORT`（默认 `:4003`）。当前只有健康检查，会话与请求聚合尚未接入。
 
 ## 运行
 

@@ -192,6 +192,30 @@ for (const { path, json, isRoot } of manifests) {
   }
 }
 
+const packageDocFiles = ['AGENTS.md', 'CLAUDE.md', 'README.md']
+
+function checkPackageDocs(relativeDir) {
+  for (const file of packageDocFiles) {
+    if (!existsSync(resolve(root, relativeDir, file))) {
+      fail(`${relativeDir}/${file}`, 'package documentation is missing')
+    }
+  }
+
+  const claudePath = resolve(root, relativeDir, 'CLAUDE.md')
+  if (existsSync(claudePath) && readFileSync(claudePath, 'utf8').trim() !== '@AGENTS.md') {
+    fail(`${relativeDir}/CLAUDE.md`, 'must contain only "@AGENTS.md"')
+  }
+}
+
+if (existsSync(resolve(root, 'packages'))) {
+  checkPackageDocs('packages')
+  for (const entry of readdirSync(resolve(root, 'packages'), { withFileTypes: true })) {
+    if (!entry.isDirectory()) continue
+    const relativeDir = `packages/${entry.name}`
+    if (existsSync(resolve(root, relativeDir, 'package.json'))) checkPackageDocs(relativeDir)
+  }
+}
+
 for (const [name, specifier] of Object.entries(catalogs.toolchain ?? {})) {
   if (typeof specifier !== 'string' || !/^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/.test(specifier)) {
     fail(
