@@ -31,6 +31,7 @@
 | `pnpm lint`         | turbo 包级 lint + Turbo 环境变量检查    |
 | `pnpm lint:env`     | 只跑 Turbo 环境变量检查                 |
 | `pnpm hygiene`      | knip 全仓库检查 + 库包 publint 导出校验 |
+| `pnpm publint`      | 只对 `packages/*` 运行导出校验          |
 
 ## 版本策略
 

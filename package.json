@@ -25,6 +25,7 @@
     "format": "oxfmt --write .",
     "format:check": "oxfmt --check .",
     "hygiene": "turbo run build --filter \"./packages/*\" && knip && turbo run publint --filter \"./packages/*\"",
+    "publint": "turbo run publint --filter \"./packages/*\"",
     "lint": "turbo run lint && oxlint --config .oxlintrc.turbo.json .",
     "lint:env": "oxlint --config .oxlintrc.turbo.json .",
     "lint:commit": "commitlint",
