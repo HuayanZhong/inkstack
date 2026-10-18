@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 /**
- * Verify package manifests and pnpm catalogs against docs/package-metadata.md.
+ * 对照 docs/package-metadata.md 校验包清单与 pnpm catalog。
  *
- * Errors fail the command. Private-package version deviations are warnings so
- * this check does not become a release policy before the CD milestone.
+ * 错误直接失败；私有包的版本偏差只告警，避免在 CD 里程碑之前把这套检查
+ * 变成发布策略。
  */
 
 import { existsSync, readFileSync, readdirSync } from 'node:fs'
