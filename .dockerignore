@@ -1,0 +1,33 @@
+# 依赖与包管理缓存
+node_modules
+**/node_modules
+.pnpm-store
+.turbo
+.git
+
+# 构建产物
+dist
+**/dist
+.next
+**/.next
+out
+**/out
+build
+**/build
+coverage
+**/coverage
+*.tsbuildinfo
+
+# 测试产物
+playwright-report
+test-results
+
+# 环境变量与日志
+.env
+.env.*
+*.log
+
+# 编辑器与文档产物
+.vscode
+.idea
+docs
