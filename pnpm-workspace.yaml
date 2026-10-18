@@ -1,0 +1,14 @@
+# 项目中的所有包
+packages:
+  - 'apps/*'
+  - 'packages/*'
+
+catalogs:
+  # 公共的依赖
+  dev:
+    turbo: ^2.11.9
+
+# 依赖含 postinstall / install 脚本时（如 esbuild、sharp），
+# 运行 `pnpm approve-builds`，pnpm 会把包名写入这里。
+# onlyBuiltDependencies:
+#   - esbuild

@@ -1,0 +1,30 @@
+{
+  "name": "inkstack",
+  "version": "0.0.1",
+  "private": true,
+  "description": "一个支持ai d2c的项目",
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck"
+  },
+  "keywords": ["ai", "design-to-code", "tldraw", "monorepo", "turborepo"],
+  "author": "huayan",
+  "license": "ISC",
+  "engines": {
+    "node": ">=24.14.1"
+  },
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "12.14.0",
+      "onFail": "download"
+    }
+  },
+  "packageManager": "pnpm@12.14.0",
+  "type": "module",
+  "devDependencies": {
+    "turbo": "catalog:dev"
+  }
+}
