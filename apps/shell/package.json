@@ -13,6 +13,7 @@
     "typecheck": "next typegen && tsc --noEmit"
   },
   "dependencies": {
+    "@module-federation/enhanced": "catalog:runtime",
     "next": "catalog:runtime",
     "react": "catalog:runtime",
     "react-dom": "catalog:runtime"

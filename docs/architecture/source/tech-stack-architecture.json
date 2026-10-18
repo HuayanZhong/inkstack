@@ -39,7 +39,7 @@
       "parent": "frontend"
     },
 
-    { "id": "microfrontend", "label": "微前端 / Module Federation（候选）", "parent": "inkstack" },
+    { "id": "microfrontend", "label": "微前端 / Module Federation", "parent": "inkstack" },
     {
       "id": "mf_host",
       "label": "Next.js Shell (Host)",
@@ -188,11 +188,11 @@
     },
     {
       "dot": "violet",
-      "title": "微前端（候选）",
+      "title": "微前端",
       "items": [
-        "Next.js Shell 作为 Host，Canvas 作为 Module Federation remote",
-        "共享 React / tldraw 单例，画布组件禁用 SSR",
-        "先做 1–2 天 spike；App Router 集成不顺就退到 Multi-Zones"
+        "Canvas 作为 Module Federation provider（remote），Next.js Shell 用 runtime API 消费",
+        "共享 React / ReactDOM 单例，画布组件仅客户端加载",
+        "App Router 不支持 nextjs-mf；shell 用 @module-federation/enhanced/runtime"
       ]
     },
     {

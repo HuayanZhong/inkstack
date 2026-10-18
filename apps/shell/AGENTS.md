@@ -5,31 +5,24 @@
 ## 职责
 
 - 页面、布局与全局元信息。
-- 后续用 iframe 承载 `apps/canvas`，不直接操作 tldraw editor。
+- 通过 `@module-federation/enhanced/runtime` 在客户端加载 canvas 的 `./Canvas`；不使用 Next MF 插件，不直接操作 tldraw editor。
 - 不持有 action 队列，不直接调用 Gateway。
 
 ## 目录
 
 - `src/app/`：App Router 路由、`layout.tsx`、`page.tsx` 与全局样式。
-- `public/`：静态资源，当前沿用模板示例文件。
+- `src/app/canvas-host.tsx`：canvas 的 runtime consumer，包含加载与失败状态。
 
 ## 命令
 
-在仓库根执行：
-
-```bash
-pnpm --filter @inkstack/shell dev   # :3000
-pnpm --filter @inkstack/shell build
-pnpm --filter @inkstack/shell typecheck
-pnpm --filter @inkstack/shell lint
-```
+在仓库根执行：`pnpm --filter @inkstack/shell dev|build|typecheck|lint`。
 
 ## 约束
 
-- 依赖只通过 `catalog:` 引用；新增运行时依赖先进 `runtime` catalog。
-- `tsconfig.json` 继承 `@inkstack/tsconfig/next.json`，保留 Next 生成的 `include` 与 `paths`；Next 会校验并改写它，以它写回的值为准。
-- 不启用 ESLint / Tailwind / Prettier，格式与 lint 由根 oxlint / oxfmt 负责。
-- `next/font/google` 构建期需要联网，不要在应用里引入。
+- 依赖只通过 `catalog:` 引用；`@module-federation/enhanced` 用 `catalog:runtime`。
+- App Router 使用内置 React canary：shared 不设 `requiredVersion`，并覆盖 `react-dom/client`；canvas 必须先启动，入口可用 `NEXT_PUBLIC_CANVAS_MF_ENTRY` 覆盖。
+- `tsconfig.json` 继承 `@inkstack/tsconfig/next.json`，保留 Next 生成的 `include` 与 `paths`。
+- 不启用 ESLint / Tailwind / Prettier；`next/font/google` 构建期需要联网，不要引入。
 
 <!-- BEGIN:nextjs-agent-rules -->
 

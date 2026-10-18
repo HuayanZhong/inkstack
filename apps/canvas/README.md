@@ -1,6 +1,6 @@
 # @inkstack/canvas
 
-墨栈的 tldraw 画布应用，Rspack 构建，开发端口 `:4002`。通过 Module Federation 暴露 `./Canvas`，供 shell 作为 host 加载。
+墨栈的 tldraw 画布应用，Rspack 构建，开发端口 `:4002`。作为 Module Federation provider 暴露 `./Canvas`，由 shell 以 runtime consumer 加载。
 
 ## 运行
 
@@ -16,7 +16,8 @@ pnpm --filter @inkstack/canvas lint
 ## 暴露
 
 - `./Canvas` → `src/Canvas.tsx`
-- `shared`：`react`、`react-dom`，均声明为 `singleton`
+- `shared`：`react`、`react-dom`、`react-dom/client`，均为 `singleton`；`tldraw` 不共享
+- 构建产物：`remoteEntry.js`、`mf-manifest.json`、`@mf-types.zip`
 
 ## 相关文档
 

@@ -18,7 +18,7 @@
   },
   "devDependencies": {
     "@inkstack/tsconfig": "workspace:*",
-    "@module-federation/enhanced": "catalog:dev",
+    "@module-federation/enhanced": "catalog:runtime",
     "@rspack/cli": "catalog:dev",
     "@rspack/core": "catalog:dev",
     "@rspack/dev-server": "catalog:dev",

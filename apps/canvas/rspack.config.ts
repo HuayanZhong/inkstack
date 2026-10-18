@@ -6,7 +6,7 @@ import { ModuleFederationPlugin } from '@module-federation/enhanced/rspack'
 
 import { mfConfig } from './module-federation.config'
 
-// Target browsers, see: https://github.com/browserslist/browserslist
+// 目标浏览器列表，见 https://github.com/browserslist/browserslist
 const targets = ['chrome >= 87', 'edge >= 88', 'firefox >= 78', 'safari >= 14']
 
 // 用 argv.mode 判断环境：--mode 不会写入 process.env.NODE_ENV，读环境变量会拿到 undefined。
@@ -26,10 +26,19 @@ export default defineConfig((_env, argv) => {
       port: 4002,
       historyApiFallback: true,
       watchFiles: [path.resolve(__dirname, 'src')],
+      // manifest 通过 fetch 跨端口读取，需要 CORS；生产由静态托管配置同等响应头。
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
     },
     output: {
       uniqueName: 'canvas',
-      publicPath: 'http://localhost:4002/',
+      // 显式声明输出目录：MF 的 DTS 插件在 apply 阶段依赖 output.path 计算类型产物位置。
+      path: path.resolve(__dirname, 'dist'),
+      // 生产用 auto，按部署后的脚本地址解析资源，避免清单与产物带上 localhost。
+      publicPath: isDev ? 'http://localhost:4002/' : 'auto',
+      // 远程产物按整目录发布，残留旧 expose 文件会污染 manifest 与类型包。
+      clean: true,
     },
 
     experiments: {

@@ -68,7 +68,7 @@ node <archify-repo>/archify/bin/archify.mjs finalize workflow source/cicd-workfl
 ## 说明
 
 - 四张图生成时都通过了 Archify 的 validate / deliver / check / browser-check 自动校验。
-- 技术栈图包含微前端分支（候选）：Next.js Shell 作为 Host，Canvas 作为 Module Federation remote；先做 spike，退路是 Multi-Zones。
+- 技术栈图的微前端分支：Canvas 作为 Module Federation provider（remote），Next.js Shell 用 `@module-federation/enhanced/runtime` 在客户端消费。
 - BFF 是独立一层，位于前端与后端服务之间：面向前端做聚合、Auth、SSE；实时 canvas WS 可直连 Gateway；action 编排仍由 Gateway 负责。
 - Supabase 作为 BaaS 放在后端服务层（Postgres / Auth / Storage / Realtime）；本地开发仍保留 SQLite + Drizzle。
 - AI 层分三层：模型调用/流式用 Vercel AI SDK（`ai` + `@ai-sdk/anthropic`）；多 Agent 编排用 LangGraph.js（Deep Agents 作为基于 LangGraph 的候选 harness，Mastra 作为 TypeScript-native 备选）；画布 action 用 tldraw Agent Kit；MCP 使用 `@modelcontextprotocol/sdk`。

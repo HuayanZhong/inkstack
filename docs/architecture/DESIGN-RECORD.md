@@ -29,7 +29,7 @@
 | ------------- | ---------------------------------------------------------------------------------------- |
 | 前端 Shell    | Next.js + React                                                                          |
 | 画布          | tldraw + Agent starter kit（MIT）                                                        |
-| 微前端        | Module Federation（候选）；退路 Multi-Zones                                              |
+| 微前端        | Module Federation：canvas 为 remote，shell 用 runtime API 消费；退路 Multi-Zones         |
 | BFF           | NestJS BFF 或 Next.js Route Handlers                                                     |
 | 后端          | NestJS：Gateway / Agent Service / Codegen Service / MCP Adapter                          |
 | 多 Agent 编排 | LangGraph.js；Deep Agents 作为基于 LangGraph 的候选；Mastra 作为 TypeScript-native 备选  |
@@ -42,20 +42,20 @@
 
 ## 5. 关键决策（ADR 摘要）
 
-| 决策                            | 理由                                                        | 备选                                      | 状态 |
-| ------------------------------- | ----------------------------------------------------------- | ----------------------------------------- | ---- |
-| 画布用 tldraw Agent starter kit | 自带画布、属性面板、agent action（含 PenAction）            | Polotno / OpenPolotno / 自建 Konva/Leafer | 已定 |
-| 代码生成用确定性编译器          | 可测试、可复现；模型只负责调用工具                          | Agent 自由生成                            | 已定 |
-| BFF 独立一层                    | 前端聚合/Auth/SSE 与 action 编排分离                        | Gateway 兼任 BFF；Next.js Route Handlers  | 已定 |
-| Supabase 作为 BaaS              | Postgres/Auth/Storage/Realtime 一体（平台化）               | 纯 SQLite；自建 Postgres                  | 已定 |
-| LangGraph.js 作为编排层         | 图/状态/检查点/HITL，适合 Planner→Designer→Critic；当前主选 | Deep Agents / Mastra                      | 已定 |
-| Deep Agents 作为候选            | 基于 LangGraph 的规划/子 Agent harness                      | 直接手写 LangGraph                        | 待定 |
-| Mastra 作为备选                 | TypeScript-native、typed workflow                           | LangGraph.js                              | 待定 |
-| Module Federation 作为候选      | 想练微前端；画布作为 remote；需先 spike                     | Multi-Zones / 单应用                      | 待定 |
-| MCP 先 stdio 后 HTTP            | Claude Code 本地接入快；平台阶段换 HTTP；分阶段实施         | 直接 HTTP                                 | 已定 |
+| 决策                            | 理由                                                          | 备选                                      | 状态 |
+| ------------------------------- | ------------------------------------------------------------- | ----------------------------------------- | ---- |
+| 画布用 tldraw Agent starter kit | 自带画布、属性面板、agent action（含 PenAction）              | Polotno / OpenPolotno / 自建 Konva/Leafer | 已定 |
+| 代码生成用确定性编译器          | 可测试、可复现；模型只负责调用工具                            | Agent 自由生成                            | 已定 |
+| BFF 独立一层                    | 前端聚合/Auth/SSE 与 action 编排分离                          | Gateway 兼任 BFF；Next.js Route Handlers  | 已定 |
+| Supabase 作为 BaaS              | Postgres/Auth/Storage/Realtime 一体（平台化）                 | 纯 SQLite；自建 Postgres                  | 已定 |
+| LangGraph.js 作为编排层         | 图/状态/检查点/HITL，适合 Planner→Designer→Critic；当前主选   | Deep Agents / Mastra                      | 已定 |
+| Deep Agents 作为候选            | 基于 LangGraph 的规划/子 Agent harness                        | 直接手写 LangGraph                        | 待定 |
+| Mastra 作为备选                 | TypeScript-native、typed workflow                             | LangGraph.js                              | 待定 |
+| Module Federation 作为微前端    | 画布作为 remote 练微前端；Next App Router 用 runtime API 消费 | Multi-Zones / iframe                      | 已定 |
+| MCP 先 stdio 后 HTTP            | Claude Code 本地接入快；平台阶段换 HTTP；分阶段实施           | 直接 HTTP                                 | 已定 |
+| interactive HTML 随仓库提交     | 当前没有 CI 生成流程，HTML 是架构文档的查看面                 | 只提交 source + images                    | 已定 |
 
 决策状态只用 `已定 / 已取代 / 待定`。`已取代` 必须在状态列链接到取代它的新决策；`openspec/changes/archive/` 是冻结历史，`openspec/specs/` 是行为要求的当前来源。
-| interactive HTML 随仓库提交 | 当前没有 CI 生成流程，HTML 是架构文档的查看面 | 只提交 source + images | 已定 |
 
 ## 6. 三条主流程
 
@@ -91,7 +91,6 @@
 
 ## 9. 未决问题
 
-- Module Federation 是否真的采用？先做 1–2 天 spike，卡住就退 Multi-Zones。
 - LangGraph.js、Deep Agents、Mastra 最终选哪个？先用 LangGraph.js 做最小三节点图，再评估。
 - Supabase 是否作为主数据库？本地仍用 SQLite/Drizzle，平台化时切 Supabase Postgres。
 - 多 Agent 的角色划分与冲突策略（Planner/Designer/Critic 是否足够）。
