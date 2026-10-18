@@ -6,17 +6,17 @@
 
 ## 当前阶段
 
-仓库处于**骨架阶段**：`apps/` 和 `packages/` 下只有空的 `package.json` 占位，没有任何应用代码。`pnpm dev/build/lint/typecheck` 都会提示没有可执行任务，这是预期状态。
+仓库处于**骨架阶段**：`apps/` 下仍是占位，没有应用代码。`packages/config` 提供共享 tsconfig，`packages/contracts` 已可编译（CommonJS 产物，供 Next 与 Nest 共同消费）。
 
-以下内容是刻意延后的，不要在无关任务里顺手补上：tsconfig、lint、测试、Changesets、CI。包的实现顺序和各自约束随包写入对应的 `AGENTS.md`。
+以下内容是刻意延后的，不要在无关任务里顺手补上：lint、测试、Changesets、CI。包的实现顺序和各自约束随包写入对应的 `AGENTS.md`。
 
 ## 常用命令
 
 ```bash
 pnpm install
-pnpm dev            # turbo run dev
+pnpm dev            # turbo run dev（应用尚未实现）
 pnpm build          # turbo run build
-pnpm lint           # turbo run lint
+pnpm lint           # turbo run lint（尚未配置）
 pnpm typecheck      # turbo run typecheck
 pnpm lint:commit    # commitlint，从 stdin 读提交信息
 ```
@@ -32,7 +32,7 @@ git log -1 --pretty=%B | pnpm lint:commit
 
 ```
 apps/       可部署应用（shell / canvas / gateway / bff，当前均为占位）
-packages/   共享包（contracts / config，当前均为占位）
+packages/   共享包（contracts 已可编译，config 提供 tsconfig）
 docs/       架构文档与设计记录
 infra/      部署与可观测性骨架
 ```
@@ -58,6 +58,7 @@ infra/      部署与可观测性骨架
 - Node `>=24.14.1`，pnpm `12.14.0`，已由 `.nvmrc`、`engines`、`packageManager` 固定。
 - TypeScript 固定 `6.0.3`。Next.js 16 的类型检查依赖 `typescript/lib/typescript.js`，而 TS 7 已移除该文件。升级时只改 catalog 里的一行，不要在单个包里单独升级。
 - Turborepo 任务定义在 `turbo.json`，`ui` 固定为 `tui`。新增包时要补对应的 `dev` / `build` / `lint` / `typecheck` scripts。
+- `packages/config` 导出 `tsconfig.base.json`、`tsconfig.node.json`、`tsconfig.react.json`。包内 `tsconfig.json` 用 `"extends": "@inkstack/config/tsconfig.<env>.json"` 继承，并在 devDependencies 声明 `"@inkstack/config": "workspace:*"`。
 
 ## OpenSpec / OPSX 工作流
 
