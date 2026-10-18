@@ -12,6 +12,10 @@
   "keywords": ["ai", "design-to-code", "tldraw", "monorepo", "turborepo"],
   "author": "huayan",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HuayanZhong/inkstack.git"
+  },
   "engines": {
     "node": ">=24.14.1"
   },
