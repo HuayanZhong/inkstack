@@ -14,6 +14,8 @@ catalogs:
   # 开发工具与类型包，允许 minor/patch 浮动。
   dev:
     '@commitlint/config-conventional': ^21.2.3
+    '@nestjs/cli': ^12.0.8
+    '@types/express': ^5.0.6
     '@types/node': ^26.6.5
     '@types/react': ^19.3.0
     '@types/react-dom': ^19.3.0
@@ -25,9 +27,14 @@ catalogs:
     yaml: ^2.9.1
   # 运行时库：Next / tldraw / Nest / AI SDK 等；首个依赖进入时创建。
   runtime:
+    '@nestjs/common': ^12.1.3
+    '@nestjs/core': ^12.1.3
+    '@nestjs/platform-express': ^12.1.3
     next: ^16.4.2
     react: ^19.3.0
     react-dom: ^19.3.0
+    reflect-metadata: ^0.2.2
+    rxjs: ^7.8.2
 
 # oxlint 提供 ESLint v9 兼容的插件运行时；eslint-plugin-turbo 只在类型层引用 eslint。
 peerDependencyRules:

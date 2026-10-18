@@ -1,0 +1,4 @@
+schema: spec-driven
+created: 2026-10-18
+# 骨架期只让应用能启动，不产生需要长期维护的行为契约；按 OpenSpec 约定跳过 spec delta。
+skip_specs: true

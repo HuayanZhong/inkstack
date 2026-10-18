@@ -2,6 +2,28 @@
   "name": "@inkstack/bff",
   "version": "0.0.0",
   "private": true,
-  "description": "BFF for Inkstack: frontend aggregation, auth/session, and SSE.",
-  "license": "ISC"
+  "description": "面向前端的 BFF 层：负责会话、SSE 与请求聚合，不持有 action 队列，也不直接执行画布操作。",
+  "license": "ISC",
+  "type": "module",
+  "scripts": {
+    "dev": "nest start --watch",
+    "build": "nest build",
+    "start": "nest start",
+    "lint": "oxlint --config ../../.oxlintrc.json --type-aware .",
+    "typecheck": "tsc -p tsconfig.build.json --noEmit"
+  },
+  "dependencies": {
+    "@nestjs/common": "catalog:runtime",
+    "@nestjs/core": "catalog:runtime",
+    "@nestjs/platform-express": "catalog:runtime",
+    "reflect-metadata": "catalog:runtime",
+    "rxjs": "catalog:runtime"
+  },
+  "devDependencies": {
+    "@inkstack/tsconfig": "workspace:*",
+    "@nestjs/cli": "catalog:dev",
+    "@types/express": "catalog:dev",
+    "@types/node": "catalog:dev",
+    "typescript": "catalog:toolchain"
+  }
 }

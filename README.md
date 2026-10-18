@@ -34,9 +34,9 @@ pnpm install
 pnpm dev
 ```
 
-> 当前为骨架阶段：`apps/shell` 已能启动与构建，`apps/canvas`、`apps/gateway`、
-> `apps/bff` 仍只有 `package.json`。`pnpm dev` 会拉起 shell 与 contracts 的
-> 监听任务，访问 <http://localhost:3000>；其余应用按里程碑逐个接入。
+> 当前为骨架阶段：`apps/shell` 与 `apps/bff` 已能启动与构建，`apps/canvas`、
+> `apps/gateway` 仍只有 `package.json`。`pnpm dev` 会拉起 shell（<http://localhost:3000>）、
+> bff（<http://localhost:4003>）与 contracts 的监听任务；其余应用按里程碑逐个接入。
 
 ## 文档
 

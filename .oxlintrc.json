@@ -56,7 +56,7 @@
       }
     },
     {
-      "files": ["apps/gateway/**/*.{ts,tsx}"],
+      "files": ["apps/gateway/**/*.{ts,tsx}", "apps/bff/**/*.{ts,tsx}"],
       "rules": {
         "typescript/no-extraneous-class": "off",
         "no-useless-constructor": "off",
