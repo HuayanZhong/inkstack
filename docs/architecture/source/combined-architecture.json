@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "墨栈 Inkstack · 运行时架构",
+    "subtitle": "内嵌 AI、人工编辑与外部 Agent 共用同一动作队列",
+    "locale": "zh-CN",
+    "output": "interactive/combined-architecture.html",
+    "quality_profile": "showcase"
+  },
+  "components": [
+    { "id": "chat", "type": "frontend", "label": "Chat Panel", "sublabel": "内嵌 AI 对话", "pos": [40, 40], "size": [180, 64] },
+    { "id": "claude", "type": "cloud", "label": "Claude Code", "sublabel": "外部 Agent", "pos": [40, 170], "size": [180, 64] },
+    { "id": "coze", "type": "cloud", "label": "Coze 平台", "sublabel": "未来 MCP Client", "pos": [40, 300], "size": [180, 64] },
+
+    { "id": "bff", "type": "backend", "label": "BFF 层 / Frontend API", "sublabel": "聚合 / Auth / SSE", "pos": [296, 40], "size": [180, 64] },
+    { "id": "agent", "type": "backend", "label": "Agent Service", "sublabel": "LangGraph 编排 / 流式", "pos": [260, 140], "size": [180, 64] },
+    { "id": "mcp", "type": "backend", "label": "MCP Adapter", "sublabel": "stdio / HTTP", "pos": [260, 300], "size": [180, 64] },
+
+    { "id": "gw", "type": "backend", "label": "Gateway", "sublabel": "Action Queue / 单一序列器", "pos": [500, 180], "size": [220, 80] },
+
+    { "id": "human", "type": "external", "label": "人工编辑", "sublabel": "拖拽 / 属性面板", "pos": [860, 30], "size": [140, 64] },
+    { "id": "canvas", "type": "frontend", "label": "Canvas / tldraw", "sublabel": "单一执行器", "pos": [780, 140], "size": [220, 72] },
+    { "id": "codegen", "type": "backend", "label": "Codegen Service", "sublabel": "IR → React + Tailwind", "pos": [510, 340], "size": [200, 64] },
+
+    { "id": "json", "type": "database", "label": "design.json", "sublabel": "Git 中的设计快照", "pos": [1040, 30], "size": [160, 64] },
+    { "id": "code", "type": "frontend", "label": "代码产物", "sublabel": "预览 / 导出", "pos": [510, 460], "size": [200, 64] }
+  ],
+  "connections": [
+    { "from": "chat", "to": "bff", "label": "SSE / HTTP", "variant": "emphasis", "fromSide": "right", "toSide": "left" },
+    { "from": "bff", "to": "agent", "label": "聚合 / 流式", "fromSide": "bottom", "toSide": "top" },
+    { "from": "bff", "to": "gw", "label": "REST / WS", "fromSide": "bottom", "toSide": "top" },
+    { "from": "claude", "to": "mcp", "label": "MCP", "variant": "security" },
+    { "from": "coze", "to": "mcp", "label": "MCP", "variant": "security" },
+    { "from": "human", "to": "canvas", "label": "操作", "fromSide": "bottom", "toSide": "top" },
+    { "from": "agent", "to": "gw", "label": "actions", "variant": "emphasis" },
+    { "from": "mcp", "to": "gw", "label": "HTTP", "variant": "emphasis" },
+    { "from": "gw", "to": "canvas", "label": "WS apply", "variant": "emphasis", "fromSide": "right", "toSide": "left" },
+    { "from": "canvas", "to": "gw", "label": "ack + snapshot", "variant": "dashed", "fromSide": "bottom", "toSide": "bottom", "via": [[890, 300], [610, 300]] },
+    { "from": "gw", "to": "json", "label": "持久化", "variant": "dashed", "fromSide": "top", "toSide": "top", "via": [[610, 10], [1120, 10]] },
+    { "from": "gw", "to": "codegen", "label": "TCP / HTTP", "fromSide": "bottom", "toSide": "top" },
+    { "from": "codegen", "to": "code", "label": "生成", "variant": "emphasis" }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "三条主流程",
+      "items": [
+        "内嵌 AI：Chat → BFF → Agent Service → Gateway → Canvas",
+        "人工编辑：Canvas → Gateway → design.json",
+        "外部 Agent：MCP Adapter → Gateway → Canvas"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "关键约束",
+      "items": [
+        "BFF 是独立一层：前端聚合 / Auth / SSE；实时 WS 可直连 Gateway",
+        "Gateway 是单一序列器，所有 action 排队并编号",
+        "Canvas 是单一执行器，负责调用 tldraw editor 并回 ack",
+        "写操作要求画布在线；读与 codegen 可离线使用最后快照"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "协议",
+      "items": [
+        "浏览器与 BFF：HTTP / SSE；实时动作：WS 可直连 Gateway",
+        "内嵌聊天：BFF 聚合后 SSE 流式响应",
+        "外部接入：MCP stdio，平台阶段换 HTTP",
+        "服务间：Nest TCP / Redis（候选）"
+      ]
+    },
+    {
+      "dot": "violet",
+      "title": "Supabase（可选）",
+      "items": [
+        "Auth / Storage / Postgres 作为平台化能力接入",
+        "不进入主 action 流；本地仍以 design.json 为准"
+      ]
+    }
+  ]
+}

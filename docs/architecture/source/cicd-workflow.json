@@ -1,0 +1,97 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "墨栈 Inkstack · CI/CD 流水线",
+    "subtitle": "从 PR 到生产：质量门禁、部署与回滚",
+    "locale": "zh-CN",
+    "output": "interactive/cicd-workflow.html",
+    "quality_profile": "showcase"
+  },
+  "lanes": [
+    { "id": "dev", "label": "开发者 / Git" },
+    { "id": "ci", "label": "CI / GitHub Actions" },
+    { "id": "quality", "label": "质量门禁" },
+    { "id": "deploy", "label": "部署环境" },
+    { "id": "ops", "label": "运行与回滚", "variant": "exception" }
+  ],
+  "phases": [
+    { "id": "verify", "label": "Build & Verify", "fromCol": 0, "toCol": 3 },
+    { "id": "release", "label": "Preview → Production", "fromCol": 4, "toCol": 5, "variant": "emphasis" }
+  ],
+  "mainPath": ["pr", "install", "lint", "unit", "golden", "integration", "e2e", "preview", "approval", "prod", "smoke"],
+  "nodes": [
+    { "id": "pr", "lane": "dev", "col": 0, "type": "external", "label": "PR / Push", "sublabel": "feature branch", "width": 140 },
+    { "id": "install", "lane": "ci", "col": 1, "type": "backend", "label": "Install + Cache", "sublabel": "pnpm / Turborepo", "width": 170 },
+    { "id": "lint", "lane": "quality", "col": 1, "type": "security", "label": "Lint + Typecheck", "sublabel": "ESLint / tsc", "width": 170 },
+    { "id": "unit", "lane": "ci", "col": 2, "type": "backend", "label": "Unit + Build", "sublabel": "Vitest / turbo build", "width": 170 },
+    { "id": "golden", "lane": "quality", "col": 2, "type": "security", "label": "Codegen Golden", "sublabel": "snapshot diff", "width": 170 },
+    { "id": "integration", "lane": "ci", "col": 3, "type": "backend", "label": "Integration", "sublabel": "Nest / MCP", "width": 170 },
+    { "id": "e2e", "lane": "quality", "col": 3, "type": "security", "label": "E2E", "sublabel": "Playwright", "width": 170 },
+    { "id": "preview", "lane": "deploy", "col": 4, "type": "cloud", "label": "Preview / Staging", "sublabel": "Vercel / Docker", "width": 180 },
+    { "id": "approval", "lane": "quality", "col": 5, "type": "security", "label": "Prod Approval", "sublabel": "GitHub Environment", "width": 170 },
+    { "id": "prod", "lane": "deploy", "col": 5, "type": "cloud", "label": "Production", "sublabel": "Vercel / Fly.io", "width": 180 },
+    { "id": "smoke", "lane": "ops", "col": 5, "type": "backend", "label": "Smoke + Sentry", "sublabel": "health / errors", "width": 170 },
+    { "id": "rollback", "lane": "ops", "col": 4, "type": "security", "label": "Rollback", "sublabel": "Vercel / image tag", "width": 170 }
+  ],
+  "edges": [
+    { "from": "pr", "to": "install", "variant": "emphasis", "role": "main" },
+    { "from": "install", "to": "lint", "variant": "default", "role": "main" },
+    { "from": "lint", "to": "unit", "variant": "emphasis", "role": "main" },
+    { "from": "unit", "to": "golden", "variant": "default", "role": "main" },
+    { "from": "golden", "to": "integration", "variant": "emphasis", "role": "main" },
+    { "from": "integration", "to": "e2e", "variant": "default", "role": "main" },
+    { "from": "e2e", "to": "preview", "variant": "emphasis", "role": "main" },
+    { "from": "preview", "to": "approval", "variant": "default", "role": "main" },
+    { "from": "approval", "to": "prod", "variant": "emphasis", "role": "main" },
+    { "from": "prod", "to": "smoke", "variant": "default", "role": "main" },
+    { "from": "smoke", "to": "rollback", "label": "failed", "variant": "security", "role": "error", "route": "straight", "fromSide": "left", "toSide": "right" }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "环境",
+      "items": [
+        "local → preview → staging → production",
+        "production 部署必须经过 GitHub Environment 审批",
+        "preview 只用于前端与只读预览，避免污染数据"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "部署目标",
+      "items": [
+        "Shell / Canvas：Vercel 或静态 CDN",
+        "BFF / Gateway / Agent / Codegen：Docker 镜像 → Fly.io / Render / VPS",
+        "Supabase：托管 Postgres / Auth / Storage；MCP：npm 包 + HTTP 服务"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "质量门禁",
+      "items": [
+        "Lint + typecheck + unit + codegen golden 必须通过",
+        "Nest / MCP 集成测试与 Playwright E2E 作为合并门槛",
+        "Turborepo affected + 缓存，缩短 PR 反馈时间"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "回滚与观测",
+      "items": [
+        "Vercel 即时回滚；Docker 部署按镜像 tag 回滚",
+        "Drizzle / Supabase 迁移采用 expand → migrate → contract",
+        "Sentry + smoke test + 健康检查，失败自动触发 rollback"
+      ]
+    },
+    {
+      "dot": "violet",
+      "title": "密钥与权限",
+      "items": [
+        "Anthropic key 只放 agent-service；Supabase service role 只放 BFF/后端",
+        "前端只用 anon key；密钥通过 GitHub Actions Secrets 注入",
+        "生产环境单独审批，禁止 PR 预览使用生产密钥"
+      ]
+    }
+  ]
+}

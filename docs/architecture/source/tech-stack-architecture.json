@@ -1,0 +1,138 @@
+{
+  "schema_version": 1,
+  "diagram_type": "tree",
+  "meta": {
+    "title": "墨栈 Inkstack · 技术栈架构",
+    "subtitle": "按层分解：连线表示归属，不表示调用",
+    "locale": "zh-CN",
+    "output": "interactive/tech-stack-architecture.html",
+    "quality_profile": "showcase"
+  },
+  "layout": {
+    "direction": "down",
+    "nodeMaxW": 220
+  },
+  "nodes": [
+    { "id": "inkstack", "label": "墨栈 Inkstack", "sublabel": "技术栈分解" },
+
+    { "id": "access", "label": "接入层 / Access", "parent": "inkstack" },
+    { "id": "shell", "label": "Next.js Shell", "sublabel": "三栏布局", "parent": "access" },
+    { "id": "canvas_app", "label": "Canvas (tldraw)", "sublabel": "画布应用", "parent": "access" },
+    { "id": "mcp_client", "label": "MCP Client", "sublabel": "Claude Code / 平台", "parent": "access" },
+
+    { "id": "frontend", "label": "前端技术 / Frontend", "parent": "inkstack" },
+    { "id": "react", "label": "React", "parent": "frontend" },
+    { "id": "next", "label": "Next.js", "parent": "frontend" },
+    { "id": "vite", "label": "Vite", "parent": "frontend" },
+    { "id": "tldraw", "label": "tldraw", "parent": "frontend" },
+    { "id": "tailwind", "label": "Tailwind", "parent": "frontend" },
+    { "id": "radix", "label": "Radix", "parent": "frontend" },
+    { "id": "state", "label": "Zustand / Context", "sublabel": "presence / chat", "parent": "frontend" },
+
+    { "id": "microfrontend", "label": "微前端 / Module Federation（候选）", "parent": "inkstack" },
+    { "id": "mf_host", "label": "Next.js Shell (Host)", "sublabel": "路由与布局", "parent": "microfrontend" },
+    { "id": "mf_remote", "label": "Canvas Remote", "sublabel": "Vite + tldraw", "parent": "microfrontend" },
+    { "id": "mf_shared", "label": "Shared React / tldraw", "sublabel": "单例依赖", "parent": "microfrontend" },
+
+    { "id": "bff_layer", "label": "BFF 层 / Frontend API", "parent": "inkstack" },
+    { "id": "bff_service", "label": "BFF Service", "sublabel": "NestJS / Next Route Handlers", "parent": "bff_layer" },
+    { "id": "bff_auth", "label": "Auth & Session", "sublabel": "Supabase Auth", "parent": "bff_layer" },
+    { "id": "bff_agg", "label": "Aggregation & SSE", "sublabel": "chat / export / upload", "parent": "bff_layer" },
+
+    { "id": "protocol", "label": "协议层 / Protocols", "parent": "inkstack" },
+    { "id": "http", "label": "HTTP / REST", "parent": "protocol" },
+    { "id": "ws", "label": "WebSocket", "parent": "protocol" },
+    { "id": "mcp_proto", "label": "MCP stdio / HTTP", "parent": "protocol" },
+
+    { "id": "services", "label": "后端服务 / Backend Services", "parent": "inkstack" },
+    { "id": "gateway", "label": "Gateway", "sublabel": "HTTP + WS + 动作队列", "parent": "services" },
+    { "id": "agent", "label": "Agent Service", "sublabel": "LangGraph 多 Agent 编排", "parent": "services" },
+    { "id": "codegen", "label": "Codegen Service", "sublabel": "IR → 代码", "parent": "services" },
+    { "id": "mcp_adapter", "label": "MCP Adapter", "sublabel": "工具协议", "parent": "services" },
+    { "id": "tcp", "label": "Nest TCP / Redis（候选）", "parent": "services" },
+    { "id": "supabase", "label": "Supabase（BaaS）", "sublabel": "Postgres / Auth / Storage / Realtime", "parent": "services" },
+
+    { "id": "data", "label": "数据层 / Data", "parent": "inkstack" },
+    { "id": "design_json", "label": "design.json", "sublabel": "tldraw snapshot", "parent": "data" },
+    { "id": "sqlite", "label": "SQLite + Drizzle", "sublabel": "本地元数据 / action log", "parent": "data" },
+    { "id": "git", "label": "Git", "sublabel": "版本与评审", "parent": "data" },
+
+    { "id": "ai", "label": "AI 层 / AI", "parent": "inkstack" },
+    { "id": "ai_sdk", "label": "Vercel AI SDK", "sublabel": "模型调用 / 流式", "parent": "ai" },
+    { "id": "anthropic", "label": "Anthropic API", "sublabel": "Claude 模型调用", "parent": "ai" },
+    { "id": "langgraph", "label": "LangGraph.js", "sublabel": "多 Agent 图 / 状态 / HITL", "parent": "ai" },
+    { "id": "deepagents", "label": "Deep Agents（候选）", "sublabel": "规划 / 子 Agent / 基于 LangGraph", "parent": "ai" },
+    { "id": "mastra", "label": "Mastra（备选）", "sublabel": "TS-native workflow", "parent": "ai" },
+    { "id": "agent_loop", "label": "tldraw Agent Kit", "sublabel": "画布 action / 上下文", "parent": "ai" },
+    { "id": "context", "label": "Screenshot + Shape", "sublabel": "画布上下文", "parent": "ai" },
+
+    { "id": "engineering", "label": "工程化 / Engineering", "parent": "inkstack" },
+    { "id": "pnpm", "label": "pnpm", "parent": "engineering" },
+    { "id": "turbo", "label": "Turborepo", "parent": "engineering" },
+    { "id": "vitest", "label": "Vitest", "parent": "engineering" },
+    { "id": "playwright", "label": "Playwright", "parent": "engineering" },
+    { "id": "docker", "label": "Docker Compose（候选）", "parent": "engineering" },
+    { "id": "gha", "label": "GitHub Actions", "sublabel": "lint / test / build / deploy", "parent": "engineering" },
+    { "id": "changesets", "label": "Changesets", "sublabel": "版本 / changelog", "parent": "engineering" },
+    { "id": "sentry", "label": "Sentry", "sublabel": "错误与性能监控", "parent": "engineering" }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "分层顺序",
+      "items": [
+        "接入层 → 前端技术 → 微前端 → BFF 层 → 协议层 → 后端服务 → 数据层 → AI 层 → 工程化",
+        "BFF 是独立一层：前端聚合 / Auth / SSE；Gateway 仍是内部 action 序列器",
+        "服务层先以 NestJS 模块化单体落地，再拆无状态服务"
+      ]
+    },
+    {
+      "dot": "orange",
+      "title": "BFF 层（独立）",
+      "items": [
+        "位置：前端与后端服务之间，单独一层",
+        "职责：聚合 Gateway / Agent / Codegen，Auth/session，SSE，上传/下载",
+        "实现：NestJS BFF 或 Next.js Route Handlers",
+        "边界：不持有 action 队列，不做画布执行"
+      ]
+    },
+    {
+      "dot": "violet",
+      "title": "微前端（候选）",
+      "items": [
+        "Next.js Shell 作为 Host，Canvas 作为 Module Federation remote",
+        "共享 React / tldraw 单例，画布组件禁用 SSR",
+        "先做 1–2 天 spike；App Router 集成不顺就退到 Multi-Zones"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Supabase（BaaS）",
+      "items": [
+        "放在后端服务层：Postgres / Auth / Storage / Realtime",
+        "NestJS 仍是业务编排层，Supabase 不替代 NestJS",
+        "本地开发仍可用 SQLite + Drizzle"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "AI 框架与多 Agent 编排",
+      "items": [
+        "模型调用 / 流式：Vercel AI SDK（ai + @ai-sdk/anthropic）",
+        "多 Agent 编排：LangGraph.js（图 / 状态 / 检查点 / HITL）",
+        "Deep Agents：基于 LangGraph 的高层 harness（规划 / 子 Agent / MCP），候选",
+        "画布执行：tldraw Agent Kit；外部接入：MCP SDK",
+        "Mastra 作为 TypeScript-native 备选；不要同时上两套编排层"
+      ]
+    },
+    {
+      "dot": "slate",
+      "title": "候选与关键选型",
+      "items": [
+        "Nest TCP / Redis：拆服务或需要 pub/sub 时启用",
+        "Docker Compose：本地多服务编排时启用",
+        "画布 tldraw Agent kit（MIT）；代码生成用确定性编译器；契约用 Zod 共享"
+      ]
+    }
+  ]
+}

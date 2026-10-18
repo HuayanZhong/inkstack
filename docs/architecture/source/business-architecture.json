@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "墨栈 Inkstack · 业务架构",
+    "subtitle": "参与者、业务场景、核心能力与业务资产",
+    "locale": "zh-CN",
+    "output": "interactive/business-architecture.html",
+    "quality_profile": "showcase"
+  },
+  "components": [
+    { "id": "user", "type": "external", "label": "开发者 / 设计师", "sublabel": "主要使用者", "pos": [40, 40], "size": [170, 64] },
+    { "id": "inline_ai", "type": "backend", "label": "内嵌 AI 助手", "sublabel": "聊天驱动", "pos": [240, 40], "size": [170, 64] },
+    { "id": "external_ai", "type": "cloud", "label": "外部 Agent", "sublabel": "Claude Code / Coze 平台", "pos": [440, 40], "size": [220, 64] },
+
+    { "id": "manual_edit", "type": "backend", "label": "人工编辑画布", "sublabel": "拖拽 / 属性面板", "pos": [40, 170], "size": [170, 64] },
+    { "id": "ai_proto", "type": "backend", "label": "AI 生成原型", "sublabel": "prompt → 界面", "pos": [240, 170], "size": [170, 64] },
+    { "id": "multi_agent", "type": "backend", "label": "多 Agent 协同", "sublabel": "并行绘制", "pos": [440, 170], "size": [170, 64] },
+    { "id": "design_to_code", "type": "backend", "label": "设计转代码", "sublabel": "frame → 组件", "pos": [640, 170], "size": [170, 64] },
+    { "id": "platform_call", "type": "backend", "label": "平台调用画布", "sublabel": "MCP 工具", "pos": [840, 170], "size": [170, 64] },
+
+    { "id": "canvas_edit", "type": "backend", "label": "画布编辑", "sublabel": "tldraw 编辑器", "pos": [40, 300], "size": [170, 64] },
+    { "id": "ai_pen", "type": "backend", "label": "AI 控笔", "sublabel": "action 驱动", "pos": [240, 300], "size": [170, 64] },
+    { "id": "props_style", "type": "backend", "label": "属性与样式", "sublabel": "位置 / 填充 / 文字", "pos": [440, 300], "size": [170, 64] },
+    { "id": "codegen", "type": "backend", "label": "Codegen", "sublabel": "确定性编译器", "pos": [640, 300], "size": [170, 64] },
+    { "id": "mcp_access", "type": "backend", "label": "MCP 接入", "sublabel": "读写与导出", "pos": [840, 300], "size": [170, 64] },
+
+    { "id": "design_snapshot", "type": "database", "label": "Design Snapshot", "sublabel": "JSON，随仓库进 Git", "pos": [40, 430], "size": [200, 64] },
+    { "id": "code_output", "type": "frontend", "label": "代码产物", "sublabel": "React + Tailwind", "pos": [640, 430], "size": [200, 64] },
+    { "id": "git_history", "type": "database", "label": "Git 提交历史", "sublabel": "分支 / diff / 评审", "pos": [300, 430], "size": [170, 64] }
+  ],
+  "connections": [
+    { "from": "user", "to": "manual_edit", "label": "编辑", "variant": "emphasis" },
+    { "from": "inline_ai", "to": "ai_proto", "label": "prompt", "variant": "emphasis" },
+    { "from": "external_ai", "to": "platform_call", "label": "MCP", "variant": "security" },
+    { "from": "manual_edit", "to": "canvas_edit", "label": "操作" },
+    { "from": "ai_proto", "to": "ai_pen", "label": "生成动作", "variant": "emphasis" },
+    { "from": "multi_agent", "to": "ai_pen", "label": "并行笔迹" },
+    { "from": "design_to_code", "to": "codegen", "label": "调用", "variant": "emphasis" },
+    { "from": "platform_call", "to": "mcp_access", "label": "工具" },
+    { "from": "canvas_edit", "to": "design_snapshot", "label": "快照" },
+    { "from": "props_style", "to": "design_snapshot", "label": "样式写入", "fromSide": "bottom", "toSide": "top" },
+    { "from": "design_snapshot", "to": "git_history", "label": "提交", "variant": "dashed" },
+    { "from": "codegen", "to": "code_output", "label": "输出", "variant": "emphasis" }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "价值链",
+      "items": [
+        "需求 → AI 或人工原型 → 迭代 → 导出代码 → 进仓库",
+        "设计文件与代码同仓，可 diff、可分支、可评审",
+        "MCP 工具通过平台调用读写 Design Snapshot"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "阅读方式",
+      "items": [
+        "自上而下依次是：参与者、业务场景、核心能力、业务资产",
+        "左聊天、中画布、右属性是界面布局，不是业务分层"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "本期边界",
+      "items": [
+        "不做多人实时协作、云部署、图片资产管理与完整设计系统",
+        "外部 Agent 通过 MCP 接入，本期只要求本地可用"
+      ]
+    }
+  ]
+}
