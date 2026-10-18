@@ -11,10 +11,10 @@ apps/
   shell/       Next.js Shell
   canvas/      tldraw 画布
   gateway/     NestJS Gateway
-  bff/         BFF（框架待定，占位）
+  bff/         BFF（NestJS，占位）
 packages/
   contracts/   共享类型 / 协议 / codegen IR
-  config/      共享 tsconfig 预设
+  tsconfig/    共享 tsconfig 预设
 docs/
   architecture/  架构图与设计记录
 openspec/        OpenSpec 规格与变更

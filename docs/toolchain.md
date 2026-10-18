@@ -1,26 +1,26 @@
 # 工具链配置
 
-本文是 format、lint 与 Turborepo 环境变量检查的唯一 home。tsconfig 与测试配置不在本文范围。
+本文是 format、lint 与 Turborepo 环境变量检查的唯一 home。tsconfig 见 [`docs/typescript.md`](typescript.md)；测试配置不在本文范围。
 
 ## 平面模型
 
-| 平面   | 典型路径                                 | 运行时特征   | 配置方式                                      |
-| ------ | ---------------------------------------- | ------------ | --------------------------------------------- |
-| 浏览器 | `apps/shell`、`apps/canvas`              | DOM、bundler | `tsconfig.react/next` + lint browser override |
-| Node   | `apps/gateway`、`apps/bff`、`packages/*` | Node ESM     | `tsconfig.node/nest` + lint node override     |
-| AI     | 未来的 `packages/ai-*`                   | Node ESM     | `tsconfig.node` + lint node override          |
+| 平面   | 典型路径                                 | 运行时特征   | 配置方式                                                              |
+| ------ | ---------------------------------------- | ------------ | --------------------------------------------------------------------- |
+| 浏览器 | `apps/shell`、`apps/canvas`              | DOM、bundler | `@inkstack/tsconfig/react.json` / `next.json` + lint browser override |
+| Node   | `apps/gateway`、`apps/bff`、`packages/*` | Node ESM     | `@inkstack/tsconfig/node.json` / `nest.json` + lint node override     |
+| AI     | 未来的 `packages/ai-*`                   | Node ESM     | `@inkstack/tsconfig/node.json` + lint node override                   |
 
 ## 所有权
 
-| 内容                     | 位置                        | 原因                            |
-| ------------------------ | --------------------------- | ------------------------------- |
-| 全仓库 lint 规则         | 根 `.oxlintrc.json`         | 工具从仓库根读取一次            |
-| Turbo 环境变量检查       | 根 `.oxlintrc.turbo.json`   | 规则需要 workspace 根上下文     |
-| 格式规则                 | 根 `.oxfmtrc.json`          | 与环境无关                      |
-| 每个包的 lint 命令       | 包内 `package.json` scripts | 只有包自己知道源码入口          |
-| 共享 tsconfig / 测试预设 | `packages/config`           | 每个包需要主动 extends / import |
+| 内容               | 位置                        | 原因                        |
+| ------------------ | --------------------------- | --------------------------- |
+| 全仓库 lint 规则   | 根 `.oxlintrc.json`         | 工具从仓库根读取一次        |
+| Turbo 环境变量检查 | 根 `.oxlintrc.turbo.json`   | 规则需要 workspace 根上下文 |
+| 格式规则           | 根 `.oxfmtrc.json`          | 与环境无关                  |
+| 每个包的 lint 命令 | 包内 `package.json` scripts | 只有包自己知道源码入口      |
+| 共享 tsconfig      | `packages/tsconfig`         | 每个包需要主动 extends      |
 
-环境差异用根配置的 `overrides[].files` 表达。不要在包内新建 `.oxlintrc.json`；只有"调用方式不同"才拆文件，例如 staged 检查需要关闭 type-aware。
+环境差异用根配置的 `overrides[].files` 表达。不要在包内新建 `.oxlintrc.json`；只有"调用方式不同"才拆文件，例如 staged 检查需要关闭 type-aware。测试预设将来放独立的 `@inkstack/vitest-config`，不回到 tsconfig 包。
 
 ## 命令
 

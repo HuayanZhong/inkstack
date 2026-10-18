@@ -21,6 +21,13 @@ function readJson(relativePath) {
   return JSON.parse(readFileSync(resolve(root, relativePath), 'utf8'))
 }
 
+function readJsonc(relativePath) {
+  const text = readFileSync(resolve(root, relativePath), 'utf8')
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    .replace(/^\s*\/\/.*$/gm, '')
+  return JSON.parse(text)
+}
+
 function collectManifests() {
   const manifests = [{ path: 'package.json', json: readJson('package.json'), isRoot: true }]
   for (const group of ['apps', 'packages']) {
@@ -41,6 +48,9 @@ const catalogs = workspace.catalogs ?? {}
 const catalogNames = new Set(Object.keys(catalogs))
 const manifests = collectManifests()
 const depFields = ['dependencies', 'devDependencies', 'peerDependencies', 'optionalDependencies']
+const tsconfigExports = new Set(
+  Object.keys(readJson('packages/tsconfig/package.json').exports ?? {}),
+)
 
 for (const { path, json, isRoot } of manifests) {
   if (isRoot) {
@@ -101,9 +111,30 @@ for (const { path, json, isRoot } of manifests) {
     for (const script of ['dev', 'build', 'lint', 'typecheck']) {
       if (!json.scripts?.[script]) fail(path, `root must define script "${script}"`)
     }
-  } else if (existsSync(resolve(root, path, '..', 'src'))) {
-    for (const script of ['build', 'typecheck']) {
-      if (!json.scripts?.[script]) fail(path, `package with src/ must define script "${script}"`)
+  } else {
+    const packageDir = resolve(root, path, '..')
+    if (existsSync(resolve(packageDir, 'src'))) {
+      for (const script of ['build', 'typecheck']) {
+        if (!json.scripts?.[script]) fail(path, `package with src/ must define script "${script}"`)
+      }
+      if (json.type !== 'module') fail(path, 'package with src/ must declare "type": "module"')
+    }
+
+    const tsconfigRelative = path.replace(/package\.json$/, 'tsconfig.json')
+    if (existsSync(resolve(root, tsconfigRelative))) {
+      const tsconfig = readJsonc(tsconfigRelative)
+      const extendsValue = tsconfig.extends
+      if (typeof extendsValue !== 'string' || !extendsValue.startsWith('@inkstack/tsconfig/')) {
+        fail(tsconfigRelative, 'must extend "@inkstack/tsconfig/<preset>.json"')
+      } else {
+        const subpath = extendsValue.slice('@inkstack/tsconfig'.length)
+        if (!tsconfigExports.has(`.${subpath}`)) {
+          fail(tsconfigRelative, `extends references missing export "${subpath}"`)
+        }
+      }
+      if (json.devDependencies?.['@inkstack/tsconfig'] !== 'workspace:*') {
+        fail(path, 'must declare "@inkstack/tsconfig": "workspace:*" in devDependencies')
+      }
     }
   }
 }

@@ -251,13 +251,13 @@ importers:
 
   apps/shell: {}
 
-  packages/config: {}
-
   packages/contracts:
     devDependencies:
-      '@inkstack/config':
+      '@inkstack/tsconfig':
         specifier: workspace:*
-        version: link:../config
+        version: link:../tsconfig
+
+  packages/tsconfig: {}
 
 packages:
 

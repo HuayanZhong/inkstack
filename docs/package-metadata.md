@@ -27,16 +27,16 @@ pnpm add --filter @inkstack/<pkg> --save-catalog-name runtime <pkg>
 
 ## 字段标准
 
-| 字段                | 根         | app（私有）   | package（私有）                                      |
-| ------------------- | ---------- | ------------- | ---------------------------------------------------- |
-| `name`              | `inkstack` | `@inkstack/*` | `@inkstack/*`                                        |
-| `version`           | `0.0.0`    | `0.0.0`       | `0.0.0`                                              |
-| `private`           | `true`     | `true`        | `true`                                               |
-| `description`       | 必填       | 必填          | 必填                                                 |
-| `license`           | `ISC`      | `ISC`         | `ISC`                                                |
-| `type`              | `module`   | 实现时决定    | `@inkstack/contracts` 为 `commonjs`；config 暂不声明 |
-| `exports` / `files` | —          | —             | 可被导入时必填                                       |
-| `scripts`           | 必填       | 实现时补      | 有代码时补                                           |
+| 字段                | 根         | app（私有）   | package（私有）                             |
+| ------------------- | ---------- | ------------- | ------------------------------------------- |
+| `name`              | `inkstack` | `@inkstack/*` | `@inkstack/*`                               |
+| `version`           | `0.0.0`    | `0.0.0`       | `0.0.0`                                     |
+| `private`           | `true`     | `true`        | `true`                                      |
+| `description`       | 必填       | 必填          | 必填                                        |
+| `license`           | `ISC`      | `ISC`         | `ISC`                                       |
+| `type`              | `module`   | `module`      | `module`；`@inkstack/tsconfig` 无代码不声明 |
+| `exports` / `files` | —          | —             | 可被导入时必填                              |
+| `scripts`           | 必填       | 实现时补      | 有代码时补                                  |
 
 ## Description 规则
 

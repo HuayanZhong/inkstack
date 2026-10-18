@@ -7,7 +7,7 @@
   "files": [
     "dist"
   ],
-  "type": "commonjs",
+  "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
@@ -23,6 +23,6 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "devDependencies": {
-    "@inkstack/config": "workspace:*"
+    "@inkstack/tsconfig": "workspace:*"
   }
 }

@@ -1,5 +1,5 @@
 {
-  "extends": "@inkstack/config/tsconfig.node.json",
+  "extends": "@inkstack/tsconfig/library.json",
   "compilerOptions": {
     "rootDir": "src",
     "outDir": "dist",
