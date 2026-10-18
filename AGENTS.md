@@ -35,7 +35,11 @@ apps/       可部署应用（shell / canvas / gateway / bff，当前均为占�
 packages/   共享包（contracts 已可编译，config 提供 tsconfig）
 docs/       架构文档与设计记录
 infra/      部署与可观测性骨架
+.agents/    共享技能实体（skills）
+.claude/    Claude Code 配置（skills 符号链接、commands、rules、settings.json）
 ```
+
+`.claude/skills` 指向 `../.agents/skills`；`commands/` 和 `rules/` 保留在 `.claude/`。`.claude/settings.json` 必须留在原位，`CLAUDE.md` 必须在仓库根目录。
 
 所有包统一使用 `@inkstack/*` 命名。pnpm workspace 只包含 `apps/*` 和 `packages/*`；`docs/`、`infra/` 不是包。
 
@@ -82,7 +86,7 @@ Claude Code 中的命令：
 
 约定：
 
-- 技能实体在 `.agents/skills/openspec-*`，`.claude/skills` 是指向 `../.agents/skills` 的符号链接；不要直接编辑生成的技能文件。
+- 技能实体在 `.agents/skills/openspec-*`，`.claude/skills` 是指向它的符号链接；命令和规则保留在 `.claude/` 下。不要直接编辑生成的技能和命令文件。
 - 刷新生成物用 `pnpm exec openspec update`，它会写入 `.agents/skills` 并保留符号链接。
 - 项目 devDependency 与全局 `openspec` 都固定 `1.14.3`；升级时两处一起改。
 - `/opsx:propose` 只产出规划产物，不改代码；实现从 `/opsx:apply` 开始。

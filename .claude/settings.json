@@ -12,9 +12,7 @@
       "Bash(git diff:*)",
       "Bash(git log:*)",
       "Bash(git show:*)",
-      "Bash(git branch:*)",
-      "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git branch:*)"
     ]
   }
 }
