@@ -39,7 +39,7 @@
   "devDependencies": {
     "@commitlint/config-conventional": "catalog:dev",
     "@fission-ai/openspec": "catalog:dev",
-    "@types/node": "^24.19.2",
+    "@types/node": "catalog:dev",
     "commitlint": "catalog:dev",
     "husky": "catalog:dev",
     "turbo": "catalog:dev",

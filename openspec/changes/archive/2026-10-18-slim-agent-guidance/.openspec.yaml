@@ -1,0 +1,4 @@
+schema: spec-driven
+created: 2026-10-18
+# 纯文档与工具链变更，不涉及运行时行为；按 OpenSpec 约定显式跳过 spec delta。
+skip_specs: true

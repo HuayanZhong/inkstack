@@ -53,6 +53,7 @@
 | Mastra 作为备选 | TypeScript-native、typed workflow | LangGraph.js | 备选 |
 | Module Federation 作为候选 | 想练微前端；画布作为 remote | Multi-Zones / 单应用 | 待 spike |
 | MCP 先 stdio 后 HTTP | Claude Code 本地接入快；平台阶段换 HTTP | 直接 HTTP | 分阶段 |
+| interactive HTML 随仓库提交 | 当前没有 CI 生成流程，HTML 是架构文档的查看面 | 只提交 source + images | 已定 |
 
 ## 6. 三条主流程
 
@@ -68,6 +69,8 @@
 - 多 Agent 在画布里的协同是运行时功能，与 Git 分支策略无关。
 
 ## 8. 里程碑
+
+> 里程碑是规划而不是当前状态。骨架期 lint、测试、Changesets、CI 延后，实际接入以 `AGENTS.md` 的阶段策略为准。
 
 | 周 | 交付 |
 |---|---|
@@ -90,7 +93,6 @@
 - LangGraph.js、Deep Agents、Mastra 最终选哪个？先用 LangGraph.js 做最小三节点图，再评估。
 - Supabase 是否作为主数据库？本地仍用 SQLite/Drizzle，平台化时切 Supabase Postgres。
 - 多 Agent 的角色划分与冲突策略（Planner/Designer/Critic 是否足够）。
-- interactive HTML 是否提交仓库？建议只提交 `source/*.json` + `images/*.png`，HTML 由 CI 生成。
 
 ## 10. 产物
 

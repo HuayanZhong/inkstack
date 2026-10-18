@@ -168,8 +168,11 @@ catalogs:
       specifier: ^21.2.3
       version: 21.2.3
     '@fission-ai/openspec':
-      specifier: ^1.14.3
+      specifier: 1.14.3
       version: 1.14.3
+    '@types/node':
+      specifier: ^24.19.2
+      version: 24.19.2
     commitlint:
       specifier: ^21.2.3
       version: 21.2.3
@@ -194,7 +197,7 @@ importers:
         specifier: catalog:dev
         version: 1.14.3(@types/node@24.19.2)
       '@types/node':
-        specifier: ^24.19.2
+        specifier: catalog:dev
         version: 24.19.2
       commitlint:
         specifier: catalog:dev
