@@ -24,12 +24,13 @@
 
 ## 命令
 
-| 命令                | 作用                                 |
-| ------------------- | ------------------------------------ |
-| `pnpm format`       | oxfmt 写入全仓库                     |
-| `pnpm format:check` | 只检查格式，供 CI 接入后使用         |
-| `pnpm lint`         | turbo 包级 lint + Turbo 环境变量检查 |
-| `pnpm lint:env`     | 只跑 Turbo 环境变量检查              |
+| 命令                | 作用                                    |
+| ------------------- | --------------------------------------- |
+| `pnpm format`       | oxfmt 写入全仓库                        |
+| `pnpm format:check` | 只检查格式，供 CI 接入后使用            |
+| `pnpm lint`         | turbo 包级 lint + Turbo 环境变量检查    |
+| `pnpm lint:env`     | 只跑 Turbo 环境变量检查                 |
+| `pnpm hygiene`      | knip 全仓库检查 + 库包 publint 导出校验 |
 
 ## 版本策略
 
@@ -44,6 +45,15 @@
 - 不启用 `@stylistic/*`：格式由 oxfmt 负责，两个工具同时改格式会互相覆盖。
 - Gateway 关闭三条规则：`typescript/no-extraneous-class`、`no-useless-constructor`、`typescript/consistent-type-imports`。前两条误伤 Nest Module 与纯注入构造函数；第三条会把值导入改成 `import type`，导致 `emitDecoratorMetadata` 丢失类引用。
 - 公共导出符号的 TSDoc 要求见 [`.claude/rules/comments.md`](../.claude/rules/comments.md)。
+
+## 死代码与包边界检查
+
+- `pnpm hygiene` = `turbo run build --filter "./packages/*" && knip && turbo run publint --filter "./packages/*"`。先构建库包，是因为 knip 会加载 `rspack.config.ts` 等配置，而这些配置 import 的 `@inkstack/config` 指向 `dist`；构建或任一检查失败都以非零状态退出。
+- knip 一次分析整个 workspace，报告死文件、死导出/类型、未使用依赖、未声明依赖、循环依赖与未使用 catalog 条目。配置在根 `knip.jsonc`。
+- `packages/config`、`packages/contracts` 的入口指向 `dist`，knip 显式使用 `src/index.ts` 作为 entry；应用入口由 Next、Nest、Rspack 的内置识别提供。
+- `.agents/**`、`.claude/**` 是 vendored 技能与视图，整体 ignore；`@fission-ai/openspec` 只由技能工作流调用，按依赖 ignore。每条 ignore 必须在 `knip.jsonc` 写明理由，禁止用宽泛忽略关闭整类检查。
+- publint 只跑 `packages/*` 中声明了 `publint` script 的包，校验 `exports` 目标是否存在于 `pnpm pack` 的文件集。`turbo.json` 的 `publint` 任务 `dependsOn: ["build"]`，干净检出会先构建 `dist`。
+- `--filter "./packages/*"` 限定检查范围：publint 不应用于没有 `exports` 的应用，也避免 pre-push 触发应用构建。
 
 ## Turbo 环境变量检查
 
@@ -74,7 +84,7 @@
 
 - `commit-msg`：commitlint 校验提交信息，规则见 [`.claude/rules/git.md`](../.claude/rules/git.md)。
 - `pre-commit`：`pnpm exec lint-staged`，只处理暂存文件。TS/JS 先 `oxfmt` 格式化，再 `oxlint --config .oxlintrc.staged.json`；Markdown、JSON、YAML、CSS、HTML 只格式化。任一任务失败时 lint-staged 会还原到运行前状态，格式修复也会丢弃；先修复错误再重新提交。
-- `pre-push`：`pnpm typecheck`。Turborepo 缓存命中后开销很小；类型检查不放进 pre-commit。
+- `pre-push`：先 `pnpm typecheck`，再 `pnpm hygiene`。Turborepo 缓存命中后开销很小；类型检查与 hygiene 都不放进 pre-commit。
 - staged lint 关闭 `typeAware`：提交路径只做格式与基础正确性；类型检查由 pre-push 负责，CI 接入后再加入，且根配置文件、`.mjs` 脚本不在任何包的 tsconfig 内。
 - 规则仍只有根 `.oxlintrc.json` 一个 home；`.oxlintrc.staged.json` 只覆盖 `options`，不复制规则。
 - `lint-staged` 版本固定在 `dev` catalog。

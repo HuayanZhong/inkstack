@@ -23,7 +23,7 @@
   "devDependencies": {
     "@inkstack/tsconfig": "workspace:*",
     "@nestjs/cli": "catalog:dev",
-    "@types/express": "catalog:dev",
+    "@nestjs/schematics": "catalog:dev",
     "@types/node": "catalog:dev",
     "dotenv-cli": "catalog:dev",
     "typescript": "catalog:toolchain"

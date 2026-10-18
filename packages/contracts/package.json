@@ -20,9 +20,11 @@
     "build": "tsc -p tsconfig.json",
     "dev": "tsc -p tsconfig.json --watch",
     "lint": "oxlint --config ../../.oxlintrc.json --type-aware .",
+    "publint": "publint",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "devDependencies": {
-    "@inkstack/tsconfig": "workspace:*"
+    "@inkstack/tsconfig": "workspace:*",
+    "publint": "catalog:dev"
   }
 }

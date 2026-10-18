@@ -12,5 +12,3 @@ export const config = {
     port: env.BFF_PORT,
   },
 } as const
-
-export type AppConfig = typeof config

@@ -14,5 +14,11 @@
     "./library.json": "./library.json",
     "./react.json": "./react.json",
     "./next.json": "./next.json"
+  },
+  "scripts": {
+    "publint": "publint"
+  },
+  "devDependencies": {
+    "publint": "catalog:dev"
   }
 }

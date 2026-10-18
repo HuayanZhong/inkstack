@@ -69,6 +69,7 @@ pnpm add --filter @inkstack/<pkg> --save-catalog-name runtime <pkg>
 8. 根 scripts 存在；有 `src` 的包有 `build` / `typecheck`。
 9. 私有包版本偏离 `0.0.0` 时输出 warning，不影响退出码。
 10. `packages/` 与 `packages/*` 的 `AGENTS.md` / `CLAUDE.md` / `README.md` 三件套存在，且 `CLAUDE.md` 只写 `@AGENTS.md`。
+11. 声明了 `exports` 的包有 `publint` script，且 `publint` 以 `catalog:dev` 声明在 devDependencies。
 
 ## 非目标
 

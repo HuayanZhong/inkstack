@@ -173,6 +173,17 @@ for (const { path, json, isRoot } of manifests) {
       if (json.type !== 'module') fail(path, 'package with src/ must declare "type": "module"')
     }
 
+    // 导出映射是包对消费者的契约；没有 publint 就只剩运行时才发现目标缺失。
+    if (json.exports) {
+      if (!json.scripts?.publint) fail(path, 'package with "exports" must define script "publint"')
+      if (json.devDependencies?.publint !== 'catalog:dev') {
+        fail(
+          path,
+          'package with "exports" must declare "publint": "catalog:dev" in devDependencies',
+        )
+      }
+    }
+
     const tsconfigRelative = path.replace(/package\.json$/, 'tsconfig.json')
     if (existsSync(resolve(root, tsconfigRelative))) {
       const tsconfig = readJsonc(tsconfigRelative)

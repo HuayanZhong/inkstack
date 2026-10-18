@@ -38,6 +38,11 @@
     "typecheck": {
       "description": "按包执行 TypeScript 类型检查；先构建依赖包，不产出文件。",
       "dependsOn": ["^build"]
+    },
+    "publint": {
+      "description": "校验库包的 package.json 导出映射；先构建出 dist，避免干净检出时目标文件缺失。",
+      "dependsOn": ["build"],
+      "outputs": []
     }
   }
 }
