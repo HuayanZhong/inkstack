@@ -7,9 +7,16 @@
     "dev": "turbo run dev",
     "build": "turbo run build",
     "lint": "turbo run lint",
+    "lint:commit": "commitlint",
     "typecheck": "turbo run typecheck"
   },
-  "keywords": ["ai", "design-to-code", "tldraw", "monorepo", "turborepo"],
+  "keywords": [
+    "ai",
+    "design-to-code",
+    "tldraw",
+    "monorepo",
+    "turborepo"
+  ],
   "author": "huayan",
   "license": "ISC",
   "repository": {
@@ -29,6 +36,8 @@
   "packageManager": "pnpm@12.14.0",
   "type": "module",
   "devDependencies": {
+    "@commitlint/config-conventional": "catalog:dev",
+    "commitlint": "catalog:dev",
     "turbo": "catalog:dev"
   }
 }

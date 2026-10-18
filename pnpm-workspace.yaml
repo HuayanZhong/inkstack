@@ -6,6 +6,8 @@ packages:
 catalogs:
   # 公共的依赖
   dev:
+    "@commitlint/config-conventional": ^21.2.3
+    commitlint: ^21.2.3
     turbo: ^2.11.9
 
 # 依赖含 postinstall / install 脚本时（如 esbuild、sharp），
