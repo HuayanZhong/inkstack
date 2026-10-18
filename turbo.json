@@ -1,20 +1,25 @@
 {
   "$schema": "./node_modules/turbo/schema.json",
+  "agentGuidance": true,
   "ui": "tui",
   "tasks": {
     "build": {
+      "description": "构建所有包，产出 dist 与 .next 构建产物。",
       "dependsOn": ["^build"],
       "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
     },
     "dev": {
+      "description": "启动各应用的开发服务器，长期运行且不缓存。",
       "cache": false,
       "persistent": true
     },
     "lint": {
+      "description": "按包执行 oxlint 检查；根规则文件变化时缓存失效。",
       "dependsOn": ["^lint"],
       "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/.oxlintrc.json"]
     },
     "typecheck": {
+      "description": "按包执行 TypeScript 类型检查，不产出文件。",
       "dependsOn": ["^typecheck"]
     }
   }

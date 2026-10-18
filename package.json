@@ -36,12 +36,22 @@
     "commitlint": "catalog:dev",
     "eslint-plugin-turbo": "catalog:dev",
     "husky": "catalog:dev",
+    "lint-staged": "catalog:dev",
     "oxfmt": "catalog:toolchain",
     "oxlint": "catalog:toolchain",
     "oxlint-tsgolint": "catalog:toolchain",
     "turbo": "catalog:dev",
     "typescript": "catalog:toolchain",
     "yaml": "catalog:dev"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,mjs,cjs}": [
+      "oxfmt --no-error-on-unmatched-pattern",
+      "oxlint --config .oxlintrc.staged.json"
+    ],
+    "*.{json,jsonc,md,mdx,yml,yaml,css,html}": [
+      "oxfmt --no-error-on-unmatched-pattern"
+    ]
   },
   "devEngines": {
     "packageManager": {

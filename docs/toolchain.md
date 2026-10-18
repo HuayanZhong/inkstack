@@ -52,15 +52,32 @@
 - 框架前缀白名单（`NEXT_PUBLIC_*`、`VITE_*`）只用于降低噪音；缓存正确性仍以 `turbo.json` 的显式 `env` / `globalEnv` 声明为准。
 - 新增环境变量的顺序：先写入 `turbo.json`，再在代码中引用。
 
+## Turborepo 与 AI
+
+- 版本匹配的文档随包分发：`node_modules/turbo/docs/README.md` 是入口。非扁平 `node_modules` 或 workspace 链接下，先用 `node -p "require.resolve('turbo/package.json')"` 解析包位置，再读其中的 `docs/README.md`。
+- 检索用 `pnpm exec turbo docs "<关键词>"`；结果链接指向当前安装版本（如 `v2-11-9.turborepo.dev`），不要用未版本化的在线文档替代。
+- 根 `AGENTS.md` 的 `<!-- BEGIN:turborepo-agent-rules -->` 块由 turbo 维护，只在检测到 agent 环境时刷新；只编辑块外内容，预算与链接检查跳过块内。
+- `.agents/skills/turborepo/SKILL.md` 是上游 `vercel/turborepo` 同名 Skill 的副本，只做文档转发；升级 turbo 时对照一次上游文件。
+- `turbo.json` 的每个任务必须写 `description`，说明「做什么 + 关键约束」，不要让人或 Agent 必须读包内 scripts 才能理解任务语义。
+
 ## 格式范围
 
 - oxfmt 覆盖仓库内所有它支持的格式；这是当前接受的策略。挂到 husky 之后，pre-commit 只处理 staged 文件。
 - `.oxfmtrc.json` 只忽略 `node_modules`、`dist`、`.next`、`coverage`。
 - `docs/architecture/interactive/*.html` 是生成物。格式化后如果重新生成，以生成器输出为准，不要手改。
 
+## Git hooks
+
+- `commit-msg`：commitlint 校验提交信息，规则见 [`.claude/rules/git.md`](../.claude/rules/git.md)。
+- `pre-commit`：`pnpm exec lint-staged`，只处理暂存文件。TS/JS 先 `oxfmt` 格式化，再 `oxlint --config .oxlintrc.staged.json`；Markdown、JSON、YAML、CSS、HTML 只格式化。任一任务失败时 lint-staged 会还原到运行前状态，格式修复也会丢弃；先修复错误再重新提交。
+- `pre-push`：`pnpm typecheck`。Turborepo 缓存命中后开销很小；类型检查不放进 pre-commit。
+- staged lint 关闭 `typeAware`：提交路径只做格式与基础正确性；类型检查由 pre-push 与 CI 负责，且根配置文件、`.mjs` 脚本不在任何包的 tsconfig 内。
+- 规则仍只有根 `.oxlintrc.json` 一个 home；`.oxlintrc.staged.json` 只覆盖 `options`，不复制规则。
+- `lint-staged` 版本固定在 `dev` catalog。
+
 ## 推迟项
 
 - Node 升级到 24.15+（解锁 `@nestjs/schematics` 与 `jsdom`）。
 - Vitest / Vite 安装与 `node` / `react` / `nest` / `browser` 预设。
 - Nest / Next / React / tldraw / AI SDK 等运行时依赖。
-- pre-commit hook、CI 与 Renovate 配置。
+- CI 与 Renovate 配置。
