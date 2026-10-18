@@ -2,6 +2,35 @@
   "name": "@inkstack/canvas",
   "version": "0.0.0",
   "private": true,
-  "description": "tldraw-based canvas and the sole executor of Inkstack actions.",
-  "license": "ISC"
+  "description": "tldraw 画布应用，负责渲染设计稿，并作为所有画布 action 的唯一执行者。",
+  "license": "ISC",
+  "type": "module",
+  "scripts": {
+    "dev": "rspack serve --mode development",
+    "build": "rspack build --mode production",
+    "lint": "oxlint --config ../../.oxlintrc.json --type-aware .",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "react": "catalog:runtime",
+    "react-dom": "catalog:runtime",
+    "tldraw": "catalog:runtime"
+  },
+  "devDependencies": {
+    "@inkstack/tsconfig": "workspace:*",
+    "@module-federation/enhanced": "catalog:dev",
+    "@rspack/cli": "catalog:dev",
+    "@rspack/core": "catalog:dev",
+    "@rspack/dev-server": "catalog:dev",
+    "@rspack/plugin-react-refresh": "catalog:dev",
+    "@types/react": "catalog:dev",
+    "@types/react-dom": "catalog:dev",
+    "autoprefixer": "catalog:dev",
+    "css-loader": "catalog:dev",
+    "postcss": "catalog:dev",
+    "postcss-loader": "catalog:dev",
+    "react-refresh": "catalog:dev",
+    "ts-node": "catalog:dev",
+    "typescript": "catalog:toolchain"
+  }
 }
