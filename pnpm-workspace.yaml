@@ -10,6 +10,7 @@ catalogs:
     commitlint: ^21.2.3
     husky: ^9.1.7
     turbo: ^2.11.9
+    typescript: ^6.0.3
 
 # 依赖含 install / postinstall 脚本时（如 esbuild、sharp），
 # 运行 `pnpm approve-builds`，pnpm 11+ 会把包名写入这里。

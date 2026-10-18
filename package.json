@@ -40,6 +40,7 @@
     "@commitlint/config-conventional": "catalog:dev",
     "commitlint": "catalog:dev",
     "husky": "catalog:dev",
-    "turbo": "catalog:dev"
+    "turbo": "catalog:dev",
+    "typescript": "catalog:dev"
   }
 }
