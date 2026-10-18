@@ -47,7 +47,7 @@
   "lint-staged": {
     "*.{js,jsx,ts,tsx,mjs,cjs}": [
       "oxfmt --no-error-on-unmatched-pattern",
-      "oxlint --config .oxlintrc.staged.json"
+      "oxlint --config .oxlintrc.staged.json --ignore-pattern \"**/.agents/**\""
     ],
     "*.{json,jsonc,md,mdx,yml,yaml,css,html}": [
       "oxfmt --no-error-on-unmatched-pattern"

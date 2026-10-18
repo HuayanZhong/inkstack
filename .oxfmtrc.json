@@ -8,5 +8,13 @@
   "arrowParens": "always",
   "bracketSpacing": true,
   "endOfLine": "lf",
-  "ignorePatterns": ["**/node_modules/**", "**/dist/**", "**/.next/**", "**/coverage/**"]
+  "ignorePatterns": [
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/.next/**",
+    "**/coverage/**",
+    "**/.agents/**",
+    "docs/architecture/interactive/**",
+    "openspec/changes/archive/**"
+  ]
 }
