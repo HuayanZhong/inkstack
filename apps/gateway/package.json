@@ -1,5 +1,7 @@
 {
   "name": "@inkstack/gateway",
   "version": "0.0.0",
-  "private": true
+  "private": true,
+  "description": "Action sequencer for Inkstack: queueing, numbering, validation, broadcast, and persistence.",
+  "license": "ISC"
 }

@@ -32,10 +32,10 @@ pnpm lint:commit    # commitlint，从 stdin 读取提交信息
 
 ## 依赖与工具链
 
-- 所有依赖走 pnpm catalog，版本只写在 `pnpm-workspace.yaml` 的 `catalogs.dev`，`package.json` 使用 `catalog:dev`，禁止裸 semver。
-- 根工具链依赖用 `pnpm add -Dw <pkg> --save-catalog-name dev`；包依赖用 `pnpm add --filter @inkstack/<pkg> --save-catalog-name dev <pkg>`，开发依赖再加 `-D`。
+- 所有依赖走 pnpm catalog，版本只写在 `pnpm-workspace.yaml`；catalog 分为 `toolchain`（精确 pin）、`dev`（开发工具）、`runtime`（运行时库），`package.json` 分别使用 `catalog:toolchain`、`catalog:dev`、`catalog:runtime`，禁止裸 semver。规则见 [`docs/package-metadata.md`](docs/package-metadata.md)。
+- 根工具链依赖用 `pnpm add -Dw <pkg> --save-catalog-name toolchain`；运行时依赖用 `pnpm add --filter @inkstack/<pkg> --save-catalog-name runtime <pkg>`，开发依赖再加 `-D`。
 - pnpm 11+ 的构建脚本白名单是 `allowBuilds`；遇到 `ERR_PNPM_IGNORED_BUILDS` 时用 `pnpm approve-builds`。
-- Node `>=24.14.1`、pnpm `12.14.0`、TypeScript `6.0.3` 已固定。不要升级到 TS 7：Next.js 16 的类型检查依赖 `typescript/lib/typescript.js`，该文件在 TS 7 已移除。`@types/node` 的主版本跟随 Node 主版本。
+- Node `>=24.14.1`、pnpm `12.14.0`、TypeScript `6.0.3` 已固定（catalog `toolchain` 精确 pin）。不要升级到 TS 7：Next.js 16 的类型检查依赖 `typescript/lib/typescript.js`，该文件在 TS 7 已移除。`@types/node` 的主版本跟随 Node 主版本。
 - 包内 `tsconfig.json` 继承 `@inkstack/config` 的 `tsconfig.<env>.json`，并在 devDependencies 声明 `"@inkstack/config": "workspace:*"`。Turborepo 任务定义在 `turbo.json`，`ui` 固定为 `tui`；新增包要补 `dev`、`build`、`lint`、`typecheck` scripts。
 
 ## OpenSpec

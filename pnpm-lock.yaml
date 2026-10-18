@@ -167,9 +167,6 @@ catalogs:
     '@commitlint/config-conventional':
       specifier: ^21.2.3
       version: 21.2.3
-    '@fission-ai/openspec':
-      specifier: 1.14.3
-      version: 1.14.3
     '@types/node':
       specifier: ^24.19.2
       version: 24.19.2
@@ -182,8 +179,15 @@ catalogs:
     turbo:
       specifier: ^2.11.9
       version: 2.11.9
+    yaml:
+      specifier: ^2.9.1
+      version: 2.9.1
+  toolchain:
+    '@fission-ai/openspec':
+      specifier: 1.14.3
+      version: 1.14.3
     typescript:
-      specifier: ^6.0.3
+      specifier: 6.0.3
       version: 6.0.3
 
 importers:
@@ -194,7 +198,7 @@ importers:
         specifier: catalog:dev
         version: 21.2.3
       '@fission-ai/openspec':
-        specifier: catalog:dev
+        specifier: catalog:toolchain
         version: 1.14.3(@types/node@24.19.2)
       '@types/node':
         specifier: catalog:dev
@@ -209,8 +213,11 @@ importers:
         specifier: catalog:dev
         version: 2.11.9
       typescript:
-        specifier: catalog:dev
+        specifier: catalog:toolchain
         version: 6.0.3
+      yaml:
+        specifier: catalog:dev
+        version: 2.9.1
 
   apps/bff: {}
 

@@ -2,8 +2,9 @@
   "name": "inkstack",
   "version": "0.0.1",
   "private": true,
-  "description": "一个支持ai d2c的项目",
+  "description": "Inkstack — an AI design-to-code canvas with agent pen control, manual editing, and deterministic code generation.",
   "scripts": {
+    "check:manifests": "node scripts/check-manifests.mjs",
     "dev": "turbo run dev",
     "build": "turbo run build",
     "lint": "turbo run lint",
@@ -38,11 +39,12 @@
   "type": "module",
   "devDependencies": {
     "@commitlint/config-conventional": "catalog:dev",
-    "@fission-ai/openspec": "catalog:dev",
+    "@fission-ai/openspec": "catalog:toolchain",
     "@types/node": "catalog:dev",
     "commitlint": "catalog:dev",
     "husky": "catalog:dev",
     "turbo": "catalog:dev",
-    "typescript": "catalog:dev"
+    "typescript": "catalog:toolchain",
+    "yaml": "catalog:dev"
   }
 }

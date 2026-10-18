@@ -1,5 +1,7 @@
 {
   "name": "@inkstack/bff",
   "version": "0.0.0",
-  "private": true
+  "private": true,
+  "description": "BFF for Inkstack: frontend aggregation, auth/session, and SSE.",
+  "license": "ISC"
 }

@@ -4,15 +4,21 @@ packages:
   - 'packages/*'
 
 catalogs:
-  # 公共的依赖
+  # 精确 pin：影响构建或类型，升级时只改这里。
+  toolchain:
+    '@fission-ai/openspec': 1.14.3
+    typescript: 6.0.3
+  # 开发工具与类型包，允许 minor/patch 浮动。
   dev:
     "@commitlint/config-conventional": ^21.2.3
-    '@fission-ai/openspec': 1.14.3
     '@types/node': ^24.19.2
     commitlint: ^21.2.3
     husky: ^9.1.7
     turbo: ^2.11.9
-    typescript: ^6.0.3
+    yaml: ^2.9.1
+  # 运行时库：Next / tldraw / Nest / AI SDK 等；首个依赖进入时创建。
+  # runtime:
+  #   next: ^16
 
 # 依赖含 install / postinstall 脚本时（如 esbuild、sharp），
 # 运行 `pnpm approve-builds`，pnpm 11+ 会把包名写入这里。
