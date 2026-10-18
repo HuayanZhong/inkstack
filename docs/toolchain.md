@@ -77,7 +77,6 @@
 
 ## 推迟项
 
-- Node 升级到 24.15+（解锁 `@nestjs/schematics` 与 `jsdom`）。
 - Vitest / Vite 安装与 `node` / `react` / `nest` / `browser` 预设。
 - Nest / Next / React / tldraw / AI SDK 等运行时依赖。
 - CI 与 Renovate 配置。

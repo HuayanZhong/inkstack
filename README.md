@@ -27,7 +27,7 @@ infra/
 
 ## 开发
 
-要求 Node `>=24.14.1`、pnpm `12.14.0`。
+要求 Node `>=26.12.0`、pnpm `12.14.0`。
 
 ```bash
 pnpm install

@@ -14,7 +14,7 @@ catalogs:
   # 开发工具与类型包，允许 minor/patch 浮动。
   dev:
     '@commitlint/config-conventional': ^21.2.3
-    '@types/node': ^24.19.2
+    '@types/node': ^26.6.5
     commitlint: ^21.2.3
     eslint-plugin-turbo: ^2.11.9
     husky: ^9.1.7
