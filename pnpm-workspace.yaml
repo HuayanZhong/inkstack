@@ -7,6 +7,7 @@ catalogs:
   # 公共的依赖
   dev:
     "@commitlint/config-conventional": ^21.2.3
+    '@fission-ai/openspec': ^1.14.3
     commitlint: ^21.2.3
     husky: ^9.1.7
     turbo: ^2.11.9

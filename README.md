@@ -17,6 +17,8 @@ packages/
   config/      共享 tsconfig / lint 配置
 docs/
   architecture/  架构图与设计记录
+openspec/        OpenSpec 规格与变更
+.agents/skills/  共享技能（.claude/skills 符号链接到这里）
 infra/
   docker/ k8s/ compose/ observability/  部署与可观测性配置
 ```
