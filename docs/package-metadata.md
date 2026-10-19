@@ -76,4 +76,4 @@ pnpm add --filter @inkstack/<pkg> --save-catalog-name runtime <pkg>
 - tsconfig 的进一步拆分与对外分发。
 - 发布版本、Changesets、changelog、git tag、`publishConfig`。
 - 字段顺序、`keywords`、`author`、`repository`、包级 `engines`。
-- CI / pre-commit 接入与 OpenWiki。
+- CI 接入与 OpenWiki。

@@ -39,7 +39,7 @@
 - `oxlint`、`oxlint-tsgolint`、`oxfmt` 固定在 `toolchain` catalog，精确 pin。
 - `oxlint` 与 `oxlint-tsgolint` 成对升级；两者没有 peer 约束，版本错配只会在运行期暴露。
 - oxfmt 处于 0.x，升级作为独立提交，升级后必须跑 `pnpm format:check` 并审查 diff。
-- 未来接入 Vitest 时，`vite` 必须是 8.x；Vitest 4 的 peer 允许 6/7/8，解析到旧版本会丢失 Nest 的装饰器元数据。
+- 未来接入 Vitest 时固定 `vite` 8.x；Vitest 5 的 peer 允许 `6.4` / `7` / `8`，解析到旧版本会丢失 Nest 的装饰器元数据。
 
 ## lint 规则组织
 
@@ -52,15 +52,15 @@
 
 - `pnpm hygiene` = `turbo run build --filter "./packages/*" && knip && turbo run publint --filter "./packages/*"`。先构建库包，是因为 knip 会加载 `rspack.config.ts` 等配置，而这些配置 import 的 `@inkstack/config` 指向 `dist`；构建或任一检查失败都以非零状态退出。
 - knip 一次分析整个 workspace，报告死文件、死导出/类型、未使用依赖、未声明依赖、循环依赖与未使用 catalog 条目。配置在根 `knip.config.ts`。
-- `packages/config`、`packages/contracts` 的入口指向 `dist`，knip 显式使用 `src/index.ts` 作为 entry；应用入口由 Next、Nest、Rspack 的内置识别提供。
-- `.agents/**`、`.claude/**` 是 vendored 技能与视图，整体 ignore；`@fission-ai/openspec` 只由技能工作流调用，按依赖 ignore。每条 ignore 必须在 `knip.config.ts` 写明理由，禁止用宽泛忽略关闭整类检查。
+- 库包入口由 `package.json` 的 `exports` 推导；应用入口由 Next、Nest、Rspack 的内置识别提供。
+- `.agents/**` 是 vendored 技能，整体 ignore；`@fission-ai/openspec` 只由技能工作流调用，按依赖 ignore。每条 ignore 必须在 `knip.config.ts` 写明理由，禁止用宽泛忽略关闭整类检查。
 - publint 只跑 `packages/*` 中声明了 `publint` script 的包，校验 `exports` 目标是否存在于 `pnpm pack` 的文件集。`turbo.json` 的 `publint` 任务 `dependsOn: ["build"]`，干净检出会先构建 `dist`。
 - `--filter "./packages/*"` 限定检查范围：publint 不应用于没有 `exports` 的应用，也避免 pre-push 触发应用构建。
 
 ## Turbo 环境变量检查
 
 - `eslint-plugin-turbo` 通过 oxlint 的 `jsPlugins` 加载，规则为 `turbo/no-undeclared-env-vars`。
-- `eslint` peer 通过 `peerDependencyRules.ignoreMissing` 忽略。依据：插件构建产物中 `eslint` 只出现在 `import type`，运行时由 oxlint 提供 ESLint v9 兼容接口。
+- `eslint` peer 不自动安装（`autoInstallPeers: false`）；`peerDependencyRules.ignoreMissing` 只负责不再报告缺失。依据：插件构建产物中 `eslint` 只出现在 `import type`，运行时由 oxlint 提供 ESLint v9 兼容接口。
 - 框架前缀白名单（`NEXT_PUBLIC_*`、`VITE_*`）只用于降低噪音；缓存正确性仍以 `turbo.json` 的显式 `env` / `globalEnv` 声明为准。
 - `globalEnv` 当前声明 `NODE_ENV`、`PORT`、`CANVAS_HOST`、`CANVAS_PORT`、`CANVAS_DEV_CORS_ORIGIN`、`BFF_PORT`、`GATEWAY_PORT`、`GATEWAY_WS_PATH`、`NEXT_PUBLIC_CANVAS_MF_ENTRY`。`envMode: strict` 下未声明的变量不会传给任务，新增变量必须先补声明。
 - 工作区包构建到 `dist` 后，`dev` / `lint` / `typecheck` 会先执行依赖包的 `build`，保证干净检出也能直接通过。
@@ -94,5 +94,5 @@
 ## 推迟项
 
 - Vitest / Vite 安装与 `node` / `react` / `nest` / `browser` 预设。
-- Nest / Next / React / tldraw / AI SDK 等运行时依赖。
+- AI SDK、Supabase 等尚未接入的运行时依赖。
 - CI 与 Renovate 配置。

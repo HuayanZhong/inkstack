@@ -4,8 +4,8 @@
 
 ## 职责
 
-- 唯一的 action 序列器：后续负责 action 排队、单调编号、校验、广播与持久化。
-- 不执行画布操作，不直接写 design.json；执行器是 canvas。
+- 唯一的 action 序列器：后续负责 action 排队、单调编号、校验、广播，以及 action log 与 `design.json` 快照的持久化。
+- 不执行画布操作；canvas 只执行并 ack，不写文件。
 - 不承担 BFF 的会话、SSE 或前端聚合。
 
 ## 目录
@@ -17,7 +17,7 @@
 
 ## 约束
 
-- 在仓库根执行：`pnpm --filter @inkstack/gateway dev|build|start|typecheck|lint|smoke:ws`。
+- 在仓库根执行：`pnpm --filter @inkstack/gateway dev|build|typecheck|lint|smoke:ws`。
 - 业务代码只读 `config`，不直接访问 `process.env`；新增变量先写进 `turbo.json` 的 `globalEnv`。
 - WS 使用 Socket.IO（`@nestjs/platform-socket.io`）；`GATEWAY_WS_PATH` 对应 Socket.IO 的 `path`，不是 namespace。
 - 依赖只通过 `catalog:` 引用；`tsconfig.json` 继承 `@inkstack/tsconfig/nest.json`，构造器注入的类不要改成 `import type`。
