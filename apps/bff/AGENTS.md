@@ -22,4 +22,4 @@
 
 - 业务代码只读 `config`，不直接访问 `process.env`；新增变量先写进 `turbo.json` 的 `globalEnv`。
 - env 由应用 scripts 的 dotenv 链加载；`BFF_PORT` 缺省 `4003`。
-- 依赖只通过 `catalog:` 引用；`tsconfig.json` 继承 `@inkstack/tsconfig/nest.json`，构造器注入的类不要改成 `import type`；不启用 ESLint / Prettier / Vitest。
+- 依赖只通过 `catalog:` 引用；`tsconfig.json` 继承 `@inkstack/tsconfig/nest.json`，构造器注入的类不要改成 `import type`；不启用 ESLint / Prettier。

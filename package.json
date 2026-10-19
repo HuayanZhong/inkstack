@@ -29,14 +29,17 @@
     "lint:env": "oxlint --config .oxlintrc.turbo.json .",
     "lint:commit": "commitlint",
     "typecheck": "turbo run typecheck",
-    "verify": "pnpm install --frozen-lockfile && pnpm lint && pnpm check:manifests && pnpm typecheck && pnpm build && pnpm format:check && pnpm hygiene",
-    "prepare": "husky"
+    "test": "turbo run test",
+    "verify": "pnpm install --frozen-lockfile && pnpm lint && pnpm check:manifests && pnpm typecheck && pnpm test:coverage && pnpm build && pnpm format:check && pnpm hygiene",
+    "prepare": "husky",
+    "test:coverage": "turbo run test:coverage"
   },
   "devDependencies": {
     "@commitlint/cli": "catalog:dev",
     "@commitlint/config-conventional": "catalog:dev",
     "@fission-ai/openspec": "catalog:toolchain",
     "@types/node": "catalog:dev",
+    "@vitest/coverage-v8": "catalog:dev",
     "eslint-plugin-turbo": "catalog:dev",
     "husky": "catalog:dev",
     "knip": "catalog:dev",

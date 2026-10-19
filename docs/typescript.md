@@ -46,7 +46,7 @@ base.json            语言与严格性，不直接使用
 - **Next 应用在应用级关闭 `noUnusedLocals` / `noUnusedParameters`**（见 `apps/shell/tsconfig.json`）。Next 生成的 `.next/**/validator.ts` 自带未使用的导入与类型别名，开启后 `typecheck` 会在跑过 `dev` 之后失败；未使用检查由 oxlint 的 `no-unused-vars` 承担。
 - **Next 应用把 `tsBuildInfoFile` 指向 `.next/cache/`**，避免增量类型检查的缓存文件落在应用根目录。
 - **`library.json` 只负责声明文件与 sourcemap**。暂不设置 `composite`；project references 等跨包 `tsc -b` 有真实收益时再引入。
-- **测试与构建分文件**。有测试后，`tsconfig.json` 纳入测试做类型检查，`tsconfig.build.json` 只 emit `src`；当前没有测试，不预建。
+- **测试与构建分文件**。`tsconfig.json` 纳入测试做类型检查，`tsconfig.build.json` 排除 `*.test.ts` 只 emit 源码；接入步骤见 [`docs/testing.md`](testing.md)。
 - **不引入根 solution tsconfig**。Turborepo 按包执行 `typecheck` / `build`；跨包顺序由 `dependsOn: ["^build"]` 保证。
 
 ## 新增包时的模板

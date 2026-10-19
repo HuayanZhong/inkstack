@@ -70,6 +70,7 @@ pnpm add --filter @inkstack/<pkg> --save-catalog-name runtime <pkg>
 9. 私有包版本偏离 `0.0.0` 时输出 warning，不影响退出码。
 10. `packages/` 与 `packages/*` 的 `AGENTS.md` / `CLAUDE.md` / `README.md` 三件套存在，且 `CLAUDE.md` 只写 `@AGENTS.md`。
 11. 声明了 `exports` 的包有 `publint` script，且 `publint` 以 `catalog:dev` 声明在 devDependencies。
+12. `packages/*` 中有运行时代码的包具备 `test` script、`vitest: catalog:dev` 与至少一个 `src/**/*.test.ts`；纯类型包必须在 `testExemptions` 中写明理由。
 
 ## 非目标
 

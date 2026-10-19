@@ -9,7 +9,9 @@
     "dev": "dotenv -e ../../.env.local -e ../../.env.development -e ../../.env -- nest start --watch",
     "build": "dotenv -e ../../.env.local -e ../../.env.production -e ../../.env -- nest build",
     "lint": "oxlint --config ../../.oxlintrc.json --type-aware .",
-    "typecheck": "tsc -p tsconfig.build.json --noEmit",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
     "smoke:ws": "dotenv -e ../../.env.local -e ../../.env.development -e ../../.env -e ../../.env.example -- node scripts/smoke-ws.mjs"
   },
   "dependencies": {
@@ -24,11 +26,17 @@
   },
   "devDependencies": {
     "@inkstack/tsconfig": "workspace:*",
+    "@inkstack/vitest-config": "workspace:*",
     "@nestjs/cli": "catalog:dev",
     "@nestjs/schematics": "catalog:dev",
+    "@nestjs/testing": "catalog:dev",
     "@types/node": "catalog:dev",
+    "@types/supertest": "catalog:dev",
     "dotenv-cli": "catalog:dev",
     "socket.io-client": "catalog:dev",
-    "typescript": "catalog:toolchain"
+    "supertest": "catalog:dev",
+    "typescript": "catalog:toolchain",
+    "vite": "catalog:dev",
+    "vitest": "catalog:dev"
   }
 }

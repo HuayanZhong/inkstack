@@ -14,9 +14,11 @@
 - 包是库，不提供开发服务器；有 `src/` 的包构建到 `dist`。
 - 应用通过 `@inkstack/*` + `workspace:*` 消费包，不跨包引用源码路径。
 - 公共导出使用 TSDoc，协议语义与兼容性约束写在导出符号上。
+- 有运行时代码的包 MUST 提供 Vitest 测试，并在同一变更里补齐；纯类型包按 [测试规则](../.claude/rules/testing.md) 登记豁免。
 
 ## 目录
 
 - `config/`：配置解析与 URL 标准化。
 - `contracts/`：action 协议、共享类型与 codegen IR。
 - `tsconfig/`：共享 tsconfig 预设，无运行时代码。
+- `vitest-config/`：共享 Vitest 预设（node / react / nest）。

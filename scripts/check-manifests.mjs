@@ -14,6 +14,11 @@ const root = resolve(import.meta.dirname, '..')
 const errors = []
 const warnings = []
 
+// 纯类型包没有可执行行为；豁免必须写明理由，运行时代码包不得加入。
+const testExemptions = new Map([
+  ['packages/contracts/package.json', '当前只导出类型 ActionId，没有运行时代码'],
+])
+
 const fail = (file, message) => errors.push(`${file}: ${message}`)
 const warn = (file, message) => warnings.push(`${file}: ${message}`)
 
@@ -79,6 +84,16 @@ function stripJsonComments(text) {
 
 function readJsonc(relativePath) {
   return JSON.parse(stripJsonComments(readFileSync(resolve(root, relativePath), 'utf8')))
+}
+
+function containsTestFile(directory) {
+  if (!existsSync(directory)) return false
+  for (const entry of readdirSync(directory, { withFileTypes: true })) {
+    const entryPath = resolve(directory, entry.name)
+    if (entry.isDirectory() && containsTestFile(entryPath)) return true
+    if (entry.isFile() && entry.name.endsWith('.test.ts')) return true
+  }
+  return false
 }
 
 function collectManifests() {
@@ -161,7 +176,7 @@ for (const { path, json, isRoot } of manifests) {
   }
 
   if (isRoot) {
-    for (const script of ['dev', 'build', 'lint', 'typecheck']) {
+    for (const script of ['dev', 'build', 'lint', 'typecheck', 'test']) {
       if (!json.scripts?.[script]) fail(path, `root must define script "${script}"`)
     }
   } else {
@@ -171,6 +186,17 @@ for (const { path, json, isRoot } of manifests) {
         if (!json.scripts?.[script]) fail(path, `package with src/ must define script "${script}"`)
       }
       if (json.type !== 'module') fail(path, 'package with src/ must declare "type": "module"')
+
+      // 测试边界只强制 packages/*；apps/* 的运行形态与 scripts 差异较大，暂由规则约束。
+      if (path.startsWith('packages/') && !testExemptions.has(path)) {
+        if (!json.scripts?.test) fail(path, 'package with runtime code must define script "test"')
+        if (json.devDependencies?.vitest !== 'catalog:dev') {
+          fail(path, 'package with runtime code must declare "vitest": "catalog:dev"')
+        }
+        if (!containsTestFile(resolve(packageDir, 'test'))) {
+          fail(path, 'package with runtime code must include at least one test/**/*.test.ts')
+        }
+      }
     }
 
     // 导出映射是包对消费者的契约；没有 publint 就只剩运行时才发现目标缺失。

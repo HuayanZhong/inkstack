@@ -9,7 +9,9 @@
     "dev": "dotenv -e ../../.env.local -e ../../.env.development -e ../../.env -- rspack serve --mode development",
     "build": "dotenv -e ../../.env.local -e ../../.env.production -e ../../.env -- rspack build --mode production",
     "lint": "oxlint --config ../../.oxlintrc.json --type-aware .",
-    "typecheck": "tsc --noEmit"
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "typecheck": "tsc --noEmit && tsc -p tsconfig.test.json --noEmit"
   },
   "dependencies": {
     "@inkstack/config": "workspace:*",
@@ -19,17 +21,21 @@
   },
   "devDependencies": {
     "@inkstack/tsconfig": "workspace:*",
+    "@inkstack/vitest-config": "workspace:*",
     "@module-federation/enhanced": "catalog:runtime",
     "@rspack/cli": "catalog:dev",
     "@rspack/core": "catalog:dev",
     "@rspack/dev-server": "catalog:dev",
     "@rspack/plugin-react-refresh": "catalog:dev",
+    "@types/node": "catalog:dev",
     "@types/react": "catalog:dev",
     "@types/react-dom": "catalog:dev",
     "dotenv-cli": "catalog:dev",
     "postcss": "catalog:dev",
     "postcss-loader": "catalog:dev",
     "react-refresh": "catalog:dev",
-    "typescript": "catalog:toolchain"
+    "typescript": "catalog:toolchain",
+    "vite": "catalog:dev",
+    "vitest": "catalog:dev"
   }
 }

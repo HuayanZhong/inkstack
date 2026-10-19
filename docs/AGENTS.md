@@ -13,6 +13,7 @@
 | 生成物（含 OpenWiki） | `openwiki/`、`interactive/*.html`、`images/*.png` | 派生、非规范、可选上下文；未知项是验证缺口 |
 | 包元数据与版本        | `docs/package-metadata.md`                        | 规范                                       |
 | 工具链与 TS 配置      | `docs/toolchain.md`、`docs/typescript.md`         | 规范                                       |
+| 测试配置              | `docs/testing.md`                                 | 规范                                       |
 
 ## 规则
 

@@ -36,6 +36,18 @@
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/.env*"]
     },
+    "test": {
+      "description": "按包执行 Vitest 单元与集成测试；先构建本包与依赖包，覆盖构建产物契约。",
+      "dependsOn": ["build"],
+      "inputs": ["$TURBO_DEFAULT$"],
+      "outputs": []
+    },
+    "test:coverage": {
+      "description": "按包执行 Vitest 并输出 v8 覆盖率报告；先构建本包与依赖包。",
+      "dependsOn": ["build"],
+      "inputs": ["$TURBO_DEFAULT$"],
+      "outputs": ["coverage/**"]
+    },
     "publint": {
       "description": "校验库包的 package.json 导出映射；先构建出 dist，避免干净检出时目标文件缺失。",
       "dependsOn": ["build"],
