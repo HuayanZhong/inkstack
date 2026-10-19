@@ -8,7 +8,6 @@
   "scripts": {
     "dev": "dotenv -e ../../.env.local -e ../../.env.development -e ../../.env -- nest start --watch",
     "build": "dotenv -e ../../.env.local -e ../../.env.production -e ../../.env -- nest build",
-    "start": "dotenv -e ../../.env.local -e ../../.env.production -e ../../.env -- nest start",
     "lint": "oxlint --config ../../.oxlintrc.json --type-aware .",
     "typecheck": "tsc -p tsconfig.build.json --noEmit",
     "smoke:ws": "dotenv -e ../../.env.local -e ../../.env.development -e ../../.env -e ../../.env.example -- node scripts/smoke-ws.mjs"
@@ -29,7 +28,7 @@
     "@nestjs/schematics": "catalog:dev",
     "@types/node": "catalog:dev",
     "dotenv-cli": "catalog:dev",
-    "socket.io-client": "catalog:runtime",
+    "socket.io-client": "catalog:dev",
     "typescript": "catalog:toolchain"
   }
 }

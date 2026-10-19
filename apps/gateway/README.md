@@ -15,7 +15,7 @@ pnpm --filter @inkstack/gateway lint
 
 健康检查：`curl http://localhost:4001/health`
 
-WS smoke（先启动 `dev` 或 `start`）：
+WS smoke（先启动 `dev`）：
 
 ```bash
 pnpm --filter @inkstack/gateway smoke:ws

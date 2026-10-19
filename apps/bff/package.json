@@ -8,7 +8,6 @@
   "scripts": {
     "dev": "dotenv -e ../../.env.local -e ../../.env.development -e ../../.env -- nest start --watch",
     "build": "dotenv -e ../../.env.local -e ../../.env.production -e ../../.env -- nest build",
-    "start": "dotenv -e ../../.env.local -e ../../.env.production -e ../../.env -- nest start",
     "lint": "oxlint --config ../../.oxlintrc.json --type-aware .",
     "typecheck": "tsc -p tsconfig.build.json --noEmit"
   },

@@ -1,0 +1,4 @@
+schema: spec-driven
+created: 2026-10-19
+# 只调整开发命令与仓库检查，不改变产品行为；按 OpenSpec 约定跳过 spec delta。
+skip_specs: true

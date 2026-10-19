@@ -25,6 +25,7 @@
   },
   "devDependencies": {
     "@inkstack/tsconfig": "workspace:*",
-    "publint": "catalog:dev"
+    "publint": "catalog:dev",
+    "typescript": "catalog:toolchain"
   }
 }

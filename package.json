@@ -21,7 +21,6 @@
     "check:manifests": "node scripts/check-manifests.mjs",
     "dev": "turbo run dev",
     "build": "turbo run build",
-    "start": "turbo run start",
     "format": "oxfmt --write .",
     "format:check": "oxfmt --check .",
     "hygiene": "turbo run build --filter \"./packages/*\" && knip && turbo run publint --filter \"./packages/*\"",
@@ -30,6 +29,7 @@
     "lint:env": "oxlint --config .oxlintrc.turbo.json .",
     "lint:commit": "commitlint",
     "typecheck": "turbo run typecheck",
+    "verify": "pnpm install --frozen-lockfile && pnpm lint && pnpm check:manifests && pnpm typecheck && pnpm build && pnpm format:check && pnpm hygiene",
     "prepare": "husky"
   },
   "devDependencies": {
