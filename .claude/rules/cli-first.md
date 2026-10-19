@@ -40,13 +40,24 @@
 
 - 在临时目录生成再并入目标目录。目标目录已有占位文件时 CLI 会拒绝或覆盖，不要为此删除仓库文件。
 - 脚手架写入的依赖版本一律换成 catalog 引用，新增条目加到 `pnpm-workspace.yaml`，不保留裸 semver。
-- 删除 CLI 自带的锁文件、`.git`、示例 README、ESLint / Prettier 配置。仓库用 oxlint / oxfmt。
+- 删除 CLI 自带的锁文件、`.git`、示例 README，以及模板生成的 lint / format / test 配置（不同版本的产物不同，以实际生成结果为准）。仓库统一用根 oxlint / oxfmt，测试按阶段策略处理。
 - 按 [`docs/package-metadata.md`](../../docs/package-metadata.md) 改写 `package.json`：`@inkstack/<kebab-case>`、`0.0.0`、`private: true`、`license: ISC`、40–120 字符描述。
 - `tsconfig.json` 改为继承 `@inkstack/tsconfig/<preset>.json`，并在 devDependencies 声明 `"@inkstack/tsconfig": "workspace:*"`。
 - 补齐 `dev`、`build`、`lint`、`typecheck` 四个 scripts。
 - 创建该层 `AGENTS.md` 和只写 `@AGENTS.md` 的 `CLAUDE.md`。
 - 脚手架的产物必须能真实启动：`pnpm dev` 能起服务、`pnpm build` 能产出，不要把生成物删到只剩空文件。
 - 完成后跑 `pnpm install`、`pnpm check:manifests`、`pnpm typecheck`。
+
+## 事实核验
+
+计划与实现里的版本、API、CLI 选项和脚手架产物，必须来自当前实际来源，不凭模型记忆：
+
+- 仓库已安装版本：`node_modules`、`package.json`、lockfile。
+- registry：`pnpm view <pkg> version peerDependencies`。
+- 与版本匹配的官方文档；优先随安装包分发或明确标注版本的文档。
+- CLI 行为：`--help`、`--dry-run`，或临时目录里的实际生成结果。
+
+来源之间冲突时以实际安装版本为准；无法核实的内容标为假设，并在实现前向用户确认。计划中写明核对方式，例如“读取 `@nestjs/schematics@12.0.7` 的 `application/files/ts-esm`”。
 
 ## 边界
 

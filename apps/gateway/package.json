@@ -2,6 +2,34 @@
   "name": "@inkstack/gateway",
   "version": "0.0.0",
   "private": true,
-  "description": "Action sequencer for Inkstack: queueing, numbering, validation, broadcast, and persistence.",
-  "license": "ISC"
+  "description": "墨栈 Gateway 服务：负责画布 action 的排队、单调编号、校验、广播与持久化，是唯一的 action 序列器。",
+  "license": "ISC",
+  "type": "module",
+  "scripts": {
+    "dev": "dotenv -e ../../.env.local -e ../../.env.development -e ../../.env -- nest start --watch",
+    "build": "dotenv -e ../../.env.local -e ../../.env.production -e ../../.env -- nest build",
+    "start": "dotenv -e ../../.env.local -e ../../.env.production -e ../../.env -- nest start",
+    "lint": "oxlint --config ../../.oxlintrc.json --type-aware .",
+    "typecheck": "tsc -p tsconfig.build.json --noEmit",
+    "smoke:ws": "dotenv -e ../../.env.local -e ../../.env.development -e ../../.env -e ../../.env.example -- node scripts/smoke-ws.mjs"
+  },
+  "dependencies": {
+    "@inkstack/config": "workspace:*",
+    "@nestjs/common": "catalog:runtime",
+    "@nestjs/core": "catalog:runtime",
+    "@nestjs/platform-express": "catalog:runtime",
+    "@nestjs/platform-socket.io": "catalog:runtime",
+    "@nestjs/websockets": "catalog:runtime",
+    "reflect-metadata": "catalog:runtime",
+    "rxjs": "catalog:runtime"
+  },
+  "devDependencies": {
+    "@inkstack/tsconfig": "workspace:*",
+    "@nestjs/cli": "catalog:dev",
+    "@nestjs/schematics": "catalog:dev",
+    "@types/node": "catalog:dev",
+    "dotenv-cli": "catalog:dev",
+    "socket.io-client": "catalog:runtime",
+    "typescript": "catalog:toolchain"
+  }
 }

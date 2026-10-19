@@ -9,6 +9,8 @@
     "CANVAS_PORT",
     "CANVAS_DEV_CORS_ORIGIN",
     "BFF_PORT",
+    "GATEWAY_PORT",
+    "GATEWAY_WS_PATH",
     "NEXT_PUBLIC_CANVAS_MF_ENTRY"
   ],
   "tasks": {

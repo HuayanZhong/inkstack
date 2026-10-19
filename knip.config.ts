@@ -17,6 +17,9 @@ export default defineConfig({
     'packages/contracts': {
       entry: ['src/index.ts'],
     },
+    'apps/gateway': {
+      entry: ['src/main.ts', 'scripts/**/*.mjs'],
+    },
     'apps/canvas': {
       entry: ['rspack.config.ts', 'module-federation.config.ts', 'src/index.ts'],
     },

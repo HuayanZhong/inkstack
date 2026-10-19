@@ -35,10 +35,10 @@ pnpm install
 pnpm dev
 ```
 
-> 当前为骨架阶段：`apps/shell`、`apps/bff`、`apps/canvas` 已能启动与构建，
-> `apps/gateway` 仍只有 `package.json`。`pnpm dev` 会拉起 shell（默认 <http://localhost:3000>）、
-> bff（默认 <http://localhost:4003>）、canvas（默认 <http://localhost:4002>）与 contracts / config 的监听任务；
-> gateway 按里程碑接入。
+> 当前为骨架阶段：`apps/shell`、`apps/bff`、`apps/canvas`、`apps/gateway` 已能启动与构建。
+> `pnpm dev` 会拉起 shell（默认 <http://localhost:3000>）、bff（默认 <http://localhost:4003>）、
+> canvas（默认 <http://localhost:4002>）、gateway（默认 <http://localhost:4001>）与 contracts / config 的监听任务；
+> gateway 当前只有健康检查与 `/ws` ping/pong，action 协议尚未接入。
 
 ## 环境变量
 
