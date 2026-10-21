@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@inkstack/config": "workspace:*",
+    "@inkstack/ui": "workspace:*",
     "@module-federation/enhanced": "catalog:runtime",
     "next": "catalog:runtime",
     "react": "catalog:runtime",
@@ -23,6 +24,7 @@
   "devDependencies": {
     "@inkstack/tsconfig": "workspace:*",
     "@inkstack/vitest-config": "workspace:*",
+    "@tailwindcss/postcss": "catalog:dev",
     "@testing-library/dom": "catalog:dev",
     "@testing-library/jest-dom": "catalog:dev",
     "@testing-library/react": "catalog:dev",

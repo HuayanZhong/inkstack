@@ -27,7 +27,7 @@ pnpm lint:commit    # commitlint，从 stdin 读取提交信息
 
 - 所有包统一使用 `@inkstack/*` 命名；pnpm workspace 只包含 `apps/*` 和 `packages/*`，`docs/`、`infra/` 不是包。
 - 新增包或目录时同时创建该层 `AGENTS.md` 与只写 `@AGENTS.md` 的 `CLAUDE.md`。
-- `.claude/skills` 指向 `../.agents/skills`；`.claude/settings.json` 与根 `CLAUDE.md` 位置固定，不要移动。
+- `.claude/skills` 指向 `../.agents/skills`；shadcn 先读该技能。`.claude/settings.json` 与根 `CLAUDE.md` 位置固定，不要移动。
 - 图的可编辑源是 `docs/architecture/source/*.json`，不要手改 `interactive/*.html`。生成物随仓库提交；重新生成命令见 [`docs/architecture/README.md`](docs/architecture/README.md)。
 
 ## 依赖与工具链
@@ -35,7 +35,7 @@ pnpm lint:commit    # commitlint，从 stdin 读取提交信息
 - 所有依赖走 pnpm catalog，版本只写在 `pnpm-workspace.yaml`；catalog 分为 `toolchain`（精确 pin）、`dev`（开发工具）、`runtime`（运行时库），`package.json` 分别使用 `catalog:toolchain`、`catalog:dev`、`catalog:runtime`，禁止裸 semver。规则见 [`docs/package-metadata.md`](docs/package-metadata.md)。
 - 根工具链依赖用 `pnpm add -Dw <pkg> --save-catalog-name toolchain`；运行时依赖用 `pnpm add --filter @inkstack/<pkg> --save-catalog-name runtime <pkg>`，开发依赖再加 `-D`。
 - pnpm 11+ 的构建脚本白名单是 `allowBuilds`；遇到 `ERR_PNPM_IGNORED_BUILDS` 时用 `pnpm approve-builds`。
-- Node `>=26.12.0`、pnpm `12.14.0`、TypeScript `6.0.3` 已固定（catalog `toolchain` 精确 pin）。不要升级到 TS 7：Next.js 16 的类型检查依赖 `typescript/lib/typescript.js`，该文件在 TS 7 已移除。`@types/node` 的主版本跟随 Node 主版本。
+- Node `>=26.12.0`、pnpm `12.14.0`、TypeScript `6.0.3` 已固定（catalog `toolchain` 精确 pin）。不要升级到 TS 7：Nest CLI 12 仍要求旧的编译器 API；Next 16.4 已支持 TS 7 的 CLI 模式。`@types/node` 的主版本跟随 Node 主版本。
 - 包内 `tsconfig.json` 继承 `@inkstack/tsconfig` 的平面预设，并在 devDependencies 声明 `"@inkstack/tsconfig": "workspace:*"`；预设与模块格式见 [`docs/typescript.md`](docs/typescript.md)。Turborepo 任务定义在 `turbo.json`，`ui` 固定为 `tui`。
 - format 与 lint 由根目录的 oxfmt / oxlint 负责；规则见 [`docs/toolchain.md`](docs/toolchain.md)。
 

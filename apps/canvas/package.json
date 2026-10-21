@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@inkstack/config": "workspace:*",
+    "@inkstack/ui": "workspace:*",
     "react": "catalog:runtime",
     "react-dom": "catalog:runtime",
     "tldraw": "catalog:runtime"
@@ -27,6 +28,7 @@
     "@rspack/core": "catalog:dev",
     "@rspack/dev-server": "catalog:dev",
     "@rspack/plugin-react-refresh": "catalog:dev",
+    "@tailwindcss/postcss": "catalog:dev",
     "@types/node": "catalog:dev",
     "@types/react": "catalog:dev",
     "@types/react-dom": "catalog:dev",

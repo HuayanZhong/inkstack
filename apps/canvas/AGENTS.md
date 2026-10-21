@@ -19,7 +19,7 @@
 
 ## 约束
 
-- 依赖只通过 `catalog:` 引用；`@module-federation/enhanced` 用 `catalog:runtime`。
+- 依赖只通过 `catalog:` 引用；`@module-federation/enhanced` 用 `catalog:runtime`。样式入口 `src/index.css` 导入 `@inkstack/ui/globals.css`，`postcss.config.mjs` 固定 `@tailwindcss/postcss`；UI 组件从 `@inkstack/ui` 导入，不复制到应用。
 - React 必须保持单例；`react-dom/client` 子路径也必须共享，否则 remote 会加载自带副本。
 - dev 的 `publicPath` 由 `CANVAS_HOST` / `CANVAS_PORT` 生成，production 用 `auto`；dev server 的 CORS 由 `CANVAS_DEV_CORS_ORIGIN` 控制。
-- 不要改回 `src/index.ts` 的手写异步边界。
+- 不要改回 `src/index.ts` 的手写异步边界。全局样式与 tldraw 同文档，调整 Tailwind 或共享主题后需回归画布交互。
