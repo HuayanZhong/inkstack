@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  pull_request:
+
+# 同一 PR 只保留最新一轮，旧提交不占用 runner。
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  static:
+    uses: ./.github/workflows/ci-static.yml
+
+  test:
+    uses: ./.github/workflows/ci-test.yml
+
+  build:
+    uses: ./.github/workflows/ci-build.yml
+
+  dependency_review:
+    uses: ./.github/workflows/dependency-review.yml
+    permissions:
+      contents: read
+      pull-requests: write
+
+  all-checks-passed:
+    name: all checks passed
+    if: always()
+    needs: [static, test, build, dependency_review]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check required jobs
+        env:
+          STATIC_RESULT: ${{ needs.static.result }}
+          TEST_RESULT: ${{ needs.test.result }}
+          BUILD_RESULT: ${{ needs.build.result }}
+          DEPENDENCY_REVIEW_RESULT: ${{ needs.dependency_review.result }}
+        run: |
+          set -euo pipefail
+          failed=0
+          check() {
+            name="$1"
+            result="$2"
+            echo "$name: $result"
+            if [ "$result" != "success" ]; then
+              echo "::error::$name did not succeed"
+              failed=1
+            fi
+          }
+          check static "$STATIC_RESULT"
+          check test "$TEST_RESULT"
+          check build "$BUILD_RESULT"
+          check dependency-review "$DEPENDENCY_REVIEW_RESULT"
+          exit "$failed"

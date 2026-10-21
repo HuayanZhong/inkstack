@@ -8,7 +8,7 @@
 
 ## 阶段策略
 
-仓库处于骨架阶段。Changesets 与 CI 刻意延后；测试按规则执行。CI 规划见 [`docs/architecture/README.md`](docs/architecture/README.md)，那是规划而不是现状。CI 接入后改写。
+仓库处于骨架阶段。Changesets 刻意延后；CI 已接入 [ci.yml](.github/workflows/ci.yml)；部署规划见 [架构文档](docs/architecture/README.md)。
 
 ## 常用命令
 

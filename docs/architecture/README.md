@@ -49,13 +49,14 @@ node <archify-repo>/archify/bin/archify.mjs finalize workflow source/cicd-workfl
 ## 开发工作流（暂不启用 worktree）
 
 - 当前用主 checkout + feature branch：`git switch -c feat/xxx`，完成后走 PR 合并。
-- 每个任务一个分支、一个 PR；CI 接入后由分支 / PR 触发。
+- 每个任务一个分支、一个 PR；CI 已由分支 / PR 触发。
 - Git worktree 暂时不引入；等需要并行开发或多 Agent 代码隔离时再加。
 
 ## CI/CD 规划
 
-> 本节是规划，不属于当前骨架阶段；DESIGN-RECORD 中的「云部署」非目标指当前不实际部署。
+> 本节是部署与发布规划；PR/main CI、依赖审查、Dependabot 与未来流水线的激活顺序见 [CI/CD 蓝图](../ci-cd.md)，不在这里重复。DESIGN-RECORD 中的「云部署」非目标指当前不实际部署。
 
+- **当前已落地**：PR/main 执行 static / test / build（含 hygiene）三组检查（等价于 `pnpm verify`），PR 额外运行 dependency review，Dependabot 每日检查依赖；部署、E2E、发布与回滚仍按下文规划。
 - **主流程**：PR → install/cache → lint/typecheck → unit/build → codegen golden → integration → E2E → preview/staging → prod approval → production → smoke/Sentry → rollback。
 - **环境**：local → preview → staging → production；production 必须经过 GitHub Environment 审批，preview 不使用生产密钥。
 - **部署目标**：

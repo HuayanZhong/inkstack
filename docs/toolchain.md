@@ -88,12 +88,16 @@
 - `commit-msg`：commitlint 校验提交信息，规则见 [`.claude/rules/git.md`](../.claude/rules/git.md)。
 - `pre-commit`：`pnpm exec lint-staged`，只处理暂存文件。TS/JS 先 `oxfmt` 格式化，再 `oxlint --config .oxlintrc.staged.json`；Markdown、JSON、YAML、CSS、HTML 只格式化。任一任务失败时 lint-staged 会还原到运行前状态，格式修复也会丢弃；先修复错误再重新提交。
 - `pre-push`：执行 `pnpm verify`（install --frozen-lockfile → lint → check:manifests → typecheck → test → build → format:check → hygiene）。Turborepo 缓存命中后开销很小；这些检查都不放进 pre-commit。
-- staged lint 关闭 `typeAware`：提交路径只做格式与基础正确性；类型检查由 pre-push 负责，CI 接入后再加入，且根配置文件、`.mjs` 脚本不在任何包的 tsconfig 内。
+- staged lint 关闭 `typeAware`：提交路径只做格式与基础正确性；类型检查由 pre-push 与 CI 的 `pnpm verify` 负责，且根配置文件、`.mjs` 脚本不在任何包的 tsconfig 内。
 - 规则仍只有根 `.oxlintrc.json` 一个 home；`.oxlintrc.staged.json` 只覆盖 `options`，不复制规则。
 - `lint-staged` 版本固定在 `dev` catalog。
 
+## CI 与依赖更新
+
+CI workflow、依赖更新、分支保护、预览/部署与发布蓝图见 [`ci-cd.md`](ci-cd.md)。本文只记录 format、lint、hooks、Turborepo 环境变量与本地门禁。
+
 ## 推迟项
 
-- Vitest 的 `node` / `react` / `nest` / `browser` 预设与 `@inkstack/vitest-config`。
+- Vitest 的 `browser` 预设；`node` / `react` / `nest` 已由 `@inkstack/vitest-config` 提供。
 - AI SDK、Supabase 等尚未接入的运行时依赖。
-- CI 与 Renovate 配置。
+- 生产部署、发布与 E2E 流水线；当前只接入 PR/main CI 与依赖更新。
