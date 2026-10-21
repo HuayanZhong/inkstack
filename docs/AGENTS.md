@@ -1,5 +1,7 @@
 # docs/AGENTS.md
 
+补充根文件的规则。本目录维护架构文档、CI/CD 与跨包规则的权威归属。
+
 ## 权威归属
 
 | 事实        | 权威                                      | 性质                   |
@@ -20,6 +22,6 @@
 
 - 一条事实一个 home；冲突按上表取权威；其他位置只链接，不复述。只写当前状态，不写变更历史（"previously / now / 已改为"），状态只写在 README.md 并带复查条件；历史留在 Git、变更归档和决策记录。
 - 生成物永不手改：改 `source/*.json` 后重新生成 HTML/PNG；OpenWiki 接入后改源码或 `openwiki/INSTRUCTIONS.md`，由工具重建。
-- `AGENTS.md` / `CLAUDE.md` 中的 `OPENWIKI:START/END`、`nextjs-agent-rules`、`turborepo-agent-rules` 标记块由工具维护；只编辑标记外，预算与链接检查跳过标记内。
-- 预算按手写区计算：根 `AGENTS.md` ≤70 行且 ≤3,200 非空白字符；子树和本文件 ≤25 行且 ≤1,000。
+- `AGENTS.md` / `CLAUDE.md` 中的 `OPENWIKI:START/END`、`nextjs-agent-rules`、`turborepo-agent-rules` 标记块由工具维护；只编辑标记外。
+- 预算、优先级与检查方式见 [`.claude/rules/agent-docs.md`](../.claude/rules/agent-docs.md)。
 - `DESIGN-RECORD` 的状态只用 `已定 / 已取代 / 待定`；`已取代` 必须链接新决策；`openspec/changes/archive/` 冻结，`openspec/specs/` 是当前来源。

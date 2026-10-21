@@ -7,7 +7,7 @@
 - 只放 `compilerOptions`；`include`、`exclude`、`rootDir`、`outDir`、`paths` 留在消费包。
 - 预设之间的继承关系与选择规则以 `docs/typescript.md` 为准，不在本目录复述。
 - 新增或重命名预设时同步更新 `package.json` 的 `exports` 与 `docs/typescript.md`。
-- 不引入依赖或构建脚本；预设由 TypeScript 直接读取。
+- 除 `publint` 外不引入依赖；无构建脚本；预设由 TypeScript 直接读取。
 
 ## 目录
 

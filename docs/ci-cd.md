@@ -17,7 +17,7 @@
 | ----------------------- | ------------------------------------ | ---------------------------------------------------------------------------- |
 | `ci.yml`                | `pull_request`                       | PR 编排：static / test / build / dependency-review，汇总 `all checks passed` |
 | `ci-master.yml`         | `push main`、`workflow_dispatch`     | main 与手动：static / test / build                                           |
-| `ci-static.yml`         | `workflow_call`、`workflow_dispatch` | lint、check:manifests、typecheck、format:check                               |
+| `ci-static.yml`         | `workflow_call`、`workflow_dispatch` | lint、check:manifests、check:docs、typecheck、format:check                   |
 | `ci-test.yml`           | `workflow_call`、`workflow_dispatch` | test:coverage、上传覆盖率                                                    |
 | `ci-build.yml`          | `workflow_call`、`workflow_dispatch` | build、hygiene（knip/publint）                                               |
 | `dependency-review.yml` | `workflow_call`                      | PR 新增依赖审查，high 阻断                                                   |
@@ -144,7 +144,7 @@ Environment：`preview`（无审批、无生产 secret）、`staging`（staging 
 2. 只在以下情况新建 workflow：独立运行时/平台、service containers、长时 E2E、需要 secrets/environment、部署或发布。
 3. 新检查文件用 `ci-<area>.yml`（检查单元）或 `<purpose>.yml`（部署/发布/E2E）；检查单元用 `workflow_call` + `workflow_dispatch`。
 4. 在 `ci.yml` 和/或 `ci-master.yml` 加一行 caller；在 `all checks passed` 的 `needs` 与结果检查里加一行；分支保护仍只要求这一个检查。
-5. 更新本文的激活表与 [`../.github/AGENTS.md`](../.github/AGENTS.md)；首次 PR 验证通过后再标记为已启用。
+5. 更新本文的“当前已启用”表；`.github/AGENTS.md` 只在落位规则变化时更新；首次 PR 验证通过后再标记为已启用。
 
 ## 明确不做
 

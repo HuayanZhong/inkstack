@@ -4,52 +4,55 @@
 
 ## 指引分层
 
-根 `AGENTS.md` 只放跨包的常驻规则。`apps/*`、`packages/*`、`docs/`、`infra/` 可拥有自己的 `AGENTS.md`，以"补充根文件的规则"开头，只写目录特有内容，不重复根规则，≤25 行。占位包不创建空文件。每层 `CLAUDE.md` 只写 `@AGENTS.md`；`packages/*` 需 `README.md`，见 `packages/AGENTS.md`。文档规则见 [`docs/AGENTS.md`](docs/AGENTS.md)。
+根 `AGENTS.md` 只放跨包常驻规则。子树 `AGENTS.md` 以“补充根文件的规则”开头，只写目录特有内容，不重复根规则，≤25 行；占位包不创建空文件。每层 `CLAUDE.md` 只写 `@AGENTS.md`；`packages/*` 需 `README.md`。优先级、预算与单一归属见 [`.claude/rules/agent-docs.md`](.claude/rules/agent-docs.md)；文档规则见 [`docs/AGENTS.md`](docs/AGENTS.md)。
 
 ## 阶段策略
 
-仓库处于骨架阶段。Changesets 刻意延后；CI 已接入 [ci.yml](.github/workflows/ci.yml)；部署规划见 [架构文档](docs/architecture/README.md)。
+仓库处于骨架阶段，Changesets 刻意延后；状态与部署见 [`README.md`](README.md) 与 [架构文档](docs/architecture/README.md)。
 
 ## 常用命令
 
 ```bash
 pnpm install
-pnpm dev            # turbo run dev
-pnpm build          # turbo run build
-pnpm lint           # turbo run lint
-pnpm typecheck      # turbo run typecheck
-pnpm lint:commit    # commitlint，从 stdin 读取提交信息
+pnpm dev              # turbo run dev
+pnpm build            # turbo run build
+pnpm lint             # turbo run lint
+pnpm typecheck        # turbo run typecheck
+pnpm test             # turbo run test
+pnpm verify           # lint → manifest → docs → typecheck → coverage → build → format → hygiene
+pnpm check:manifests
+pnpm format           # oxfmt --write .
+pnpm lint:commit      # commitlint，从 stdin 读取提交信息
 ```
 
 提交信息必须符合 Conventional Commits；husky 的 `commit-msg` hook 会拒绝不合规信息。
 
 ## 仓库约定
 
-- 所有包统一使用 `@inkstack/*` 命名；pnpm workspace 只包含 `apps/*` 和 `packages/*`，`docs/`、`infra/` 不是包。
-- 新增包或目录时同时创建该层 `AGENTS.md` 与只写 `@AGENTS.md` 的 `CLAUDE.md`。
-- `.claude/skills` 指向 `../.agents/skills`；shadcn 先读该技能。`.claude/settings.json` 与根 `CLAUDE.md` 位置固定，不要移动。
-- 图的可编辑源是 `docs/architecture/source/*.json`，不要手改 `interactive/*.html`。生成物随仓库提交；重新生成命令见 [`docs/architecture/README.md`](docs/architecture/README.md)。
+- 包统一使用 `@inkstack/*` 命名；pnpm workspace 只包含 `apps/*` 和 `packages/*`，`docs/`、`infra/` 不是包。
+- `.claude/skills` 指向 `../.agents/skills`；`.claude/settings.json` 与根 `CLAUDE.md` 位置固定，不要移动。
+- 图的可编辑源是 `docs/architecture/source/*.json`，不要手改 `interactive/*.html`。生成物入库；重新生成命令见 [`docs/architecture/README.md`](docs/architecture/README.md)。
 
 ## 依赖与工具链
 
-- 所有依赖走 pnpm catalog，版本只写在 `pnpm-workspace.yaml`；catalog 分为 `toolchain`（精确 pin）、`dev`（开发工具）、`runtime`（运行时库），`package.json` 分别使用 `catalog:toolchain`、`catalog:dev`、`catalog:runtime`，禁止裸 semver。规则见 [`docs/package-metadata.md`](docs/package-metadata.md)。
-- 根工具链依赖用 `pnpm add -Dw <pkg> --save-catalog-name toolchain`；运行时依赖用 `pnpm add --filter @inkstack/<pkg> --save-catalog-name runtime <pkg>`，开发依赖再加 `-D`。
-- pnpm 11+ 的构建脚本白名单是 `allowBuilds`；遇到 `ERR_PNPM_IGNORED_BUILDS` 时用 `pnpm approve-builds`。
-- Node `>=26.12.0`、pnpm `12.14.0`、TypeScript `6.0.3` 已固定（catalog `toolchain` 精确 pin）。不要升级到 TS 7：Nest CLI 12 仍要求旧的编译器 API；Next 16.4 已支持 TS 7 的 CLI 模式。`@types/node` 的主版本跟随 Node 主版本。
-- 包内 `tsconfig.json` 继承 `@inkstack/tsconfig` 的平面预设，并在 devDependencies 声明 `"@inkstack/tsconfig": "workspace:*"`；预设与模块格式见 [`docs/typescript.md`](docs/typescript.md)。Turborepo 任务定义在 `turbo.json`，`ui` 固定为 `tui`。
+- 依赖只走 catalog，版本写在 `pnpm-workspace.yaml`；命名、字段与版本分层见 [`docs/package-metadata.md`](docs/package-metadata.md)。禁止裸 semver。
+- 根工具链：`pnpm add -Dw <pkg> --save-catalog-name toolchain`；运行时：`pnpm add --filter @inkstack/<pkg> --save-catalog-name runtime <pkg>`，开发依赖加 `-D`。构建脚本白名单是 `allowBuilds`，用 `pnpm approve-builds`。
+- Node `>=26.12.0`、pnpm `12.14.0`、TypeScript `6.0.3` 已固定。不要升级到 TS 7：Nest CLI 12 仍要求旧的编译器 API；Next 16.4 已支持 TS 7 的 CLI 模式。`@types/node` 的主版本跟随 Node。
+- 包内 `tsconfig.json` 继承 `@inkstack/tsconfig` 预设，并在 devDependencies 声明 `"@inkstack/tsconfig": "workspace:*"`；模块格式见 [`docs/typescript.md`](docs/typescript.md)。Turborepo 任务见 `turbo.json`，`ui` 固定为 `tui`。
 - format 与 lint 由根目录的 oxfmt / oxlint 负责；规则见 [`docs/toolchain.md`](docs/toolchain.md)。
 
 ## OpenSpec
 
-需求以 `openspec/specs/` 为唯一来源，进行中的变更在 `openspec/changes/<id>/`。`/opsx:propose` 只产出规划，`/opsx:apply` 才开始实现。产物语言与标题格式见 `openspec/config.yaml`。不要直接编辑生成的技能与命令文件，刷新用 `pnpm exec openspec update`。devDependency 与全局 `openspec` 同固定 `1.14.3`，升级两处一起改。
+需求以 `openspec/specs/` 为唯一来源，进行中的变更在 `openspec/changes/<id>/`。`/opsx:propose` 只规划，`/opsx:apply` 才实现。产物语言与标题见 `openspec/config.yaml`。不要手改生成的技能与命令，刷新用 `pnpm exec openspec update`；devDependency 与全局 `openspec` 同固定 `1.14.3`。
 
 ## 架构不变量
 
-- **Canvas 是唯一执行器**：所有画布修改最终由 tldraw editor 执行并 ack。
-- **Gateway 是唯一序列器**：所有 action 排队、编号、校验、广播、持久化。
-- **BFF 是独立一层**：负责前端聚合、Auth/session、SSE，不持有 action 队列。
-- **代码生成是确定性编译器**：模型只负责调用工具，不自由写代码。
-- **设计文件是 JSON**：tldraw snapshot 随仓库进 Git，不使用 `.pen` 格式。
+- **Canvas 是单一执行器**：所有画布修改最终由 tldraw editor 执行并回 ack。
+- **Gateway 是单一序列器**：所有 action 排队、编号、校验、广播、持久化。
+- **BFF 是独立一层**：前端聚合、Auth/session、SSE、上传/下载；不持有 action 队列。
+- **实时 WS 可直连 Gateway**：REST/SSE/Auth 走 BFF，降低 action 延迟。
+- **代码生成是确定性编译器**：不让模型自由写代码。
+- **设计文件是 JSON**：tldraw snapshot，随仓库进 Git，不使用 Pencil 的 `.pen` 格式。
 
 ## 工作约束
 
@@ -58,11 +61,8 @@ pnpm lint:commit    # commitlint，从 stdin 读取提交信息
 - Git：除非用户当次明确要求，不执行任何会改变工作区、分支或历史的命令；详见 [`.claude/rules/git.md`](.claude/rules/git.md)。
 - 注释：解释代码长期成立的事实，不复述过程或代码；详见 [`.claude/rules/comments.md`](.claude/rules/comments.md)。
 - 环境变量：端口、host、URL、凭据只通过 env 分发，规则见 [`.claude/rules/env.md`](.claude/rules/env.md)。
-- 完成前跑 `pnpm typecheck`（以及已存在的 `pnpm build`），并报告实际输出。
-
-## 编辑本文件
-
-根文件只放跨包、稳定、不读会做错的规则；每条规则自包含，细节链接到唯一归属地。新增内容前先确认是否已有归属地。超标时按"下沉 → 压缩 → 扩预算"的顺序处理，并在变更说明中给出理由。预算只统计手写区：根文件 ≤70 行且 ≤3,200 非空白字符，子树 `AGENTS.md` ≤25 行且 ≤1,000。`OPENWIKI:START/END`、`nextjs-agent-rules`、`turborepo-agent-rules` 等标记块由工具维护，只编辑标记外，预算和链接检查跳过标记内。
+- 指引维护：改 `AGENTS.md` / `CLAUDE.md` 前读 [`.claude/rules/agent-docs.md`](.claude/rules/agent-docs.md)。
+- 完成前跑 `pnpm verify`，并报告实际输出。
 
 <!-- BEGIN:turborepo-agent-rules -->
 

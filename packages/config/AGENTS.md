@@ -18,4 +18,3 @@
 
 - 每个应用的 schema 定义在使用方，不汇入本包。
 - 布尔值只接受 `true` / `false` / `1` / `0`；禁止 `Boolean(value)` 语义。
-- 公共导出使用 TSDoc；依赖只通过 catalog 引用。

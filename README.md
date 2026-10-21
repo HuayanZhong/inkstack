@@ -18,6 +18,7 @@ packages/
   config/      共享配置解析与 URL 标准化
   contracts/   共享类型 / 协议 / codegen IR
   tsconfig/    共享 tsconfig 预设
+  ui/          共享 shadcn 组件与 Tailwind 主题
   vitest-config/  共享 Vitest 预设
 docs/
   architecture/  架构图与设计记录

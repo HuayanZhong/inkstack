@@ -11,13 +11,13 @@
 ## 目录
 
 - `src/main.ts`：启动入口，安装 Socket.IO `IoAdapter`，从 `config` 读取端口。
-- `src/config/`：`env.ts` 定义并校验 schema，`index.ts` 暴露类型化配置。
+- `src/config/`：`env.ts` 校验 schema，`index.ts` 导出类型化配置。
 - `src/ws/`：WebSocket gateway；当前只有 `ping`/`pong` 传输验证。
 - `scripts/smoke-ws.mjs`：本地 WS smoke 脚本。
 
 ## 约束
 
-- 在仓库根执行：`pnpm --filter @inkstack/gateway dev|build|typecheck|lint|smoke:ws`。
-- 业务代码只读 `config`，不直接访问 `process.env`；新增变量先写进 `turbo.json` 的 `globalEnv`。
+- 在仓库根执行：`pnpm --filter @inkstack/gateway dev|build|typecheck|lint|test|smoke:ws`。
+- 业务代码只读 `config`，新增变量按 [env 规则](../../.claude/rules/env.md)。
 - WS 使用 Socket.IO（`@nestjs/platform-socket.io`）；`GATEWAY_WS_PATH` 对应 Socket.IO 的 `path`，不是 namespace。
-- 依赖只通过 `catalog:` 引用；`tsconfig.json` 继承 `@inkstack/tsconfig/nest.json`，构造器注入的类不要改成 `import type`。
+- `tsconfig.json` 继承 `@inkstack/tsconfig/nest.json`，构造器注入的类不要改成 `import type`。

@@ -30,4 +30,4 @@ pnpm --filter @inkstack/ui publint
 
 应用的 `postcss.config.mjs` 必须把 `@tailwindcss/postcss` 的 `base` 指向仓库根，否则共享组件的类名不会进入产物。
 
-新增组件使用仓库根的 shadcn CLI，从 `apps/shell` 目录执行，组件会落到本包的 `src/components`。
+新增组件在仓库根执行 `pnpm dlx shadcn@latest add <name> -c apps/shell`，组件落到本包 `src/components`；生成后执行 `pnpm --filter @inkstack/ui build`。

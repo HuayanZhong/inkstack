@@ -44,6 +44,9 @@ jobs:
       - name: Check manifests
         run: pnpm check:manifests
 
+      - name: Check agent docs
+        run: pnpm check:docs
+
       - name: Typecheck
         run: pnpm typecheck
 

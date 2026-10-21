@@ -17,4 +17,3 @@
 
 - 新增预设时保持 `include` 指向 `test/**`、`exclude` 包含 `dist`。
 - 覆盖率 provider、reporter 与门槛在这里统一；使用方只声明 `coverage.include` 与排除理由。
-- 依赖只通过 catalog 引用；构建到 `dist`，消费方用 `workspace:*`。

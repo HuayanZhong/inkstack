@@ -19,6 +19,7 @@
   "type": "module",
   "scripts": {
     "check:manifests": "node scripts/check-manifests.mjs",
+    "check:docs": "node scripts/check-agent-docs.mjs",
     "dev": "turbo run dev",
     "build": "turbo run build",
     "format": "oxfmt --write .",
@@ -30,7 +31,7 @@
     "lint:commit": "commitlint",
     "typecheck": "turbo run typecheck",
     "test": "turbo run test",
-    "verify": "pnpm install --frozen-lockfile && pnpm lint && pnpm check:manifests && pnpm typecheck && pnpm test:coverage && pnpm build && pnpm format:check && pnpm hygiene",
+    "verify": "pnpm install --frozen-lockfile && pnpm lint && pnpm check:manifests && pnpm check:docs && pnpm typecheck && pnpm test:coverage && pnpm build && pnpm format:check && pnpm hygiene",
     "prepare": "husky",
     "test:coverage": "turbo run test:coverage"
   },

@@ -24,16 +24,16 @@
 
 ## 命令
 
-| 命令                | 作用                                                                      |
-| ------------------- | ------------------------------------------------------------------------- |
-| `pnpm format`       | oxfmt 写入全仓库                                                          |
-| `pnpm format:check` | 只检查格式，供 CI 接入后使用                                              |
-| `pnpm lint`         | turbo 包级 lint + Turbo 环境变量检查                                      |
-| `pnpm lint:env`     | 只跑 Turbo 环境变量检查                                                   |
-| `pnpm test`         | turbo 包级 Vitest 单元测试                                                |
-| `pnpm hygiene`      | knip 全仓库检查 + 库包 publint 导出校验                                   |
-| `pnpm publint`      | 只对 `packages/*` 运行导出校验                                            |
-| `pnpm verify`       | 完整本地门禁：install、lint、manifests、typecheck、build、format、hygiene |
+| 命令                | 作用                                                                            |
+| ------------------- | ------------------------------------------------------------------------------- |
+| `pnpm format`       | oxfmt 写入全仓库                                                                |
+| `pnpm format:check` | 只检查格式，供 CI 接入后使用                                                    |
+| `pnpm lint`         | turbo 包级 lint + Turbo 环境变量检查                                            |
+| `pnpm lint:env`     | 只跑 Turbo 环境变量检查                                                         |
+| `pnpm test`         | turbo 包级 Vitest 单元测试                                                      |
+| `pnpm hygiene`      | knip 全仓库检查 + 库包 publint 导出校验                                         |
+| `pnpm publint`      | 只对 `packages/*` 运行导出校验                                                  |
+| `pnpm verify`       | 完整本地门禁：install、lint、manifests、docs、typecheck、build、format、hygiene |
 
 ## 版本策略
 
@@ -87,7 +87,7 @@
 
 - `commit-msg`：commitlint 校验提交信息，规则见 [`.claude/rules/git.md`](../.claude/rules/git.md)。
 - `pre-commit`：`pnpm exec lint-staged`，只处理暂存文件。TS/JS 先 `oxfmt` 格式化，再 `oxlint --config .oxlintrc.staged.json`；Markdown、JSON、YAML、CSS、HTML 只格式化。任一任务失败时 lint-staged 会还原到运行前状态，格式修复也会丢弃；先修复错误再重新提交。
-- `pre-push`：执行 `pnpm verify`（install --frozen-lockfile → lint → check:manifests → typecheck → test → build → format:check → hygiene）。Turborepo 缓存命中后开销很小；这些检查都不放进 pre-commit。
+- `pre-push`：执行 `pnpm verify`（install --frozen-lockfile → lint → check:manifests → check:docs → typecheck → test → build → format:check → hygiene）。Turborepo 缓存命中后开销很小；这些检查都不放进 pre-commit。
 - staged lint 关闭 `typeAware`：提交路径只做格式与基础正确性；类型检查由 pre-push 与 CI 的 `pnpm verify` 负责，且根配置文件、`.mjs` 脚本不在任何包的 tsconfig 内。
 - 规则仍只有根 `.oxlintrc.json` 一个 home；`.oxlintrc.staged.json` 只覆盖 `options`，不复制规则。
 - `lint-staged` 版本固定在 `dev` catalog。
