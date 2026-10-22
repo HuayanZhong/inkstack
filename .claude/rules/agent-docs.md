@@ -1,6 +1,17 @@
+---
+paths:
+  - '**/AGENTS.md'
+  - '**/CLAUDE.md'
+  - '.claude/rules/**'
+---
+
 # Agent 指引维护
 
 适用于根与各层的 `AGENTS.md`、`CLAUDE.md`，以及指向它们的规则文档。改指引前先读本文件。
+
+## 加载范围
+
+`.claude/rules/` 下的规则默认按 `paths:` 加载；没有 `paths:` 的规则会在每次会话启动时载入。常驻只允许 `cli-first.md`、`git.md`、`comments.md`，并在 `scripts/check-agent-docs.mjs` 的 `ALWAYS_ON_RULES` 中写明理由。新增规则必须声明非空 `paths:`，并在根或子树 `AGENTS.md` 留下链接；`pnpm check:docs` 会校验这两点。
 
 ## 优先级
 

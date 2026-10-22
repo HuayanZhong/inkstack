@@ -71,6 +71,12 @@ const BUILTIN_PNPM = new Set([
   'update',
   'why',
 ])
+// 常驻规则在启动时加载；其余规则必须声明 paths。每条常驻都必须写明理由。
+const ALWAYS_ON_RULES = new Map([
+  ['cli-first.md', '决定所有任务使用哪个 CLI，必须先于任何文件读取'],
+  ['git.md', '决定是否允许改工作区/分支/历史，必须先于任何 git 操作'],
+  ['comments.md', '适用于所有代码编辑，且篇幅很短，按路径 scoping 几乎等于常驻'],
+])
 
 const readJson = (path) => JSON.parse(readFileSync(path, 'utf8'))
 
@@ -111,6 +117,63 @@ function collectAgentsFiles(directory = root, depth = 0) {
     }
   }
   return found.sort((left, right) => left.localeCompare(right))
+}
+
+function collectRuleFiles(directory = join(root, '.claude/rules'), depth = 0) {
+  if (!existsSync(directory)) return []
+  const found = []
+  for (const entry of readdirSync(directory, { withFileTypes: true })) {
+    const full = join(directory, entry.name)
+    if (entry.isDirectory()) {
+      if (depth >= 3) continue
+      found.push(...collectRuleFiles(full, depth + 1))
+    } else if (entry.name.endsWith('.md')) {
+      found.push(full)
+    }
+  }
+  return found.sort((left, right) => left.localeCompare(right))
+}
+
+/** 读取文件头部的 YAML frontmatter；解析失败显式返回错误，避免坏配置被静默忽略。 */
+function parseFrontmatter(text) {
+  const match = /^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/.exec(text)
+  if (!match) return { data: {}, error: null }
+  try {
+    return { data: parseYaml(match[1]) ?? {}, error: null }
+  } catch (error) {
+    return { data: {}, error: error.message }
+  }
+}
+
+function evaluateRuleScope({ parseError, hasPathsKey, paths, allowlistReason }) {
+  const issues = []
+  if (parseError) {
+    issues.push({ level: 'error', message: `invalid frontmatter: ${parseError}` })
+    return issues
+  }
+  if (hasPathsKey && paths.length === 0) {
+    issues.push({ level: 'error', message: '"paths" must be a non-empty string array' })
+    return issues
+  }
+  if (paths.length > 0) return issues
+  if (allowlistReason === undefined) {
+    issues.push({
+      level: 'error',
+      message: 'rule must declare non-empty "paths" or be listed in ALWAYS_ON_RULES',
+    })
+    return issues
+  }
+  if (!allowlistReason.trim()) {
+    issues.push({ level: 'error', message: 'always-on rule must document a reason' })
+  }
+  return issues
+}
+
+function evaluateRuleDiscoverability({ paths, linked }) {
+  if (paths.length === 0) return []
+  return linked
+    ? []
+    : [{ level: 'error', message: 'path-scoped rule must be linked from an AGENTS.md' }]
 }
 
 function clauseKey(line) {
@@ -488,6 +551,79 @@ function runSelfTest() {
     evaluateInvariants({ designBullets: ['- **A**：x'], rootBullets: ['- **A**：x'] }).length === 0,
   )
 
+  check(
+    'rule paths ok',
+    evaluateRuleScope({
+      parseError: null,
+      hasPathsKey: true,
+      paths: ['**/*.ts'],
+      allowlistReason: undefined,
+    }).length === 0,
+  )
+  check(
+    'rule missing scope',
+    evaluateRuleScope({
+      parseError: null,
+      hasPathsKey: false,
+      paths: [],
+      allowlistReason: undefined,
+    }).length === 1,
+  )
+  check(
+    'rule empty paths',
+    evaluateRuleScope({
+      parseError: null,
+      hasPathsKey: true,
+      paths: [],
+      allowlistReason: undefined,
+    }).length === 1,
+  )
+  check(
+    'rule allowlisted',
+    evaluateRuleScope({
+      parseError: null,
+      hasPathsKey: false,
+      paths: [],
+      allowlistReason: 'workflow rule',
+    }).length === 0,
+  )
+  check(
+    'rule allowlist reason missing',
+    evaluateRuleScope({
+      parseError: null,
+      hasPathsKey: false,
+      paths: [],
+      allowlistReason: '   ',
+    }).length === 1,
+  )
+  check(
+    'rule frontmatter broken',
+    evaluateRuleScope({
+      parseError: 'bad yaml',
+      hasPathsKey: false,
+      paths: [],
+      allowlistReason: undefined,
+    }).length === 1,
+  )
+  check(
+    'rule scoped linked',
+    evaluateRuleDiscoverability({ paths: ['**/*.ts'], linked: true }).length === 0,
+  )
+  check(
+    'rule scoped unlinked',
+    evaluateRuleDiscoverability({ paths: ['**/*.ts'], linked: false }).length === 1,
+  )
+  check(
+    'rule always-on unlinked',
+    evaluateRuleDiscoverability({ paths: [], linked: false }).length === 0,
+  )
+  const frontmatter = parseFrontmatter('---\npaths:\n  - "**/*.test.ts"\n---\n# x')
+  check(
+    'frontmatter paths',
+    Array.isArray(frontmatter.data.paths) && frontmatter.data.paths[0] === '**/*.test.ts',
+  )
+  check('frontmatter broken yaml', parseFrontmatter('---\npaths: [\n---\n').error !== null)
+
   const failed = results.filter((result) => !result.ok)
   for (const result of failed) console.error(`self-test failed: ${result.name}`)
   console.log(`self-test: ${results.length - failed.length}/${results.length} passed`)
@@ -504,6 +640,35 @@ if (isSelfTest) {
     text: readText(file),
   }))
   const issues = []
+  const ruleFiles = collectRuleFiles()
+  const agentsCorpus = docs.map((doc) => doc.text).join('\n')
+  const ruleStats = { alwaysOn: 0, scoped: 0 }
+  for (const ruleFile of ruleFiles) {
+    const label = relative(join(root, '.claude/rules'), ruleFile).replaceAll('\\', '/')
+    const parsed = parseFrontmatter(readText(ruleFile))
+    const data = parsed.data && typeof parsed.data === 'object' ? parsed.data : {}
+    const rawPaths = data.paths
+    const paths = Array.isArray(rawPaths)
+      ? rawPaths.filter((value) => typeof value === 'string' && value.trim().length > 0)
+      : []
+    const hasPathsKey = Object.hasOwn(data, 'paths')
+    const allowlistReason = ALWAYS_ON_RULES.get(label)
+    for (const issue of evaluateRuleScope({
+      parseError: parsed.error,
+      hasPathsKey,
+      paths,
+      allowlistReason,
+    })) {
+      issues.push({ ...issue, file: `.claude/rules/${label}` })
+    }
+    const linked = agentsCorpus.includes(`.claude/rules/${label}`)
+    for (const issue of evaluateRuleDiscoverability({ paths, linked })) {
+      issues.push({ ...issue, file: `.claude/rules/${label}` })
+    }
+    if (paths.length > 0) ruleStats.scoped += 1
+    else if (allowlistReason !== undefined) ruleStats.alwaysOn += 1
+  }
+
   for (const doc of docs) {
     issues.push(...checkFile(join(root, doc.file), doc.text, facts))
   }
@@ -537,7 +702,7 @@ if (isSelfTest) {
   for (const issue of errors) console.error(`error: ${issue.file}: ${issue.message}`)
   for (const issue of warnings) console.warn(`warning: ${issue.file}: ${issue.message}`)
   console.log(
-    `check-agent-docs: ${files.length} file(s) checked, ${errors.length} error(s), ${warnings.length} warning(s)`,
+    `check-agent-docs: ${files.length} file(s) checked, ${ruleFiles.length} rule(s) (${ruleStats.alwaysOn} always-on, ${ruleStats.scoped} scoped), ${errors.length} error(s), ${warnings.length} warning(s)`,
   )
   if (errors.length > 0) process.exit(1)
 }

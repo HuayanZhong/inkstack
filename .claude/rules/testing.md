@@ -1,3 +1,12 @@
+---
+paths:
+  - '**/test/**'
+  - '**/*.test.ts'
+  - '**/*.test.tsx'
+  - '**/vitest.config.ts'
+  - '**/tsconfig.test.json'
+---
+
 # 测试
 
 测试是包的一部分，不是后续补的选项：新增运行时代码时，同一个变更里必须有对应测试。

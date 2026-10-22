@@ -1,3 +1,12 @@
+---
+paths:
+  - '**/env.ts'
+  - '**/config/**'
+  - '**/turbo.json'
+  - '**/next.config.ts'
+  - '**/.env*'
+---
+
 # 环境变量分发
 
 环境相关配置只从 env 读取；源码、配置文件与脚本里不写死端口、host、URL、origin 或凭据。
