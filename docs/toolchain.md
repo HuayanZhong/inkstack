@@ -54,7 +54,8 @@
 
 ## 死代码与包边界检查
 
-- `pnpm hygiene` = `turbo run build --filter "./packages/*" && knip && turbo run publint --filter "./packages/*"`。先构建库包，是因为 knip 会加载 `rspack.config.ts` 等配置，而这些配置 import 的 `@inkstack/config` 指向 `dist`；构建或任一检查失败都以非零状态退出。
+- `pnpm hygiene` = `turbo run build --filter "./packages/*" && cross-env KNIP_DISABLE_RAW_TRANSFER=1 knip && turbo run publint --filter "./packages/*"`。先构建库包，是因为 knip 会加载 `rspack.config.ts` 等配置，而这些配置 import 的 `@inkstack/config` 指向 `dist`；构建或任一检查失败都以非零状态退出。
+- knip 固定带 `KNIP_DISABLE_RAW_TRANSFER=1`：oxc-parser 的 raw transfer 每次解析要预留 6 GiB `ArrayBuffer`，提交内存紧张时（Windows 常见）直接抛 `RangeError: Array buffer allocation failed`；该开关让 knip 走普通解析路径，代价只是解析略慢。
 - knip 一次分析整个 workspace，报告死文件、死导出/类型、未使用依赖、未声明依赖、循环依赖与未使用 catalog 条目。配置在根 `knip.config.ts`。
 - 库包入口由 `package.json` 的 `exports` 推导；应用入口由 Next、Nest、Rspack 的内置识别提供。
 - `.agents/**` 是 vendored 技能，整体 ignore；`@fission-ai/openspec` 只由技能工作流调用，按依赖 ignore。每条 ignore 必须在 `knip.config.ts` 写明理由，禁止用宽泛忽略关闭整类检查。
