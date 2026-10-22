@@ -270,7 +270,7 @@ const nodeLowerBound = /(?:>=|\^|~)?\s*(\d+\.\d+\.\d+)/.exec(rootJson.engines?.n
 
 if (!nvmrc) fail('.nvmrc', 'file is missing')
 if (!nodeLowerBound)
-  fail('package.json', 'engines.node must declare a concrete lower bound like >=26.12.0')
+  fail('package.json', 'engines.node must declare a concrete lower bound like >=26.12.1')
 if (nvmrc && nodeLowerBound && nvmrc !== nodeLowerBound) {
   fail('.nvmrc', `version ${nvmrc} does not match engines.node lower bound ${nodeLowerBound}`)
 }

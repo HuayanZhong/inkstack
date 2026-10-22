@@ -37,7 +37,7 @@ pnpm lint:commit      # commitlint，从 stdin 读取提交信息
 
 - 依赖只走 catalog，版本写在 `pnpm-workspace.yaml`；命名、字段与版本分层见 [`docs/package-metadata.md`](docs/package-metadata.md)。禁止裸 semver。
 - 根工具链：`pnpm add -Dw <pkg> --save-catalog-name toolchain`；运行时：`pnpm add --filter @inkstack/<pkg> --save-catalog-name runtime <pkg>`，开发依赖加 `-D`。构建脚本白名单是 `allowBuilds`，用 `pnpm approve-builds`。
-- Node `>=26.12.0`、pnpm `12.14.0`、TypeScript `6.0.3` 已固定。不要升级到 TS 7：Nest CLI 12 仍要求旧的编译器 API；Next 16.4 已支持 TS 7 的 CLI 模式。`@types/node` 的主版本跟随 Node。
+- Node `>=26.12.1`、pnpm `12.14.0`、TypeScript `6.0.3` 已固定。不要升级到 TS 7：Nest CLI 12 仍要求旧的编译器 API；Next 16.4 已支持 TS 7 的 CLI 模式。`@types/node` 的主版本跟随 Node。
 - 包内 `tsconfig.json` 继承 `@inkstack/tsconfig` 预设，并在 devDependencies 声明 `"@inkstack/tsconfig": "workspace:*"`；模块格式见 [`docs/typescript.md`](docs/typescript.md)。Turborepo 任务见 `turbo.json`，`ui` 固定为 `tui`。
 - format 与 lint 由根目录的 oxfmt / oxlint 负责；规则见 [`docs/toolchain.md`](docs/toolchain.md)。
 
