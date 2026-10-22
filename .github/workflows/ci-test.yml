@@ -11,6 +11,7 @@ env:
   CI: 'true'
   NEXT_TELEMETRY_DISABLED: '1'
   TURBO_TELEMETRY_DISABLED: '1'
+  TURBO_UI: 'false'
   NEXT_PUBLIC_CANVAS_MF_ENTRY: 'http://localhost:4002/mf-manifest.json'
 
 jobs:
@@ -33,6 +34,15 @@ jobs:
           node-version-file: .nvmrc
           cache: pnpm
           cache-dependency-path: pnpm-lock.yaml
+
+      - name: Cache Turbo
+        uses: actions/cache@v5
+        continue-on-error: true
+        with:
+          path: .turbo/cache
+          key: ${{ runner.os }}-turbo-test-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-test-
 
       - name: Install
         run: pnpm install --frozen-lockfile

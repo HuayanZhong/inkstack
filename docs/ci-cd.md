@@ -25,6 +25,13 @@
 
 分支保护目标：`main` 要求 `all checks passed`、分支最新、对话解决；禁止 force push（需在 GitHub 设置）。当前 secrets：无。
 
+## Turbo 缓存
+
+- `ci-static.yml`、`ci-test.yml`、`ci-build.yml` 各自用 `actions/cache` 持久化 `.turbo/cache`，键为 `${{ runner.os }}-turbo-<job>-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}`，`restore-keys` 使用 `${{ runner.os }}-turbo-<job>-` 前缀。
+- 三个 job 并行执行，per-job 键避免同一 run 内互相覆盖；跨 run 复用即可跳过未变化任务。同一 run 内跨 job 的实时复用需要 Remote Cache，当前未配置，作为后续可选升级。
+- 缓存 step 设置 `continue-on-error: true`；缓存不可用时 CI 仍全量构建并通过。
+- 仓库级 `TURBO_TOKEN` / `TURBO_TEAM` 仍为可选项；启用 Remote Cache 时优先于本地缓存持久化。
+
 ## 激活顺序
 
 M3 = DESIGN-RECORD 第 3 周，依此类推。

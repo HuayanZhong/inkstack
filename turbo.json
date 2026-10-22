@@ -2,8 +2,8 @@
   "$schema": "./node_modules/turbo/schema.json",
   "agentGuidance": true,
   "ui": "tui",
-  "globalEnv": [
-    "NODE_ENV",
+  "globalEnv": ["NODE_ENV"],
+  "globalPassThroughEnv": [
     "PORT",
     "CANVAS_HOST",
     "CANVAS_PORT",
@@ -11,17 +11,17 @@
     "BFF_PORT",
     "GATEWAY_PORT",
     "GATEWAY_WS_PATH",
-    "NEXT_PUBLIC_CANVAS_MF_ENTRY"
+    "NEXT_TELEMETRY_DISABLED"
   ],
   "tasks": {
     "build": {
       "description": "构建所有包，产出 dist 与 .next 构建产物；env 文件变化时缓存失效。",
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/.env*"],
-      "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
+      "outputs": ["dist/**", ".next/**", "!.next/cache/**", "!.next/dev/**"]
     },
     "dev": {
-      "description": "启动各应用的开发服务器；先构建依赖包，长期运行且不缓存。",
+      "description": "启动 dev 任务：应用启动开发服务器，库包以 watch 模式重建 dist；pnpm dev 只跑 apps，pnpm dev:packages 跑库包；先构建依赖包，长期运行且不缓存。",
       "dependsOn": ["^build"],
       "cache": false,
       "persistent": true
@@ -32,19 +32,19 @@
       "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/.oxlintrc.json"]
     },
     "typecheck": {
-      "description": "按包执行 TypeScript 类型检查；先构建依赖包，不产出文件。",
+      "description": "按包执行 TypeScript 类型检查；先构建依赖包；会写 tsbuildinfo 与 Next 生成类型，不缓存这些文件。",
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/.env*"]
     },
     "test": {
-      "description": "按包执行 Vitest 单元与集成测试；先构建本包与依赖包，覆盖构建产物契约。",
-      "dependsOn": ["build"],
+      "description": "按包执行 Vitest 单元与集成测试；先构建依赖包；只有直接读取本包产物的测试才依赖本包构建。",
+      "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$"],
       "outputs": []
     },
     "test:coverage": {
-      "description": "按包执行 Vitest 并输出 v8 覆盖率报告；先构建本包与依赖包。",
-      "dependsOn": ["build"],
+      "description": "按包执行 Vitest 并输出 v8 覆盖率报告；先构建依赖包；只有直接读取本包产物的测试才依赖本包构建。",
+      "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$"],
       "outputs": ["coverage/**"]
     },

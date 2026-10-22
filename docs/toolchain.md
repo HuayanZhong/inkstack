@@ -24,16 +24,18 @@
 
 ## 命令
 
-| 命令                | 作用                                                                            |
-| ------------------- | ------------------------------------------------------------------------------- |
-| `pnpm format`       | oxfmt 写入全仓库                                                                |
-| `pnpm format:check` | 只检查格式，供 CI 接入后使用                                                    |
-| `pnpm lint`         | turbo 包级 lint + Turbo 环境变量检查                                            |
-| `pnpm lint:env`     | 只跑 Turbo 环境变量检查                                                         |
-| `pnpm test`         | turbo 包级 Vitest 单元测试                                                      |
-| `pnpm hygiene`      | knip 全仓库检查 + 库包 publint 导出校验                                         |
-| `pnpm publint`      | 只对 `packages/*` 运行导出校验                                                  |
-| `pnpm verify`       | 完整本地门禁：install、lint、manifests、docs、typecheck、build、format、hygiene |
+| 命令                | 作用                                                                                           |
+| ------------------- | ---------------------------------------------------------------------------------------------- |
+| `pnpm format`       | oxfmt 写入全仓库                                                                               |
+| `pnpm format:check` | 只检查格式，供 CI 接入后使用                                                                   |
+| `pnpm dev`          | 只启动 `apps/*` 的开发服务器                                                                   |
+| `pnpm dev:packages` | 以 watch 模式重建需要持续构建的库包                                                            |
+| `pnpm lint`         | turbo 包级 lint + Turbo 环境变量检查 + 根目录脚本检查                                          |
+| `pnpm lint:env`     | 只跑 Turbo 环境变量检查                                                                        |
+| `pnpm test`         | turbo 包级 Vitest 单元测试                                                                     |
+| `pnpm hygiene`      | knip 全仓库检查 + 库包 publint 导出校验                                                        |
+| `pnpm publint`      | 只对 `packages/*` 运行导出校验                                                                 |
+| `pnpm verify`       | 完整本地门禁：install、lint、manifests、docs、typecheck、test:coverage、build、format、hygiene |
 
 ## 版本策略
 
@@ -45,6 +47,7 @@
 ## lint 规则组织
 
 - 共享规则只写一次；浏览器、Node、Nest 的差异放在 `overrides`。
+- `pnpm lint` 在包级 turbo lint 之后，用 `.oxlintrc.staged.json` 的主规则检查根目录 `scripts/**/*.mjs`、`knip.config.ts` 与 `commitlint.config.mjs`；根文件不在任何包的 tsconfig 内，因此关闭 typeAware。
 - 不启用 `@stylistic/*`：格式由 oxfmt 负责，两个工具同时改格式会互相覆盖。
 - Gateway 关闭三条规则：`typescript/no-extraneous-class`、`no-useless-constructor`、`typescript/consistent-type-imports`。前两条误伤 Nest Module 与纯注入构造函数；第三条会把值导入改成 `import type`，导致 `emitDecoratorMetadata` 丢失类引用。
 - 公共导出符号的 TSDoc 要求见 [`.claude/rules/comments.md`](../.claude/rules/comments.md)。
@@ -63,11 +66,18 @@
 - `eslint-plugin-turbo` 通过 oxlint 的 `jsPlugins` 加载，规则为 `turbo/no-undeclared-env-vars`。
 - `eslint` peer 不自动安装（`autoInstallPeers: false`）；`peerDependencyRules.ignoreMissing` 只负责不再报告缺失。依据：插件构建产物中 `eslint` 只出现在 `import type`，运行时由 oxlint 提供 ESLint v9 兼容接口。
 - 框架前缀白名单（`NEXT_PUBLIC_*`、`VITE_*`）只用于降低噪音；缓存正确性仍以 `turbo.json` 的显式 `env` / `globalEnv` 声明为准。
-- `globalEnv` 当前声明 `NODE_ENV`、`PORT`、`CANVAS_HOST`、`CANVAS_PORT`、`CANVAS_DEV_CORS_ORIGIN`、`BFF_PORT`、`GATEWAY_PORT`、`GATEWAY_WS_PATH`、`NEXT_PUBLIC_CANVAS_MF_ENTRY`。`envMode: strict` 下未声明的变量不会传给任务，新增变量必须先补声明。
-- 工作区包构建到 `dist` 后，`dev` / `lint` / `typecheck` / `test` 会先执行依赖包的 `build`，保证干净检出也能直接通过。
+- 根 `globalEnv` 只声明所有构建都可能依赖的 `NODE_ENV`；根 `globalPassThroughEnv` 透传 `PORT`、`CANVAS_HOST`、`CANVAS_PORT`、`CANVAS_DEV_CORS_ORIGIN`、`BFF_PORT`、`GATEWAY_PORT`、`GATEWAY_WS_PATH` 与 `NEXT_TELEMETRY_DISABLED`，只透传、不参与哈希；shell 的 `NEXT_PUBLIC_CANVAS_MF_ENTRY` 在 `apps/shell/turbo.json` 的 `build.env` 中参与哈希。`envMode: strict` 下未声明的变量不会传给任务，新增变量必须先补声明。
+- 工作区包构建到 `dist` 后，`dev` / `lint` / `typecheck` / `test` 会先执行依赖包的 `build`；测试只有在直接读取本包产物时才额外构建本包（当前为 canvas），保证干净检出也能直接通过。
 - 应用 scripts 通过 `dotenv-cli` 加载根目录 env 链：dev 用 `.env.local → .env.development → .env`，build 用 `.env.local → .env.production → .env`。应用代码不自行读取 `.env`。
 - 变量分类、命名与四个 home 的规则见 [`.claude/rules/env.md`](../.claude/rules/env.md)；本节只记录 turbo 与加载机制。
 - 新增环境变量的顺序：`.env.example` → `turbo.json` → 应用 schema → 代码。
+
+## 包级 turbo 配置
+
+- 共享任务图（build、dev、lint、typecheck、test、test:coverage、publint）与默认产物保留在根 `turbo.json`；包级 `turbo.json` 只保留真实例外：shell 的 `build.env`、canvas 的 `test`/`test:coverage` 依赖本包 `build`、`packages/tsconfig` 的 `publint.dependsOn: []`。
+- `dev` 只用于被应用通过 `dist` 消费、且开发期需要持续重建的库（当前为 config、ui）；纯类型包（contracts）与 dev-only 预设包（vitest-config）不提供 `dev`。等 contracts 有消费者且需要热更新时再加回。
+- `pnpm dev` 只启动 apps；需要同时重建库包时另开终端跑 `pnpm dev:packages`。
+- 新增包时先复用根配置；只有确实需要不同产物、env 或任务依赖时才创建包级文件，不要复制共享任务。
 
 ## Turborepo 与 AI
 
@@ -87,7 +97,7 @@
 
 - `commit-msg`：commitlint 校验提交信息，规则见 [`.claude/rules/git.md`](../.claude/rules/git.md)。
 - `pre-commit`：`pnpm exec lint-staged`，只处理暂存文件。TS/JS 先 `oxfmt` 格式化，再 `oxlint --config .oxlintrc.staged.json`；Markdown、JSON、YAML、CSS、HTML 只格式化。任一任务失败时 lint-staged 会还原到运行前状态，格式修复也会丢弃；先修复错误再重新提交。
-- `pre-push`：执行 `pnpm verify`（install --frozen-lockfile → lint → check:manifests → check:docs → typecheck → test → build → format:check → hygiene）。Turborepo 缓存命中后开销很小；这些检查都不放进 pre-commit。
+- `pre-push`：执行 `pnpm verify`（install --frozen-lockfile → lint → check:manifests → check:docs → typecheck → test:coverage → build → format:check → hygiene）。Turborepo 缓存命中后开销很小；这些检查都不放进 pre-commit。
 - staged lint 关闭 `typeAware`：提交路径只做格式与基础正确性；类型检查由 pre-push 与 CI 的 `pnpm verify` 负责，且根配置文件、`.mjs` 脚本不在任何包的 tsconfig 内。
 - 规则仍只有根 `.oxlintrc.json` 一个 home；`.oxlintrc.staged.json` 只覆盖 `options`，不复制规则。
 - `lint-staged` 版本固定在 `dev` catalog。

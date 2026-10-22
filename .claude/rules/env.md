@@ -29,14 +29,14 @@ paths:
 新增或修改变量时同步：
 
 1. `.env.example`：模板、注释与默认值。
-2. `turbo.json`：`globalEnv` 或任务 `env`；`build.inputs` 包含 `$TURBO_ROOT$/.env*`。
+2. `turbo.json`：跨应用、影响构建的变量放根 `globalEnv`；跨应用的运行时变量放根 `globalPassThroughEnv`（只透传）；应用特有的构建期变量放该应用包级 `turbo.json` 的 `env`；`build.inputs` 包含 `$TURBO_ROOT$/.env*`。
 3. 应用 `config/env.ts`：zod schema、默认值与类型。
 4. 源码：只从解析后的 `env` / `config` 读取。
 
 ## 加载与校验
 
 - 应用 scripts 用 `dotenv-cli` 按 `.env.local → .env.<mode> → .env` 加载；应用代码不自行读取 `.env` 文件。
-- 测试使用 `.env.test`，不参与 dev / prod 链。
+- 测试不加载 `.env` 文件；测试所需配置由测试内 stub、显式传参或测试替身提供。
 - 启动或构建时用 `@inkstack/config` 的 `parseEnv` 校验，缺失或非法直接失败。
 - typecheck 允许把 `.env.example` 作为最后的非密钥兜底；build / dev 不允许。
 - 默认值只写进 schema；真实密钥只写 `.env.local` 或部署环境。

@@ -99,4 +99,4 @@ import { describe, expect, it } from 'vitest'
 | `nestConfig`  | Node  | bff、gateway   |
 | `reactConfig` | jsdom | shell          |
 
-预设负责 `include`、`exclude`、`environment` 与 v8 coverage 默认值；应用用 `defineConfig` + `mergeConfig` 追加 `setupFiles`、`testTimeout`、`coverage.include` 等自身选项。`test` 与 `test:coverage` 都在 `build` 之后运行，构建产物契约测试可以直接读取 `dist`。
+预设负责 `include`、`exclude`、`environment` 与 v8 coverage 默认值；应用用 `defineConfig` + `mergeConfig` 追加 `setupFiles`、`testTimeout`、`coverage.include` 等自身选项。`test` 与 `test:coverage` 先构建依赖包（`^build`）；只有直接读取本包产物的测试（当前为 canvas 的 MF manifest）才通过包级 `turbo.json` 依赖本包 `build`。
