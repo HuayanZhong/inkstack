@@ -18,8 +18,8 @@ catalogs:
   dev:
     '@commitlint/cli': ^21.2.3
     '@commitlint/config-conventional': ^21.2.3
-    '@nestjs/cli': ^12.0.8
-    '@nestjs/schematics': ^12.0.7
+    '@nestjs/cli': ^12.0.9
+    '@nestjs/schematics': ^12.0.9
     '@nestjs/testing': ^12.1.3
     '@rspack/cli': ^2.2.9
     '@rspack/core': ^2.2.9
