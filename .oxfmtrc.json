@@ -13,6 +13,7 @@
     "**/dist/**",
     "**/.next/**",
     "**/coverage/**",
+    "**/.mf/**",
     "**/.agents/**",
     "docs/architecture/interactive/**",
     "openspec/changes/archive/**"

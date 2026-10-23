@@ -26,7 +26,9 @@ export default defineConfig((_env, argv) => {
     devServer: {
       port: env.CANVAS_PORT,
       historyApiFallback: true,
-      watchFiles: [path.resolve(__dirname, 'src')],
+      // 画布用整页刷新：Canvas 经 MF 暴露后运行在 host 的 React 树里，模块级热更新能应用但不会重渲染；
+      // 显式关闭 HMR，避免「模块已更新、界面不动」。编译器自身按模块图监视源文件，不需要 watchFiles。
+      hot: false,
       // manifest 通过 fetch 跨端口读取，需要 CORS；生产由静态托管配置同等响应头。
       headers: {
         'Access-Control-Allow-Origin': env.CANVAS_DEV_CORS_ORIGIN,

@@ -5,6 +5,11 @@ export const mfConfig = createModuleFederationConfig({
   filename: 'remoteEntry.js',
   manifest: true,
   dts: true,
+  dev: {
+    // 类型提示插件的 websocket 固定连 ws://127.0.0.1，非本机访问必然失败，
+    // 而它用 console.error 报告，会触发 host 的 Next 错误浮层；本仓库不消费远端类型，直接关闭。
+    disableDynamicRemoteTypeHints: true,
+  },
   // 由 MF 插件在入口执行前完成共享模块初始化，替代手写异步边界。
   experiments: {
     asyncStartup: true,

@@ -67,7 +67,7 @@
 - `eslint-plugin-turbo` 通过 oxlint 的 `jsPlugins` 加载，规则为 `turbo/no-undeclared-env-vars`。
 - `eslint` peer 不自动安装（`autoInstallPeers: false`）；`peerDependencyRules.ignoreMissing` 只负责不再报告缺失。依据：插件构建产物中 `eslint` 只出现在 `import type`，运行时由 oxlint 提供 ESLint v9 兼容接口。
 - 框架前缀白名单（`NEXT_PUBLIC_*`、`VITE_*`）只用于降低噪音；缓存正确性仍以 `turbo.json` 的显式 `env` / `globalEnv` 声明为准。
-- 根 `globalEnv` 只声明所有构建都可能依赖的 `NODE_ENV`；根 `globalPassThroughEnv` 透传 `PORT`、`CANVAS_HOST`、`CANVAS_PORT`、`CANVAS_DEV_CORS_ORIGIN`、`BFF_PORT`、`GATEWAY_PORT`、`GATEWAY_WS_PATH` 与 `NEXT_TELEMETRY_DISABLED`，只透传、不参与哈希；shell 的 `NEXT_PUBLIC_CANVAS_MF_ENTRY` 在 `apps/shell/turbo.json` 的 `build.env` 中参与哈希。`envMode: strict` 下未声明的变量不会传给任务，新增变量必须先补声明。
+- 根 `globalEnv` 只声明所有构建都可能依赖的 `NODE_ENV`；根 `globalPassThroughEnv` 透传 `PORT`、`CANVAS_HOST`、`CANVAS_PORT`、`CANVAS_DEV_CORS_ORIGIN`、`BFF_PORT`、`GATEWAY_PORT`、`GATEWAY_WS_PATH`、`ALLOWED_DEV_ORIGINS` 与 `NEXT_TELEMETRY_DISABLED`，只透传、不参与哈希；shell 的 `NEXT_PUBLIC_CANVAS_MF_ENTRY` 在 `apps/shell/turbo.json` 的 `build.env` 中参与哈希。`envMode: strict` 下未声明的变量不会传给任务，新增变量必须先补声明。
 - 工作区包构建到 `dist` 后，`dev` / `lint` / `typecheck` / `test` 会先执行依赖包的 `build`；测试只有在直接读取本包产物时才额外构建本包（当前为 canvas），保证干净检出也能直接通过。
 - 应用 scripts 通过 `dotenv-cli` 加载根目录 env 链：dev 用 `.env.local → .env.development → .env`，build 用 `.env.local → .env.production → .env`。应用代码不自行读取 `.env`。
 - 变量分类、命名与四个 home 的规则见 [`.claude/rules/env.md`](../.claude/rules/env.md)；本节只记录 turbo 与加载机制。
@@ -91,7 +91,7 @@
 ## 格式范围
 
 - oxfmt 覆盖仓库内所有它支持的格式；这是当前接受的策略。挂到 husky 之后，pre-commit 只处理 staged 文件。
-- `.oxfmtrc.json` 忽略 `node_modules`、`dist`、`.next`、`coverage`、`.agents`、`docs/architecture/interactive`、`openspec/changes/archive`。
+- `.oxfmtrc.json` 忽略 `node_modules`、`dist`、`.next`、`coverage`、`.mf`、`.agents`、`docs/architecture/interactive`、`openspec/changes/archive`。
 - `docs/architecture/interactive/*.html` 是生成物。格式化后如果重新生成，以生成器输出为准，不要手改。
 
 ## Git hooks

@@ -11,6 +11,7 @@
     "BFF_PORT",
     "GATEWAY_PORT",
     "GATEWAY_WS_PATH",
+    "ALLOWED_DEV_ORIGINS",
     "NEXT_TELEMETRY_DISABLED"
   ],
   "tasks": {

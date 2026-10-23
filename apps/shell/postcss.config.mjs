@@ -1,8 +1,9 @@
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-// 共享组件的类名不在应用目录内，扫描根设到仓库根；node_modules 与产物目录由 .gitignore 排除。
-const base = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..')
+// 扫描根限定在应用包内：共享组件由 CSS 入口的 @source 显式加入。设到仓库根会让构建监视整个仓库，
+// 别的应用 dev 时写产物就会触发本应用重建。
+const base = path.dirname(fileURLToPath(import.meta.url))
 
 export default {
   plugins: {

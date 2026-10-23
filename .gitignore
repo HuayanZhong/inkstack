@@ -13,6 +13,9 @@ next-env.d.ts
 # Turborepo
 .turbo/
 
+# Module Federation 诊断与类型产物
+.mf/
+
 # 部署平台
 .vercel/
 

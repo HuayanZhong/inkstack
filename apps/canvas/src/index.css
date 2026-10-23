@@ -1,4 +1,6 @@
 @import '@inkstack/ui/globals.css';
+/* 共享组件的类名在应用目录之外，单独声明扫描来源。 */
+@source '../../../packages/ui/src';
 
 html,
 body,
