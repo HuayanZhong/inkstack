@@ -23,15 +23,16 @@ base.json            语言与严格性，不直接使用
 
 ## 包与预设
 
-| 包                   | 预设           | 说明                              |
-| -------------------- | -------------- | --------------------------------- |
-| `packages/config`    | `library.json` | ESM 输出，带声明文件              |
-| `packages/contracts` | `library.json` | ESM 输出，带声明文件              |
-| `packages/ai-*`      | `node.json`    | 纯 Node ESM                       |
-| `apps/gateway`       | `nest.json`    | Nest 装饰器与 DI                  |
-| `apps/bff`           | `nest.json`    | Nest 装饰器与 DI                  |
-| `apps/shell`         | `next.json`    | Next 会接管应用级 include / paths |
-| `apps/canvas`        | `react.json`   | 浏览器环境，`types: []`           |
+| 包                    | 预设           | 说明                              |
+| --------------------- | -------------- | --------------------------------- |
+| `packages/api-client` | `library.json` | ESM 输出，带声明文件              |
+| `packages/config`     | `library.json` | ESM 输出，带声明文件              |
+| `packages/contracts`  | `library.json` | ESM 输出，带声明文件              |
+| `packages/ai-*`       | `node.json`    | 纯 Node ESM                       |
+| `apps/gateway`        | `nest.json`    | Nest 装饰器与 DI                  |
+| `apps/bff`            | `nest.json`    | Nest 装饰器与 DI                  |
+| `apps/shell`          | `next.json`    | Next 会接管应用级 include / paths |
+| `apps/canvas`         | `react.json`   | 浏览器环境，`types: []`           |
 
 新增应用在首个源码文件落地时创建应用级 `tsconfig.json`；预设本身不提供。
 

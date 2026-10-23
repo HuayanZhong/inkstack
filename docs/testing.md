@@ -17,6 +17,7 @@
 ## 当前范围
 
 - `packages/config`：`parseEnv`、env 工厂与 URL 标准化。
+- `packages/api-client`：客户端工厂、请求与错误归一化、SSE 解析与重连。
 - `apps/gateway`：`ping` 单元、`/health` HTTP 集成、Socket.IO `ping` → `pong` 集成。
 - `apps/bff`：`/health` 的 Nest Testing + Supertest 集成。
 - `apps/shell`：`CanvasHost` 的 loading / ready / error 状态（jsdom + React Testing Library）。
@@ -77,6 +78,7 @@ import { describe, expect, it } from 'vitest'
 | 包                       | Stmts | Branch | Funcs | Lines |
 | ------------------------ | ----- | ------ | ----- | ----- |
 | `packages/config`        | 97.22 | 100    | 92.85 | 96.29 |
+| `packages/api-client`    | 86.05 | 84.94  | 83.33 | 89.11 |
 | `packages/vitest-config` | 100   | 100    | 100   | 100   |
 | `apps/bff`               | 100   | 100    | 100   | 100   |
 | `apps/gateway`           | 100   | 100    | 100   | 100   |

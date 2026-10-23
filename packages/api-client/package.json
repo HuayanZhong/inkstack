@@ -1,0 +1,40 @@
+{
+  "name": "@inkstack/api-client",
+  "version": "0.0.0",
+  "private": true,
+  "description": "墨栈前端共享请求客户端，基于 ky 提供统一配置、错误归一化与 SSE 流式消费能力。",
+  "license": "ISC",
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "dev": "tsc -p tsconfig.build.json --watch",
+    "build": "tsc -p tsconfig.build.json",
+    "lint": "oxlint --config ../../.oxlintrc.json --type-aware .",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "publint": "publint",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "eventsource-parser": "catalog:runtime",
+    "ky": "catalog:runtime"
+  },
+  "devDependencies": {
+    "@inkstack/tsconfig": "workspace:*",
+    "@inkstack/vitest-config": "workspace:*",
+    "publint": "catalog:dev",
+    "typescript": "catalog:toolchain",
+    "vite": "catalog:dev",
+    "vitest": "catalog:dev"
+  }
+}
