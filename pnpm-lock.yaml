@@ -225,8 +225,8 @@ catalogs:
       specifier: ^11.0.0
       version: 11.0.0
     eslint-plugin-turbo:
-      specifier: ^2.11.9
-      version: 2.11.9
+      specifier: ^2.11.10
+      version: 2.11.10
     husky:
       specifier: ^9.1.7
       version: 9.1.7
@@ -374,7 +374,7 @@ importers:
         version: 10.1.0
       eslint-plugin-turbo:
         specifier: catalog:dev
-        version: 2.11.9(turbo@2.11.9)
+        version: 2.11.10(turbo@2.11.9)
       husky:
         specifier: catalog:dev
         version: 9.1.7
@@ -4235,8 +4235,8 @@ packages:
   escape-html@1.0.3:
     resolution: {integrity: sha512-NiSupZ4OeuGwr68lGIeym/ksIZMJodUGOSCZ/FSnTxcrekbvqrgdUxlJOMpijaKZVjAJrWrGs/6Jy8OMuyj9ow==}
 
-  eslint-plugin-turbo@2.11.9:
-    resolution: {integrity: sha512-nuaiyetSxQmAykZqeW1ywrZ4cEuW4X36ZSGzwxVIa6aq+AwRGMADI+H8kRtGodxaPKHGqztXLO91lkzKHA21jQ==}
+  eslint-plugin-turbo@2.11.10:
+    resolution: {integrity: sha512-he4kQi41ZX8KM9fxCCl9cmhbk37bNnXR0EVGP6xc12KvxfoosfHmMVsdo7zX2a1G/iPhbLaXSATZorXAA5eXOw==}
     peerDependencies:
       eslint: '>6.6.0'
       turbo: '>2.0.0'
@@ -9265,7 +9265,7 @@ snapshots:
 
   escape-html@1.0.3: {}
 
-  eslint-plugin-turbo@2.11.9(turbo@2.11.9):
+  eslint-plugin-turbo@2.11.10(turbo@2.11.9):
     dependencies:
       dotenv: 16.0.3
       turbo: 2.11.9
