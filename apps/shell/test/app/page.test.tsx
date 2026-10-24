@@ -7,11 +7,13 @@ describe('Home', () => {
   it('renders the product entry content', () => {
     render(<Home />)
 
-    expect(
-      screen.getByRole('heading', { level: 1, name: '让 AI 落笔，让代码落地' }),
-    ).toBeInTheDocument()
-    expect(screen.getByText('墨栈 Inkstack')).toBeInTheDocument()
-    expect(screen.getByText('登录与画布入口正在搭建中。')).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 1, name: /让 AI 落笔/ })).toBeInTheDocument()
+    expect(screen.getByText('墨栈')).toBeInTheDocument()
+    expect(screen.getByText('Inkstack')).toBeInTheDocument()
+    expect(screen.getByText('登录与画布入口正在搭建中')).toBeInTheDocument()
+    expect(screen.getByText('AI 控笔')).toBeInTheDocument()
+    expect(screen.getByText('人工编辑')).toBeInTheDocument()
+    expect(screen.getByText('设计转代码')).toBeInTheDocument()
   })
 
   it('does not link to routes that are not implemented', () => {

@@ -15,7 +15,7 @@ describe('NotFound', () => {
   it('renders the 404 message and a home link', () => {
     render(<NotFound />)
 
-    expect(screen.getByRole('heading', { level: 1, name: '页面不存在' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 1, name: /这块画布上/ })).toBeInTheDocument()
     expect(screen.getByText('你访问的地址没有对应页面，或者它已经被移除。')).toBeInTheDocument()
     expect(screen.getByRole('link', { name: '返回首页' })).toHaveAttribute('href', '/')
   })
@@ -24,6 +24,7 @@ describe('NotFound', () => {
     const { container } = render(<NotFound />)
 
     expect(container.querySelector('pre')).toBeNull()
-    expect(container.textContent).not.toContain('stack')
+    expect(container.textContent).not.toContain('Error:')
+    expect(container.textContent).not.toContain('.tsx')
   })
 })

@@ -8,7 +8,9 @@ describe('GlobalError', () => {
     const retry = vi.fn()
     render(<GlobalError error={new Error('boom')} retry={retry} />)
 
-    expect(screen.getByRole('heading', { level: 1, name: '应用无法继续渲染' })).toBeInTheDocument()
+    expect(
+      screen.getByRole('heading', { level: 1, name: '应用无法继续渲染。' }),
+    ).toBeInTheDocument()
     fireEvent.click(screen.getByRole('button', { name: '重试' }))
     expect(retry).toHaveBeenCalledTimes(1)
   })

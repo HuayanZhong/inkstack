@@ -16,7 +16,9 @@ describe('ErrorPage', () => {
     const retry = vi.fn()
     render(<ErrorPage error={new Error('boom')} retry={retry} />)
 
-    expect(screen.getByRole('heading', { level: 1, name: '页面出错了' })).toBeInTheDocument()
+    expect(
+      screen.getByRole('heading', { level: 1, name: '这个页面没有画出来。' }),
+    ).toBeInTheDocument()
     fireEvent.click(screen.getByRole('button', { name: '重试' }))
     expect(retry).toHaveBeenCalledTimes(1)
     expect(screen.getByRole('link', { name: '返回首页' })).toHaveAttribute('href', '/')
