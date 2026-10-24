@@ -39,7 +39,9 @@
   "dependencies": {
     "@base-ui/react": "catalog:runtime",
     "class-variance-authority": "catalog:runtime",
-    "cn": "catalog:runtime"
+    "cn": "catalog:runtime",
+    "lucide-react": "catalog:runtime",
+    "next-themes": "catalog:runtime"
   },
   "devDependencies": {
     "@inkstack/tsconfig": "workspace:*",

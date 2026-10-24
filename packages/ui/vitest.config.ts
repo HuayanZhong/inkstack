@@ -19,6 +19,8 @@ export default mergeConfig(
     test: {
       coverage: {
         include: ['src/components/**/*.tsx', 'src/lib/**/*.ts'],
+        // shadcn 生成的 Base UI 封装由上游负责交互；ThemeProvider 是 next-themes 的透传层。
+        exclude: ['src/components/dropdown-menu.tsx', 'src/components/theme-provider.tsx'],
       },
     },
   }),
