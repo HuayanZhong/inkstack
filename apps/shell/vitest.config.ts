@@ -7,12 +7,10 @@ export default mergeConfig(
   defineConfig({
     test: {
       setupFiles: ['test/setup.ts'],
-      // 当前只有骨架页面，没有可断言行为；新增可测逻辑时必须补测试并移除该开关。
-      passWithNoTests: true,
       coverage: {
         include: ['src/**/*.tsx'],
-        // 纯展示文件没有行为分支。
-        exclude: ['src/app/layout.tsx', 'src/app/page.tsx'],
+        // 根布局是文档级外壳，没有可独立断言的行为；其余页面与状态页均有测试。
+        exclude: ['src/app/layout.tsx'],
       },
     },
   }),

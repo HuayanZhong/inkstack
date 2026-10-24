@@ -9,7 +9,7 @@
 
 ## 目录
 
-- `env.ts`、`src/app/`：env 校验与 App Router 路由。
+- `env.ts`、`src/app/`：env 校验、App Router 路由、根级状态页与全局样式入口。
 
 ## 命令
 
@@ -20,6 +20,7 @@
 - `env.ts` 在 `next.config.ts` 加载时校验 `PORT` 与 `NEXT_PUBLIC_CANVAS_MF_ENTRY`，不要写死端口或 manifest 地址。
 - `tsconfig.json` 继承 `@inkstack/tsconfig/next.json`，保留 Next 生成的 `include` 与 `paths`。
 - 不启用 ESLint / Prettier；`next/font/google` 构建期需要联网，不要引入。UI 组件从 `@inkstack/ui` 导入，新增组件见 [packages/ui/AGENTS.md](../../packages/ui/AGENTS.md)。
+- 样式入口是 `src/app/globals.css`，只导入 `@inkstack/ui/globals.css` 并用 `@source` 扫描共享组件，不写第二份主题或色值。
 
 <!-- BEGIN:nextjs-agent-rules -->
 
