@@ -15,8 +15,6 @@
   },
   "dependencies": {
     "@inkstack/config": "workspace:*",
-    "@inkstack/ui": "workspace:*",
-    "@module-federation/enhanced": "catalog:runtime",
     "next": "catalog:runtime",
     "react": "catalog:runtime",
     "react-dom": "catalog:runtime"

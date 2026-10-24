@@ -7,9 +7,11 @@ export default mergeConfig(
   defineConfig({
     test: {
       setupFiles: ['test/setup.ts'],
+      // 当前只有骨架页面，没有可断言行为；新增可测逻辑时必须补测试并移除该开关。
+      passWithNoTests: true,
       coverage: {
         include: ['src/**/*.tsx'],
-        // 纯展示文件没有行为分支；行为测试集中在 CanvasHost。
+        // 纯展示文件没有行为分支。
         exclude: ['src/app/layout.tsx', 'src/app/page.tsx'],
       },
     },

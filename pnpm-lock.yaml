@@ -606,12 +606,6 @@ importers:
       '@inkstack/config':
         specifier: workspace:*
         version: link:../../packages/config
-      '@inkstack/ui':
-        specifier: workspace:*
-        version: link:../../packages/ui
-      '@module-federation/enhanced':
-        specifier: catalog:runtime
-        version: 2.9.2(@rspack/core@2.2.9(@module-federation/runtime-tools@2.9.2)(@swc/helpers@0.5.23))(typescript@6.0.3)
       next:
         specifier: catalog:runtime
         version: 16.4.2(@babel/core@7.29.7)(@types/node@26.6.5)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)

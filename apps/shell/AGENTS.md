@@ -5,13 +5,11 @@
 ## 职责
 
 - 页面、布局与全局元信息。
-- 通过 `@module-federation/enhanced/runtime` 在客户端加载 canvas 的 `./Canvas`；不使用 Next MF 插件，不直接操作 tldraw editor。
 - 不持有 action 队列，不直接调用 Gateway。
 
 ## 目录
 
-- `env.ts`、`src/app/`：env 校验、App Router 路由与全局样式。
-- `src/app/canvas-host.tsx`：canvas 的 runtime consumer，包含加载与失败状态。
+- `env.ts`、`src/app/`：env 校验与 App Router 路由。
 
 ## 命令
 
@@ -19,10 +17,9 @@
 
 ## 约束
 
-- 依赖只通过 `catalog:` 引用；`@module-federation/enhanced` 用 `catalog:runtime`。
-- App Router 使用内置 React canary：shared 不设 `requiredVersion`，并覆盖 `react-dom/client`；canvas 必须先启动。`env.ts` 在 `next.config.ts` 加载时校验 `PORT` 与 `NEXT_PUBLIC_CANVAS_MF_ENTRY`，不要写死端口或 manifest 地址。
+- `env.ts` 在 `next.config.ts` 加载时校验 `PORT` 与 `NEXT_PUBLIC_CANVAS_MF_ENTRY`，不要写死端口或 manifest 地址。
 - `tsconfig.json` 继承 `@inkstack/tsconfig/next.json`，保留 Next 生成的 `include` 与 `paths`。
-- 不启用 ESLint / Prettier；`next/font/google` 构建期需要联网，不要引入。样式入口是 `src/app/globals.css`（只导入 `@inkstack/ui/globals.css`）；UI 组件从 `@inkstack/ui` 导入，新增组件见 [packages/ui/AGENTS.md](../../packages/ui/AGENTS.md)。
+- 不启用 ESLint / Prettier；`next/font/google` 构建期需要联网，不要引入。UI 组件从 `@inkstack/ui` 导入，新增组件见 [packages/ui/AGENTS.md](../../packages/ui/AGENTS.md)。
 
 <!-- BEGIN:nextjs-agent-rules -->
 
