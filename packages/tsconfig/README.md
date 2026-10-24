@@ -24,4 +24,8 @@
 }
 ```
 
+## 命令
+
+在仓库根执行：`pnpm --filter @inkstack/tsconfig publint`。
+
 完整规则见 [`docs/typescript.md`](../../docs/typescript.md)。

@@ -13,15 +13,15 @@
 
 ## 当前已启用
 
-| 文件                    | 触发                                 | 职责                                                                         |
-| ----------------------- | ------------------------------------ | ---------------------------------------------------------------------------- |
-| `ci.yml`                | `pull_request`                       | PR 编排：static / test / build / dependency-review，汇总 `all checks passed` |
-| `ci-master.yml`         | `push main`、`workflow_dispatch`     | main 与手动：static / test / build                                           |
-| `ci-static.yml`         | `workflow_call`、`workflow_dispatch` | lint、check:manifests、check:docs、typecheck、format:check                   |
-| `ci-test.yml`           | `workflow_call`、`workflow_dispatch` | test:coverage、上传覆盖率                                                    |
-| `ci-build.yml`          | `workflow_call`、`workflow_dispatch` | build、hygiene（knip/publint）                                               |
-| `dependency-review.yml` | `workflow_call`                      | PR 新增依赖审查，high 阻断                                                   |
-| `dependabot.yml`        | 每日 04:00 Asia/Shanghai             | npm（含 pnpm catalog）与 GitHub Actions 更新                                 |
+| 文件                    | 触发                                 | 职责                                                                          |
+| ----------------------- | ------------------------------------ | ----------------------------------------------------------------------------- |
+| `ci.yml`                | `pull_request`                       | PR 编排：static / test / build / dependency-review，汇总 `all checks passed`  |
+| `ci-master.yml`         | `push main`、`workflow_dispatch`     | main 与手动：static / test / build                                            |
+| `ci-static.yml`         | `workflow_call`、`workflow_dispatch` | lint、check:manifests、check:docs（AGENTS + README）、typecheck、format:check |
+| `ci-test.yml`           | `workflow_call`、`workflow_dispatch` | test:coverage、上传覆盖率                                                     |
+| `ci-build.yml`          | `workflow_call`、`workflow_dispatch` | build、hygiene（knip/publint）                                                |
+| `dependency-review.yml` | `workflow_call`                      | PR 新增依赖审查，high 阻断                                                    |
+| `dependabot.yml`        | 每日 04:00 Asia/Shanghai             | npm（含 pnpm catalog）与 GitHub Actions 更新                                  |
 
 分支保护目标：`main` 要求 `all checks passed`、分支最新、对话解决；禁止 force push（需在 GitHub 设置）。当前 secrets：无。
 

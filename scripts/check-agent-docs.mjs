@@ -105,6 +105,197 @@ function handArea(text) {
   }
 }
 
+function firstHeading(text) {
+  const match = /^#\s+(.+)$/m.exec(text)
+  return match ? match[1].trim() : null
+}
+
+function headingList(text) {
+  return [...text.matchAll(/^##\s+(.+)$/gm)].map((match) => match[1].trim())
+}
+
+function stripFencedBlocks(text) {
+  let inside = false
+  return text
+    .split('\n')
+    .map((line) => {
+      if (/^\s*```/.test(line)) {
+        inside = !inside
+        return ''
+      }
+      return inside ? '' : line
+    })
+    .join('\n')
+}
+
+function fencedBlocks(text) {
+  const blocks = []
+  let current = null
+  for (const line of text.split('\n')) {
+    if (/^\s*```/.test(line)) {
+      if (current) {
+        blocks.push(current)
+        current = null
+      } else {
+        current = []
+      }
+      continue
+    }
+    if (current) current.push(line)
+  }
+  return blocks
+}
+
+function parseRootTree(text) {
+  const lines = text.split('\n')
+  const headingIndex = lines.findIndex((line) => /^##\s+目录\s*$/.test(line))
+  if (headingIndex < 0) return null
+  const fenceIndex = lines.findIndex((line, index) => index > headingIndex && /^\s*```/.test(line))
+  if (fenceIndex < 0) return null
+
+  const block = []
+  for (let index = fenceIndex + 1; index < lines.length; index += 1) {
+    if (/^\s*```/.test(lines[index])) break
+    block.push(lines[index])
+  }
+
+  const result = { apps: [], packages: [] }
+  let group = null
+  for (const line of block) {
+    const trimmed = line.trim()
+    const indented = line.length !== line.trimStart().length
+    if (!indented && /^[a-z0-9-]+\/$/.test(trimmed)) {
+      group = trimmed === 'apps/' ? 'apps' : trimmed === 'packages/' ? 'packages' : null
+      continue
+    }
+    if (!group || !indented) continue
+    const match = /^([a-z0-9-]+)\//.exec(trimmed)
+    if (match) result[group].push(match[1])
+  }
+  return result
+}
+
+function parsePackagesIndex(text) {
+  const dirs = []
+  for (const line of text.split('\n')) {
+    if (!/^\s*\|/.test(line)) continue
+    for (const match of line.matchAll(/\]\(([a-z0-9-]+)\/\)/g)) dirs.push(match[1])
+  }
+  return dirs
+}
+
+function diffIndex(expected, actual) {
+  const expectedSet = new Set(expected)
+  const actualSet = new Set(actual)
+  return {
+    missing: [...expectedSet].filter((item) => !actualSet.has(item)),
+    extra: [...actualSet].filter((item) => !expectedSet.has(item)),
+  }
+}
+
+function matchesExport(keys, subpath) {
+  const normalized = subpath.replace(/^\.?\//, '')
+  for (const key of keys) {
+    const target = key.replace(/^\.\//, '')
+    if (target === normalized) return true
+    if (target.endsWith('/*') && normalized.startsWith(target.slice(0, -1))) return true
+  }
+  return false
+}
+
+function extractCommands(text) {
+  const commands = []
+  for (const block of fencedBlocks(text)) {
+    for (const raw of block) {
+      const line = raw.replace(/\s+#.*$/, '').trim()
+      const filter = /^pnpm --filter (@inkstack\/[a-z0-9-]+) ([a-z][a-z0-9:_-]*)\b/.exec(line)
+      if (filter) {
+        commands.push({ kind: 'filter', name: filter[1], command: filter[2] })
+        continue
+      }
+      const rootCommand = /^pnpm ([a-z][a-z0-9:_-]*)\b/.exec(line)
+      if (rootCommand && !BUILTIN_PNPM.has(rootCommand[1])) {
+        commands.push({ kind: 'root', command: rootCommand[1] })
+      }
+    }
+  }
+  return commands
+}
+
+function extractPortDeclarations(text) {
+  const declarations = []
+  for (const match of text.matchAll(/`([A-Z][A-Z0-9_]*)`[^（\n]{0,20}（默认 `:(\d+)`）/g)) {
+    const name = match[1]
+    if (name !== 'PORT' && !name.endsWith('_PORT')) continue
+    declarations.push({ name, declared: match[2] })
+  }
+  return declarations
+}
+
+function evaluateReadmeH1({ heading, expected }) {
+  return heading === expected
+    ? []
+    : [
+        {
+          level: 'error',
+          message: `README H1 must be ${JSON.stringify(expected)}, got ${JSON.stringify(heading)}`,
+        },
+      ]
+}
+
+function evaluateReadmeSections({ type, headings, hasScripts }) {
+  const normalized = headings.map((heading) => heading.replace(/[`*]/g, '').trim())
+  const has = (names) => names.some((name) => normalized.includes(name))
+  const issues = []
+
+  if (type === 'root') {
+    for (const section of ['目录', '开发', '文档']) {
+      if (!normalized.includes(section)) {
+        issues.push({ level: 'error', message: `README is missing section "${section}"` })
+      }
+    }
+  }
+
+  if (type === 'package') {
+    if (hasScripts && !normalized.includes('命令')) {
+      issues.push({ level: 'error', message: 'package README is missing section "命令"' })
+    }
+    if (!has(['使用', '消费', '消费方式', '创建客户端'])) {
+      issues.push({ level: 'error', message: 'package README is missing a usage section' })
+    }
+  }
+
+  if (type === 'app') {
+    for (const section of ['运行', '相关文档']) {
+      if (!normalized.includes(section)) {
+        issues.push({ level: 'error', message: `app README is missing section "${section}"` })
+      }
+    }
+  }
+
+  return issues
+}
+
+function emptySections(text) {
+  const empty = []
+  let current = null
+  for (const line of text.split('\n')) {
+    const match = /^##\s+(.+)$/.exec(line)
+    if (match) {
+      if (current && !current.hasContent) empty.push(current.title)
+      current = { title: match[1].trim(), hasContent: false }
+      continue
+    }
+    if (current && line.trim() && !line.trim().startsWith('<!--')) current.hasContent = true
+  }
+  if (current && !current.hasContent) empty.push(current.title)
+  return empty
+}
+
+function hasPlaceholder(text) {
+  return /\b(?:TODO|TBD)\b/.test(text)
+}
+
 function collectAgentsFiles(directory = root, depth = 0) {
   const found = []
   for (const entry of readdirSync(directory, { withFileTypes: true })) {
@@ -117,6 +308,29 @@ function collectAgentsFiles(directory = root, depth = 0) {
     }
   }
   return found.sort((left, right) => left.localeCompare(right))
+}
+
+function collectReadmeFiles(directory = root, depth = 0) {
+  const found = []
+  for (const entry of readdirSync(directory, { withFileTypes: true })) {
+    const full = join(directory, entry.name)
+    if (entry.isDirectory()) {
+      if (depth >= 3 || SKIP_DIRS.has(entry.name)) continue
+      found.push(...collectReadmeFiles(full, depth + 1))
+    } else if (entry.name === 'README.md') {
+      found.push(full)
+    }
+  }
+  return found.sort((left, right) => left.localeCompare(right))
+}
+
+function classifyReadme(file) {
+  const rel = relative(root, file).replaceAll('\\', '/')
+  if (rel === 'README.md') return 'root'
+  if (rel === 'packages/README.md') return 'packages-index'
+  if (/^packages\/[^/]+\/README\.md$/.test(rel)) return 'package'
+  if (/^apps\/[^/]+\/README\.md$/.test(rel)) return 'app'
+  return 'docs'
 }
 
 function collectRuleFiles(directory = join(root, '.claude/rules'), depth = 0) {
@@ -346,6 +560,7 @@ function loadFacts() {
     if (match) env.set(match[1], match[2].trim())
   }
   const packages = new Map()
+  const packageDirs = { apps: new Set(), packages: new Set() }
   for (const group of ['apps', 'packages']) {
     const groupDir = join(root, group)
     if (!existsSync(groupDir)) continue
@@ -357,7 +572,9 @@ function loadFacts() {
       packages.set(manifest.name, {
         dir: `${group}/${entry.name}`,
         scripts: new Set(Object.keys(manifest.scripts ?? {})),
+        exports: new Set(Object.keys(manifest.exports ?? {})),
       })
+      packageDirs[group].add(entry.name)
     }
   }
   return {
@@ -367,9 +584,150 @@ function loadFacts() {
     openspec: catalogs.toolchain?.['@fission-ai/openspec'] ?? '',
     rootScripts: new Set(Object.keys(rootPackage.scripts ?? {})),
     packages,
+    packageDirs,
     env,
     design: readText(join(root, 'docs/architecture/DESIGN-RECORD.md')),
   }
+}
+
+function evaluateReferences({ text, dir, facts }) {
+  const issues = []
+
+  for (const match of text.matchAll(/\]\(([^)]+)\)/g)) {
+    const target = match[1]
+    if (/^(https?:|mailto:|#)/.test(target)) continue
+    const clean = target.split('#')[0].split('?')[0]
+    if (!clean) continue
+    issues.push(...evaluateLink({ target: clean, exists: existsSync(resolve(dir, clean)) }))
+  }
+
+  for (const match of text.matchAll(/`([^`]+)`/g)) {
+    const target = match[1]
+    if (/[\s<>*$|{}:]/.test(target)) continue
+    if (/^(https?:|@|\/|~\/)/.test(target)) continue
+    if (!target.includes('/') && !KNOWN_FILES.has(target)) continue
+    if (/^(src|test|dist|openwiki|interactive|images)\/?$/.test(target)) continue
+    if (!PROJECT_PREFIX.test(target) && !KNOWN_FILES.has(target)) continue
+    // 子树文档里的 docs/、openspec/ 等路径按仓库根书写的，先查文件目录再回退根。
+    const exists = existsSync(resolve(dir, target)) || existsSync(resolve(root, target))
+    issues.push(...evaluateLink({ target, exists }))
+  }
+
+  for (const match of text.matchAll(/`pnpm --filter (@inkstack\/[a-z0-9-]+) ([^`]+)`/g)) {
+    const [, name, expression] = match
+    const pkg = facts.packages.get(name)
+    for (const command of expression.split('|').map((part) => part.trim())) {
+      if (!command || /[<*>$]/.test(command)) continue
+      issues.push(
+        ...evaluateCommand({
+          command: `${name} ${command}`,
+          available: Boolean(pkg?.scripts.has(command)),
+        }),
+      )
+    }
+  }
+
+  for (const match of text.matchAll(/`pnpm ([a-z][a-z0-9:_-]*)`/g)) {
+    const command = match[1]
+    if (BUILTIN_PNPM.has(command)) continue
+    issues.push(...evaluateCommand({ command, available: facts.rootScripts.has(command) }))
+  }
+
+  return issues
+}
+
+function checkReadme(file, text, facts) {
+  const dir = dirname(file)
+  const label = relative(root, file).replaceAll('\\', '/')
+  const relDir = relative(root, dir).replaceAll('\\', '/')
+  const type = classifyReadme(file)
+  const issues = []
+  const add = (list) => issues.push(...list.map((issue) => ({ ...issue, file: label })))
+
+  add(evaluateReferences({ text: stripFencedBlocks(text), dir, facts }))
+
+  for (const command of extractCommands(text)) {
+    if (command.kind === 'filter') {
+      const pkg = facts.packages.get(command.name)
+      if (!pkg?.scripts.has(command.command)) {
+        add([
+          { level: 'error', message: `script "${command.name} ${command.command}" does not exist` },
+        ])
+      }
+    } else if (!facts.rootScripts.has(command.command)) {
+      add([{ level: 'error', message: `script "${command.command}" does not exist` }])
+    }
+  }
+
+  for (const { name, declared } of extractPortDeclarations(stripFencedBlocks(text))) {
+    add(evaluatePort({ name, declared, actual: facts.env.get(name) }))
+  }
+
+  const headings = headingList(text)
+  const pkgEntry = [...facts.packages.entries()].find(([, info]) => info.dir === relDir)
+  const pkgName = pkgEntry?.[0]
+  const pkg = pkgEntry?.[1]
+
+  add(evaluateReadmeSections({ type, headings, hasScripts: Boolean(pkg && pkg.scripts.size > 0) }))
+
+  if (type === 'package' || type === 'app') {
+    if (!pkgName) {
+      add([{ level: 'error', message: `no package.json found for ${relDir}` }])
+    } else {
+      add(evaluateReadmeH1({ heading: firstHeading(text), expected: pkgName }))
+    }
+  }
+
+  for (const title of emptySections(text)) {
+    add([{ level: 'error', message: `section "${title}" is empty` }])
+  }
+
+  if (hasPlaceholder(text)) {
+    add([{ level: 'error', message: 'README contains a TODO/TBD placeholder' }])
+  }
+
+  if (type === 'root') {
+    const tree = parseRootTree(text)
+    if (!tree) {
+      add([{ level: 'error', message: 'root README is missing a parsable "## 目录" tree' }])
+    } else {
+      for (const group of ['apps', 'packages']) {
+        const expected = [...facts.packageDirs[group]]
+        const diff = diffIndex(expected, tree[group])
+        for (const name of diff.missing) {
+          add([{ level: 'error', message: `root README ${group} tree is missing "${name}"` }])
+        }
+        for (const name of diff.extra) {
+          add([{ level: 'error', message: `root README ${group} tree lists unknown "${name}"` }])
+        }
+      }
+    }
+  }
+
+  if (type === 'packages-index') {
+    const diff = diffIndex([...facts.packageDirs.packages], parsePackagesIndex(text))
+    for (const name of diff.missing) {
+      add([{ level: 'error', message: `packages/README.md index is missing "${name}"` }])
+    }
+    for (const name of diff.extra) {
+      add([{ level: 'error', message: `packages/README.md index lists unknown "${name}"` }])
+    }
+  }
+
+  if (type === 'package') {
+    const inline = stripFencedBlocks(text)
+    for (const match of inline.matchAll(/`(@inkstack\/[a-z0-9-]+)\/([^`\s]+)`/g)) {
+      const [, name, subpath] = match
+      if (/[<>]/.test(subpath)) continue
+      const info = facts.packages.get(name)
+      if (!info) continue
+      if (!matchesExport(info.exports, subpath)) {
+        add([{ level: 'error', message: `documented export "${name}/${subpath}" does not exist` }])
+      }
+    }
+  }
+
+  return issues
 }
 
 function checkFile(file, text, facts) {
@@ -391,50 +749,7 @@ function checkFile(file, text, facts) {
   add(evaluateBudget({ isRoot, ...handArea(text) }))
   add(evaluateCompletion({ isRoot, text }))
 
-  for (const match of text.matchAll(/\]\(([^)]+)\)/g)) {
-    const target = match[1]
-    if (/^(https?:|mailto:|#)/.test(target)) continue
-    const clean = target.split('#')[0].split('?')[0]
-    if (!clean) continue
-    add(
-      evaluateLink({
-        target: clean,
-        exists: existsSync(resolve(dir, clean)),
-      }),
-    )
-  }
-
-  for (const match of text.matchAll(/`([^`]+)`/g)) {
-    const target = match[1]
-    if (/[\s<>*$|{}:]/.test(target)) continue
-    if (/^(https?:|@|\/|~\/)/.test(target)) continue
-    if (!target.includes('/') && !KNOWN_FILES.has(target)) continue
-    if (/^(src|test|dist|openwiki|interactive|images)\/?$/.test(target)) continue
-    if (!PROJECT_PREFIX.test(target) && !KNOWN_FILES.has(target)) continue
-    // 子树文档里的 docs/、openspec/ 等路径按仓库根书写的，先查文件目录再回退根。
-    const exists = existsSync(resolve(dir, target)) || existsSync(resolve(root, target))
-    add(evaluateLink({ target, exists }))
-  }
-
-  for (const match of text.matchAll(/`pnpm --filter (@inkstack\/[a-z0-9-]+) ([^`]+)`/g)) {
-    const [, name, expression] = match
-    const pkg = facts.packages.get(name)
-    for (const command of expression.split('|').map((part) => part.trim())) {
-      if (!command || /[<*>$]/.test(command)) continue
-      add(
-        evaluateCommand({
-          command: `${name} ${command}`,
-          available: Boolean(pkg?.scripts.has(command)),
-        }),
-      )
-    }
-  }
-
-  for (const match of text.matchAll(/`pnpm ([a-z][a-z0-9:_-]*)`/g)) {
-    const command = match[1]
-    if (BUILTIN_PNPM.has(command)) continue
-    add(evaluateCommand({ command, available: facts.rootScripts.has(command) }))
-  }
+  add(evaluateReferences({ text, dir, facts }))
 
   const versionChecks = [
     ['Node', /Node\s*`([^`]+)`/g, facts.node],
@@ -624,6 +939,79 @@ function runSelfTest() {
   )
   check('frontmatter broken yaml', parseFrontmatter('---\npaths: [\n---\n').error !== null)
 
+  check('readme classification root', classifyReadme(join(root, 'README.md')) === 'root')
+  check(
+    'readme classification package',
+    classifyReadme(join(root, 'packages/api-client/README.md')) === 'package',
+  )
+  check('readme classification app', classifyReadme(join(root, 'apps/shell/README.md')) === 'app')
+  check(
+    'readme classification docs',
+    classifyReadme(join(root, 'docs/architecture/README.md')) === 'docs',
+  )
+
+  const missingIndex = diffIndex(['api-client', 'config'], ['config'])
+  check(
+    'index missing detected',
+    missingIndex.missing.length === 1 && missingIndex.missing[0] === 'api-client',
+  )
+  const extraIndex = diffIndex(['config'], ['config', 'ghost'])
+  check('index extra detected', extraIndex.extra.length === 1 && extraIndex.extra[0] === 'ghost')
+  const equalIndex = diffIndex(['config'], ['config'])
+  check('index equal', equalIndex.missing.length === 0 && equalIndex.extra.length === 0)
+
+  const tree = parseRootTree(
+    '# x\n\n## 目录\n\n```text\napps/\n  shell/\npackages/\n  config/\n```\n',
+  )
+  check('root tree parsed', tree?.apps[0] === 'shell' && tree?.packages[0] === 'config')
+
+  const table = parsePackagesIndex('| [`config`](config/) | x |\n| [`ui`](ui/) | y |')
+  check('packages index parsed', table.length === 2 && table[1] === 'ui')
+
+  check('readme h1 mismatch', evaluateReadmeH1({ heading: '@x', expected: '@y' }).length === 1)
+  check('readme h1 match', evaluateReadmeH1({ heading: '@y', expected: '@y' }).length === 0)
+
+  check(
+    'readme package missing command section',
+    evaluateReadmeSections({ type: 'package', headings: ['使用'], hasScripts: true }).length === 1,
+  )
+  check(
+    'readme app missing run section',
+    evaluateReadmeSections({ type: 'app', headings: ['相关文档'], hasScripts: false }).length === 1,
+  )
+  check(
+    'readme sections complete',
+    evaluateReadmeSections({ type: 'package', headings: ['使用', '命令'], hasScripts: true })
+      .length === 0,
+  )
+
+  check('empty section detected', emptySections('## A\n\n## B\nx').length === 1)
+  check('placeholder detected', hasPlaceholder('TODO: fill this'))
+  check('placeholder absent', !hasPlaceholder('已完成'))
+
+  const commands = extractCommands('```bash\npnpm --filter @inkstack/bff dev # url\npnpm dev\n```')
+  check(
+    'fenced filter command extracted',
+    commands.some(
+      (command) =>
+        command.kind === 'filter' && command.name === '@inkstack/bff' && command.command === 'dev',
+    ),
+  )
+  check(
+    'fenced root command extracted',
+    commands.some((command) => command.kind === 'root' && command.command === 'dev'),
+  )
+
+  const ports = extractPortDeclarations('`CANVAS_PORT` 控制（默认 `:4002`）')
+  check(
+    'port declaration extracted',
+    ports.length === 1 && ports[0].name === 'CANVAS_PORT' && ports[0].declared === '4002',
+  )
+
+  check('export exact match', matchesExport(new Set(['./globals.css']), 'globals.css'))
+  check('export wildcard match', matchesExport(new Set(['./components/*']), 'components/button'))
+  check('export missing', !matchesExport(new Set(['./components/*']), 'lib/x'))
+
   const failed = results.filter((result) => !result.ok)
   for (const result of failed) console.error(`self-test failed: ${result.name}`)
   console.log(`self-test: ${results.length - failed.length}/${results.length} passed`)
@@ -634,8 +1022,9 @@ if (isSelfTest) {
   runSelfTest()
 } else {
   const facts = loadFacts()
-  const files = collectAgentsFiles()
-  const docs = files.map((file) => ({
+  const agentsFiles = collectAgentsFiles()
+  const readmeFiles = collectReadmeFiles()
+  const docs = agentsFiles.map((file) => ({
     file: relative(root, file).replaceAll('\\', '/'),
     text: readText(file),
   }))
@@ -673,6 +1062,10 @@ if (isSelfTest) {
     issues.push(...checkFile(join(root, doc.file), doc.text, facts))
   }
 
+  for (const file of readmeFiles) {
+    issues.push(...checkReadme(file, readText(file), facts))
+  }
+
   const commandFiles = docs.filter((doc) => doc.text.includes('shadcn@latest add'))
   const cwdViolations = docs
     .filter((doc) => /shadcn[^\n]*(应用目录|cd apps\/shell)/.test(doc.text))
@@ -702,7 +1095,7 @@ if (isSelfTest) {
   for (const issue of errors) console.error(`error: ${issue.file}: ${issue.message}`)
   for (const issue of warnings) console.warn(`warning: ${issue.file}: ${issue.message}`)
   console.log(
-    `check-agent-docs: ${files.length} file(s) checked, ${ruleFiles.length} rule(s) (${ruleStats.alwaysOn} always-on, ${ruleStats.scoped} scoped), ${errors.length} error(s), ${warnings.length} warning(s)`,
+    `check-agent-docs: ${agentsFiles.length} AGENTS file(s), ${readmeFiles.length} README file(s) checked, ${ruleFiles.length} rule(s) (${ruleStats.alwaysOn} always-on, ${ruleStats.scoped} scoped), ${errors.length} error(s), ${warnings.length} warning(s)`,
   )
   if (errors.length > 0) process.exit(1)
 }

@@ -19,7 +19,7 @@
   "type": "module",
   "scripts": {
     "check:manifests": "node scripts/check-manifests.mjs",
-    "check:docs": "node scripts/check-agent-docs.mjs",
+    "check:docs": "node scripts/check-agent-docs.mjs --self-test && node scripts/check-agent-docs.mjs",
     "dev": "turbo run dev --filter=./apps/*",
     "dev:packages": "turbo run dev --filter=./packages/*",
     "build": "turbo run build",

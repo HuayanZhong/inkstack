@@ -15,6 +15,7 @@ apps/
   gateway/     NestJS Gateway
   bff/         BFF（NestJS）
 packages/
+  api-client/  共享前端请求客户端（ky + SSE）
   config/      共享配置解析与 URL 标准化
   contracts/   共享类型 / 协议 / codegen IR
   tsconfig/    共享 tsconfig 预设

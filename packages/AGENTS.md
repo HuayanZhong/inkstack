@@ -20,7 +20,9 @@
 
 ## 目录
 
+- `api-client/`：前端共享请求层（ky + SSE）。
 - `config/`：配置解析与 URL 标准化。
 - `contracts/`：action 协议、共享类型与 codegen IR。
 - `tsconfig/`：共享 tsconfig 预设，无运行时代码。
+- `ui/`：shadcn 组件、cn 工具与 Tailwind 主题。
 - `vitest-config/`：共享 Vitest 预设（node / react / nest）。

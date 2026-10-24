@@ -29,6 +29,7 @@ paths:
 | 事实               | 唯一 home                                        |
 | ------------------ | ------------------------------------------------ |
 | catalog 与版本策略 | `docs/package-metadata.md`                       |
+| README 文档质量    | `openspec/specs/` 的 documentation-quality       |
 | 测试流程与门槛     | `.claude/rules/testing.md`                       |
 | env 四个 home      | `.claude/rules/env.md`                           |
 | shadcn 生成与构建  | `packages/ui/AGENTS.md`                          |
