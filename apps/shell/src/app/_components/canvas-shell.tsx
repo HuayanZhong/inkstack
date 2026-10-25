@@ -154,14 +154,13 @@ export function Artboard({
   )
 }
 
-/** 手绘笔触：首页用于强调“落笔”，404 用于划掉“这个页面”。 */
-export function BrushStroke({
-  className,
-  tone = 'seal',
-}: {
+type BrushStrokeProps = {
   className?: string
-  tone?: 'seal' | 'destructive'
-}) {
+  tone?: 'default' | 'error'
+}
+
+/** 手绘笔触：首页用于强调“落笔”，404 用于划掉“这个页面”。 */
+export function BrushStroke({ className, tone = 'default' }: BrushStrokeProps) {
   return (
     <svg
       aria-hidden="true"
@@ -172,7 +171,7 @@ export function BrushStroke({
       <path
         d="M2 9C45 2 92 3 132 8C172 13 207 7 238 4L238 9C205 13 169 19 129 14C88 9 45 8 2 16Z"
         fill="currentColor"
-        className={cn('brush-reveal', tone === 'seal' ? 'text-seal' : 'text-destructive')}
+        className={cn('brush-reveal', tone === 'error' ? 'text-destructive' : 'text-seal')}
       />
     </svg>
   )

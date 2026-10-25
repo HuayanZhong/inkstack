@@ -19,8 +19,10 @@ pnpm build            # turbo run build
 pnpm lint             # turbo run lint
 pnpm typecheck        # turbo run typecheck
 pnpm test             # turbo run test
-pnpm verify           # lint → manifest → docs → typecheck → coverage → build → format → hygiene
+pnpm verify           # lint → manifest → docs → styles → typecheck → coverage → build → styles:build → format → hygiene
 pnpm check:manifests
+pnpm check:styles     # 源码样式契约
+pnpm check:styles:build  # 构建产物样式
 pnpm format           # oxfmt --write .
 pnpm lint:commit      # commitlint，从 stdin 读取提交信息
 ```
@@ -62,6 +64,7 @@ pnpm lint:commit      # commitlint，从 stdin 读取提交信息
 - 注释：解释代码长期成立的事实，不复述过程或代码；详见 [`.claude/rules/comments.md`](.claude/rules/comments.md)。
 - 环境变量：端口、host、URL、凭据只通过 env 分发，规则见 [`.claude/rules/env.md`](.claude/rules/env.md)。
 - 指引维护：改 `AGENTS.md` / `CLAUDE.md` 前读 [`.claude/rules/agent-docs.md`](.claude/rules/agent-docs.md)。
+- 视觉样式与组件写法：颜色、字体、版式、动效与组件写法遵循 [`.claude/rules/design-system.md`](.claude/rules/design-system.md)；改 UI 前先读，新页面先对照参考页。
 - 完成前跑 `pnpm verify`，并报告实际输出。
 
 <!-- BEGIN:turborepo-agent-rules -->

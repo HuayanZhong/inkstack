@@ -20,8 +20,7 @@ UI 组件会写入 `src/components`；`components.json` 的别名必须与应用
 
 ## 约束
 
-- 组件只通过语义令牌取色，不写死色值。
-- 暗色只跟随系统偏好，不引入 `.dark` 类策略。
+- 视觉样式与组件写法遵循 [`.claude/rules/design-system.md`](../../.claude/rules/design-system.md)；色值、字体、暗色与组件边界都以该契约为准。
 - 新增文件后执行 `pnpm --filter @inkstack/ui build`，应用通过 `dist` 消费。
 - `exports` 的 `source` 条件必须排在子路径首位，供 shadcn CLI 写入 `src`；运行时解析 `default` 的 `dist`，不要删掉它。
 - 增删组件或改组件写法前先读 `.agents/skills/shadcn/SKILL.md`；仓库的 monorepo、catalog 与暗色规则优先于技能默认建议。

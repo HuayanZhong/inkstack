@@ -20,6 +20,8 @@
   "scripts": {
     "check:manifests": "node scripts/check-manifests.mjs",
     "check:docs": "node scripts/check-agent-docs.mjs --self-test && node scripts/check-agent-docs.mjs",
+    "check:styles": "node scripts/check-style.mjs --self-test && node scripts/check-style.mjs",
+    "check:styles:build": "node scripts/check-style.mjs --built",
     "dev": "turbo run dev --filter=./apps/*",
     "dev:packages": "turbo run dev --filter=./packages/*",
     "build": "turbo run build",
@@ -32,7 +34,7 @@
     "lint:commit": "commitlint",
     "typecheck": "turbo run typecheck",
     "test": "turbo run test",
-    "verify": "pnpm install --frozen-lockfile && pnpm lint && pnpm check:manifests && pnpm check:docs && pnpm typecheck && pnpm test:coverage && pnpm build && pnpm format:check && pnpm hygiene",
+    "verify": "pnpm install --frozen-lockfile && pnpm lint && pnpm check:manifests && pnpm check:docs && pnpm check:styles && pnpm typecheck && pnpm test:coverage && pnpm build && pnpm check:styles:build && pnpm format:check && pnpm hygiene",
     "prepare": "husky",
     "test:coverage": "turbo run test:coverage"
   },

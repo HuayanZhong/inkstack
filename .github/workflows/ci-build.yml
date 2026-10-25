@@ -51,6 +51,9 @@ jobs:
       - name: Build
         run: pnpm build
 
+      - name: Check built styles
+        run: pnpm check:styles:build
+
       # hygiene 自己会构建 packages，再跑 knip 与 publint；Turbo 缓存会复用上面的产物。
       - name: Hygiene
         run: pnpm hygiene

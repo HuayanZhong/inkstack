@@ -57,6 +57,9 @@ jobs:
       - name: Check agent docs
         run: pnpm check:docs
 
+      - name: Check style contract
+        run: pnpm check:styles
+
       - name: Typecheck
         run: pnpm typecheck
 

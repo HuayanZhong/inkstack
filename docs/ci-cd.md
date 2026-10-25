@@ -13,17 +13,24 @@
 
 ## 当前已启用
 
-| 文件                    | 触发                                 | 职责                                                                          |
-| ----------------------- | ------------------------------------ | ----------------------------------------------------------------------------- |
-| `ci.yml`                | `pull_request`                       | PR 编排：static / test / build / dependency-review，汇总 `all checks passed`  |
-| `ci-master.yml`         | `push main`、`workflow_dispatch`     | main 与手动：static / test / build                                            |
-| `ci-static.yml`         | `workflow_call`、`workflow_dispatch` | lint、check:manifests、check:docs（AGENTS + README）、typecheck、format:check |
-| `ci-test.yml`           | `workflow_call`、`workflow_dispatch` | test:coverage、上传覆盖率                                                     |
-| `ci-build.yml`          | `workflow_call`、`workflow_dispatch` | build、hygiene（knip/publint）                                                |
-| `dependency-review.yml` | `workflow_call`                      | PR 新增依赖审查，high 阻断                                                    |
-| `dependabot.yml`        | 每日 04:00 Asia/Shanghai             | npm（含 pnpm catalog）与 GitHub Actions 更新                                  |
+| 文件                    | 触发                                 | 职责                                                                                        |
+| ----------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------- |
+| `ci.yml`                | `pull_request`                       | PR 编排：static / test / build / dependency-review，汇总 `all checks passed`                |
+| `ci-master.yml`         | `push main`、`workflow_dispatch`     | main 与手动：static / test / build                                                          |
+| `ci-static.yml`         | `workflow_call`、`workflow_dispatch` | lint、check:manifests、check:docs（AGENTS + README）、check:styles、typecheck、format:check |
+| `ci-test.yml`           | `workflow_call`、`workflow_dispatch` | test:coverage、上传覆盖率                                                                   |
+| `ci-build.yml`          | `workflow_call`、`workflow_dispatch` | build、check:styles:build、hygiene（knip/publint）                                          |
+| `dependency-review.yml` | `workflow_call`                      | PR 新增依赖审查，high 阻断                                                                  |
+| `dependabot.yml`        | 每日 04:00 Asia/Shanghai             | npm（含 pnpm catalog）与 GitHub Actions 更新                                                |
 
 分支保护目标：`main` 要求 `all checks passed`、分支最新、对话解决；禁止 force push（需在 GitHub 设置）。当前 secrets：无。
+
+### 样式验收
+
+- `ci-static.yml` 在 `Check agent docs` 之后运行 `pnpm check:styles`：检查源码中的颜色字面量/调色板类/任意色值/内联颜色、主题外字体、动效白名单与独立的时长/延迟、应用内手动主题切换、共享样式入口与 `@source`、契约十节与 `[CI:<id>]` 映射，以及页面骨架、状态页画板、组件命名导出与 `<Name>Props`、工作台直角/阴影/渐变/玻璃、笔触数量与固定 path、题注数量、单 h1。失败阻断 static job。
+- `ci-build.yml` 在 `Build` 之后运行 `pnpm check:styles:build`：检查 shell 的 `.next/static/**/*.css` 与 canvas 的 `dist/**/*.css` 是否包含共享令牌与关键类（`BUILT-01` / `BUILT-02`）。失败阻断 build job。
+- 风格定调与组件分层等 `[REVIEW]` 规则不在 CI 里；涉及 UI 的 OpenSpec 变更必须在变更目录写 `style-review.md`，逐条回答五条定调并对照参考页，归档前由评审者确认。
+- 两项检查都通过 `all checks passed` 聚合，不新增 required check；本地等价命令见根 `AGENTS.md` 的 `pnpm verify` 链。
 
 ## Turbo 缓存
 
