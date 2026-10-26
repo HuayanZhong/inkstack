@@ -4,23 +4,17 @@ import { describe, expect, it } from 'vitest'
 import Home from '../../src/app/page'
 
 describe('Home', () => {
-  it('renders the product entry content', () => {
+  it('renders the product name and stage notice', () => {
     render(<Home />)
 
-    expect(screen.getByRole('heading', { level: 1, name: /让 AI 落笔/ })).toBeInTheDocument()
-    expect(screen.getByText('墨栈')).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 1, name: '墨栈' })).toBeInTheDocument()
     expect(screen.getByText('Inkstack')).toBeInTheDocument()
-    expect(screen.getByText('登录与画布入口正在搭建中')).toBeInTheDocument()
-    expect(screen.getByText('AI 控笔')).toBeInTheDocument()
-    expect(screen.getByText('人工编辑')).toBeInTheDocument()
-    expect(screen.getByText('设计转代码')).toBeInTheDocument()
+    expect(screen.getByText(/尚未接入页面/)).toBeInTheDocument()
   })
 
   it('does not link to routes that are not implemented', () => {
     const { container } = render(<Home />)
 
     expect(container.querySelector('a')).toBeNull()
-    expect(container.innerHTML).not.toContain('href="/login"')
-    expect(container.innerHTML).not.toContain('href="/canvas"')
   })
 })

@@ -60,12 +60,6 @@
 - **THEN** 它从配置对象读取，且具备对应的 TypeScript 类型
 - **AND** 该模块不出现 `process.env`
 
-#### Scenario: 客户端读取公开变量
-
-- **WHEN** 客户端组件需要读取 `NEXT_PUBLIC_CANVAS_MF_ENTRY`
-- **THEN** 它直接引用 `process.env.NEXT_PUBLIC_CANVAS_MF_ENTRY`
-- **AND** 服务端配置模块不被打包进客户端产物
-
 ### Requirement: 解析器语义固定
 
 共享解析器 SHALL 对非空字符串、URL、正整数与布尔值采用固定语义；布尔值 MUST 只接受 `true`、`false`、`1`、`0`，其他字面量 MUST 校验失败。

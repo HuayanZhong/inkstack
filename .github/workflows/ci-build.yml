@@ -12,8 +12,6 @@ env:
   NEXT_TELEMETRY_DISABLED: '1'
   TURBO_TELEMETRY_DISABLED: '1'
   TURBO_UI: 'false'
-  # shell 的构建期校验需要该变量；CI 不依赖本地 .env 文件。
-  NEXT_PUBLIC_CANVAS_MF_ENTRY: 'http://localhost:4002/mf-manifest.json'
 
 jobs:
   build:
@@ -50,9 +48,6 @@ jobs:
 
       - name: Build
         run: pnpm build
-
-      - name: Check built styles
-        run: pnpm check:styles:build
 
       # hygiene 自己会构建 packages，再跑 knip 与 publint；Turbo 缓存会复用上面的产物。
       - name: Hygiene

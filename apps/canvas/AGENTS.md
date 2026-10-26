@@ -5,7 +5,7 @@
 ## 职责
 
 - 渲染 tldraw 画布，是所有画布 action 的唯一执行者；不直接写 design.json，不持有 action 队列。
-- 通过 MF 暴露 `./Canvas`，供 shell 以 runtime consumer 加载。
+- 通过 MF 暴露 `./Canvas`；shell 的消费端尚未接入。
 
 ## 目录
 

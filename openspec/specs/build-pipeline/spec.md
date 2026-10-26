@@ -34,11 +34,6 @@
 - **WHEN** 修改 `BFF_PORT`、`GATEWAY_PORT` 或 `CANVAS_PORT` 等运行时变量
 - **THEN** `build`、`typecheck` 与 `lint` 的缓存键保持不变
 
-#### Scenario: 修改构建期公开变量
-
-- **WHEN** 修改 `NEXT_PUBLIC_CANVAS_MF_ENTRY`
-- **THEN** shell 的 `build` 缓存失效，不消费该变量的包不因它失效
-
 #### Scenario: CI 透传 telemetry 开关
 
 - **WHEN** CI 设置 `NEXT_TELEMETRY_DISABLED=1` 并执行 `next build`

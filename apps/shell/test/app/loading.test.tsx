@@ -7,6 +7,6 @@ describe('Loading', () => {
   it('exposes an accessible loading status', () => {
     render(<Loading />)
 
-    expect(screen.getByRole('status')).toHaveTextContent('正在加载画布')
+    expect(screen.getByRole('status')).toHaveTextContent('正在加载')
   })
 })

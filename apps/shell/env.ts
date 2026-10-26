@@ -1,9 +1,8 @@
-import { envIntString, envOptionalString, envUrlString, parseEnv, z } from '@inkstack/config'
+import { envIntString, envOptionalString, parseEnv, z } from '@inkstack/config'
 
 const envSchema = z.object({
   // Next CLI 原生读取 PORT；这里只负责校验与类型化。
   PORT: envIntString().default(3000),
-  NEXT_PUBLIC_CANVAS_MF_ENTRY: envUrlString(),
   // 局域网或隧道调试时额外允许访问 dev server 的 hostname，逗号分隔，不带协议与端口。
   // 该变量在 .env.example 中默认为空，因此不能使用要求非空的 envString。
   ALLOWED_DEV_ORIGINS: envOptionalString().default(''),

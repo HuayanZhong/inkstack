@@ -31,7 +31,6 @@ paths:
 | catalog 与版本策略 | `docs/package-metadata.md`                       |
 | README 文档质量    | `openspec/specs/` 的 documentation-quality       |
 | 测试流程与门槛     | `.claude/rules/testing.md`                       |
-| 视觉样式与组件写法 | `.claude/rules/design-system.md`                 |
 | env 四个 home      | `.claude/rules/env.md`                           |
 | shadcn 生成与构建  | `packages/ui/AGENTS.md`                          |
 | 完成门禁           | 根 `AGENTS.md` 的 `pnpm verify`                  |

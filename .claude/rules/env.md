@@ -22,7 +22,7 @@ paths:
 - Next 应用端口用 `PORT`，Next CLI 原生读取该变量。
 - 其他应用用 `<APP>_PORT`，例如 `BFF_PORT`、`CANVAS_PORT`、`GATEWAY_PORT`。
 - 客户端可见变量必须用 `NEXT_PUBLIC_` 前缀；服务端密钥禁止使用该前缀。
-- 跨应用地址显式配置（如 `NEXT_PUBLIC_CANVAS_MF_ENTRY`），不从另一个应用的端口推导。
+- 跨应用地址显式配置（如远程入口的 manifest 地址），不从另一个应用的端口推导。
 
 ## 四个 home
 
