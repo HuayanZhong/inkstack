@@ -11,6 +11,8 @@
 | `@inkstack/ui/lib/*`        | 工具函数                |
 | `@inkstack/ui/globals.css`  | Tailwind 入口与主题令牌 |
 
+汇总入口当前导出 `Button`、`Input`、`Label`、`ModeToggle`、`ThemeProvider` 与 `cn`。
+
 ## 命令
 
 ```bash

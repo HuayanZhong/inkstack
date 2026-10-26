@@ -1,7 +1,15 @@
 import { render, screen } from '@testing-library/react'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
+
+import type { ReactNode } from 'react'
 
 import Home from '../../src/app/page'
+
+vi.mock('next/link', () => ({
+  default: ({ href, children }: { href: string; children: ReactNode }) => (
+    <a href={href}>{children}</a>
+  ),
+}))
 
 describe('Home', () => {
   it('renders the product name and stage notice', () => {
@@ -9,12 +17,14 @@ describe('Home', () => {
 
     expect(screen.getByRole('heading', { level: 1, name: '墨栈' })).toBeInTheDocument()
     expect(screen.getByText('Inkstack')).toBeInTheDocument()
-    expect(screen.getByText(/尚未接入页面/)).toBeInTheDocument()
+    expect(screen.getByText(/登录页已就绪/)).toBeInTheDocument()
   })
 
-  it('does not link to routes that are not implemented', () => {
-    const { container } = render(<Home />)
+  it('links only to the implemented auth pages', () => {
+    render(<Home />)
 
-    expect(container.querySelector('a')).toBeNull()
+    const links = screen.getAllByRole('link')
+    expect(links).toHaveLength(2)
+    expect(links.map((link) => link.getAttribute('href'))).toEqual(['/login', '/register'])
   })
 })

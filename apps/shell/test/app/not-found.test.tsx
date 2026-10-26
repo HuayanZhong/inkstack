@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from 'vitest'
 
 import type { ReactNode } from 'react'
 
-import NotFound from '../../src/app/not-found'
+import NotFound, { metadata } from '../../src/app/not-found'
 
 vi.mock('next/link', () => ({
   default: ({ href, children }: { href: string; children: ReactNode }) => (
@@ -26,5 +26,9 @@ describe('NotFound', () => {
     expect(container.querySelector('pre')).toBeNull()
     expect(container.textContent).not.toContain('Error:')
     expect(container.textContent).not.toContain('.tsx')
+  })
+
+  it('does not repeat the product name in the page title', () => {
+    expect(metadata.title).toBe('页面不存在')
   })
 })

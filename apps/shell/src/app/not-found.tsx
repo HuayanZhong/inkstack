@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { buttonVariants } from '@inkstack/ui'
 
 export const metadata: Metadata = {
-  title: '页面不存在 · 墨栈 Inkstack',
+  title: '页面不存在',
 }
 
 export default function NotFound() {

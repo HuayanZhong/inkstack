@@ -2,6 +2,23 @@
 @import 'tw-animate-css';
 @import 'shadcn/tailwind.css';
 
+/*
+ * 暗色有两条来源：shell 由 next-themes 在 <html> 上切换 .light / .dark；
+ * 未接入 ThemeProvider 的应用（canvas）继续跟随系统。
+ * 媒体查询只匹配没有显式 class 的根节点，避免两套机制同时生效。
+ */
+@custom-variant dark {
+  &:where(.dark, .dark *) {
+    @slot;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    &:where(:root:not(.light):not(.dark) *) {
+      @slot;
+    }
+  }
+}
+
 :root {
   --background: #f1f2ed;
   --foreground: #151815;
@@ -46,9 +63,9 @@
     'JetBrains Mono', 'SFMono-Regular', Menlo, Consolas, 'Liberation Mono', monospace;
 }
 
-/* 系统偏好是唯一暗色来源：不提供 .dark 类切换，避免两套机制同时生效。 */
+/* 媒体查询保留给未接入 ThemeProvider 的应用（canvas）；shell 通过 .light / .dark 显式控制。 */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not(.light):not(.dark) {
     --background: #0d100e;
     --foreground: #e8eae3;
     --card: #141815;
@@ -84,9 +101,50 @@
     --grid: rgb(232 234 227 / 7%);
   }
 
-  html {
+  html:not(.light):not(.dark) {
     color-scheme: dark;
   }
+}
+
+:root.dark {
+  color-scheme: dark;
+  --background: #0d100e;
+  --foreground: #e8eae3;
+  --card: #141815;
+  --card-foreground: #e8eae3;
+  --popover: #141815;
+  --popover-foreground: #e8eae3;
+  --primary: #e8eae3;
+  --primary-foreground: #0d100e;
+  --secondary: #1d231f;
+  --secondary-foreground: #e8eae3;
+  --muted: #1d231f;
+  --muted-foreground: #98a198;
+  --accent: #1d231f;
+  --accent-foreground: #e8eae3;
+  --destructive: #d75a45;
+  --border: #2a312c;
+  --input: #2a312c;
+  --ring: #d75a45;
+  --chart-1: #d75a45;
+  --chart-2: #98a198;
+  --chart-3: #e8eae3;
+  --chart-4: #5d655d;
+  --chart-5: #2a312c;
+  --sidebar: #111512;
+  --sidebar-foreground: #e8eae3;
+  --sidebar-primary: #d75a45;
+  --sidebar-primary-foreground: #0d100e;
+  --sidebar-accent: #1d231f;
+  --sidebar-accent-foreground: #e8eae3;
+  --sidebar-border: #2a312c;
+  --sidebar-ring: #d75a45;
+  --seal: #d75a45;
+  --grid: rgb(232 234 227 / 7%);
+}
+
+:root.light {
+  color-scheme: light;
 }
 
 @theme inline {

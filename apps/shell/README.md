@@ -1,6 +1,6 @@
 # @inkstack/shell
 
-墨栈的用户入口应用，Next.js 16 App Router，监听 `PORT`（默认 `:3000`）。画布、登录与 BFF / Gateway 尚未接入页面。
+墨栈的用户入口应用，Next.js 16 App Router，监听 `PORT`（默认 `:3000`）。登录与注册页已提供静态样式，认证、画布与 BFF / Gateway 尚未接入。
 
 ## 运行
 
