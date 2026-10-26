@@ -58,6 +58,7 @@ pnpm lint:commit      # commitlint，从 stdin 读取提交信息
 
 - 工具与事实优先：依赖、任务、检查、规格、脚手架、生成器都走官方 CLI，版本与 API 先核实，不手写工具产物；见 [`.claude/rules/cli-first.md`](.claude/rules/cli-first.md)。
 - 测试：运行时代码同变更补测试，见 [规则](.claude/rules/testing.md)。
+- 设计：视觉方向、组件纯度、主题与动效见 [`.claude/rules/design.md`](.claude/rules/design.md)。
 - Git：除非用户当次明确要求，不执行任何会改变工作区、分支或历史的命令；详见 [`.claude/rules/git.md`](.claude/rules/git.md)。
 - 注释：解释代码长期成立的事实，不复述过程或代码；详见 [`.claude/rules/comments.md`](.claude/rules/comments.md)。
 - 环境变量：端口、host、URL、凭据只通过 env 分发，规则见 [`.claude/rules/env.md`](.claude/rules/env.md)。
