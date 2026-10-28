@@ -9,7 +9,7 @@ autoInstallPeers: false
 catalogs:
   # 精确 pin：影响构建或类型，升级时只改这里。
   toolchain:
-    '@fission-ai/openspec': 1.14.3
+    '@fission-ai/openspec': 1.15.0
     oxfmt: 0.74.0
     oxlint: 1.89.0
     oxlint-tsgolint: 7.0.2005
