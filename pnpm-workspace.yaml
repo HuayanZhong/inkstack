@@ -45,7 +45,7 @@ catalogs:
     postcss-loader: ^8.2.1
     publint: ^0.3.25
     react-refresh: ^0.19.0
-    shadcn: ^4.22.1
+    shadcn: ^4.22.2
     socket.io-client: ^4.8.4
     supertest: ^7.3.1
     tailwindcss: ^4.3.3
