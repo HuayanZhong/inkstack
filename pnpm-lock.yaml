@@ -240,8 +240,8 @@ catalogs:
       specifier: ^17.6.0
       version: 17.6.0
     postcss:
-      specifier: ^8.5.31
-      version: 8.5.31
+      specifier: ^8.5.32
+      version: 8.5.32
     postcss-loader:
       specifier: ^8.2.1
       version: 8.2.1
@@ -523,10 +523,10 @@ importers:
         version: 11.0.0
       postcss:
         specifier: catalog:dev
-        version: 8.5.31
+        version: 8.5.32
       postcss-loader:
         specifier: catalog:dev
-        version: 8.2.1(@rspack/core@2.2.9(@module-federation/runtime-tools@2.9.2)(@swc/helpers@0.5.23))(postcss@8.5.31)(typescript@6.0.3)
+        version: 8.2.1(@rspack/core@2.2.9(@module-federation/runtime-tools@2.9.2)(@swc/helpers@0.5.23))(postcss@8.5.32)(typescript@6.0.3)
       react-refresh:
         specifier: catalog:dev
         version: 0.19.0
@@ -5277,6 +5277,10 @@ packages:
     resolution: {integrity: sha512-YUbWYCgErwnMAVkjUnYa+KlMBzGpHwiIt/DE7f0G33AuX2LH9UcTk6KgWxd3zRU+pN3u/C+Xl3EnMLM4Hea7Sg==}
     engines: {node: ^10 || ^12 || >=14}
 
+  postcss@8.5.32:
+    resolution: {integrity: sha512-LJlKCCAUFKOuZxipUdYw1NzIITEsPcgyOG9LkvRJvuKj/bRzbuRY0ARXvL0pWGpsZvn8jku+LMep2eU0seHp8g==}
+    engines: {node: ^10 || ^12 || >=14}
+
   powershell-utils@0.2.1:
     resolution: {integrity: sha512-C+y9x90UElAddDZmV4qOx9W53B61PO7cIqWz2dQsWlwswuq4mr8NEwytdGKboYbQlGZ3awrkTeNvcZiZNHnQ8A==}
     engines: {node: '>=20'}
@@ -8430,7 +8434,7 @@ snapshots:
       '@alloc/quick-lru': 5.3.0
       '@tailwindcss/node': 4.3.3
       '@tailwindcss/oxide': 4.3.3
-      postcss: 8.5.31
+      postcss: 8.5.32
       tailwindcss: 4.3.3
 
   '@testing-library/dom@10.4.2':
@@ -10281,11 +10285,11 @@ snapshots:
 
   pluralize@8.0.0: {}
 
-  postcss-loader@8.2.1(@rspack/core@2.2.9(@module-federation/runtime-tools@2.9.2)(@swc/helpers@0.5.23))(postcss@8.5.31)(typescript@6.0.3):
+  postcss-loader@8.2.1(@rspack/core@2.2.9(@module-federation/runtime-tools@2.9.2)(@swc/helpers@0.5.23))(postcss@8.5.32)(typescript@6.0.3):
     dependencies:
       cosmiconfig: 9.0.2(typescript@6.0.3)
       jiti: 2.7.0
-      postcss: 8.5.31
+      postcss: 8.5.32
       semver: 7.8.5
     optionalDependencies:
       '@rspack/core': 2.2.9(@module-federation/runtime-tools@2.9.2)(@swc/helpers@0.5.23)
@@ -10304,6 +10308,12 @@ snapshots:
       source-map-js: 1.2.2
 
   postcss@8.5.31:
+    dependencies:
+      nanoid: 3.3.20
+      picocolors: 1.1.1
+      source-map-js: 1.2.2
+
+  postcss@8.5.32:
     dependencies:
       nanoid: 3.3.20
       picocolors: 1.1.1
