@@ -183,7 +183,7 @@ catalogs:
       specifier: ^2.3.0
       version: 2.3.0
     '@rspack/core':
-      specifier: ^2.3.0
+      specifier: ^2.2.9
       version: 2.3.0
     '@rspack/dev-server':
       specifier: ^2.2.2
@@ -341,8 +341,8 @@ catalogs:
       version: 4.6.7
   toolchain:
     '@fission-ai/openspec':
-      specifier: 1.15.0
-      version: 1.15.0
+      specifier: 1.16.0
+      version: 1.16.0
     oxfmt:
       specifier: 0.75.0
       version: 0.75.0
@@ -368,7 +368,7 @@ importers:
         version: 21.2.4
       '@fission-ai/openspec':
         specifier: catalog:toolchain
-        version: 1.15.0(@types/node@26.6.6)
+        version: 1.16.0(@types/node@26.6.6)
       '@types/node':
         specifier: catalog:dev
         version: 26.6.6
@@ -496,7 +496,7 @@ importers:
         version: 2.9.2(@rspack/core@2.3.0(@module-federation/runtime-tools@2.9.2)(@swc/helpers@0.5.23))(typescript@6.0.3)
       '@rspack/cli':
         specifier: catalog:dev
-        version: 2.3.0(@rspack/core@2.2.9(@module-federation/runtime-tools@2.9.2)(@swc/helpers@0.5.23))(@rspack/dev-server@2.2.2(@rspack/core@2.2.9(@module-federation/runtime-tools@2.9.2)(@swc/helpers@0.5.23)))
+        version: 2.3.0(@rspack/core@2.3.0(@module-federation/runtime-tools@2.9.2)(@swc/helpers@0.5.23))(@rspack/dev-server@2.2.2(@rspack/core@2.3.0(@module-federation/runtime-tools@2.9.2)(@swc/helpers@0.5.23)))
       '@rspack/core':
         specifier: catalog:dev
         version: 2.3.0(@module-federation/runtime-tools@2.9.2)(@swc/helpers@0.5.23)
@@ -1189,9 +1189,9 @@ packages:
       '@noble/hashes':
         optional: true
 
-  '@fission-ai/openspec@1.15.0':
-    resolution: {integrity: sha512-lG/EPEiL22bB70yKJhWWSPk1UQGLnwO7Dp+hNc/jUmBwb0qxPLzHCUkXEfkny4iYDOsgnsNQmc39/g9QcvnBnA==}
-    engines: {node: '>=20.19.0'}
+  '@fission-ai/openspec@1.16.0':
+    resolution: {integrity: sha512-WQVhZoIR5PoacH/H0qh84VKMcXFbKCIKuAI96arHS3KiKYhJStlRrjUKGxLqLYKLym0j+2hAAY5MZUrPE5qXIA==}
+    engines: {node: '>=22.12.0'}
     hasBin: true
 
   '@floating-ui/core@1.8.0':
@@ -6592,7 +6592,7 @@ snapshots:
     optionalDependencies:
       '@noble/hashes': 1.8.0
 
-  '@fission-ai/openspec@1.15.0(@types/node@26.6.6)':
+  '@fission-ai/openspec@1.16.0(@types/node@26.6.6)':
     dependencies:
       '@inquirer/core': 12.0.4(@types/node@26.6.6)
       '@inquirer/prompts': 8.7.3(@types/node@26.6.6)
@@ -8327,7 +8327,7 @@ snapshots:
       '@rspack/binding-win32-ia32-msvc': 2.3.0
       '@rspack/binding-win32-x64-msvc': 2.3.0
 
-  '@rspack/cli@2.3.0(@rspack/core@2.2.9(@module-federation/runtime-tools@2.9.2)(@swc/helpers@0.5.23))(@rspack/dev-server@2.2.2(@rspack/core@2.2.9(@module-federation/runtime-tools@2.9.2)(@swc/helpers@0.5.23)))':
+  '@rspack/cli@2.3.0(@rspack/core@2.3.0(@module-federation/runtime-tools@2.9.2)(@swc/helpers@0.5.23))(@rspack/dev-server@2.2.2(@rspack/core@2.3.0(@module-federation/runtime-tools@2.9.2)(@swc/helpers@0.5.23)))':
     dependencies:
       '@rspack/core': 2.3.0(@module-federation/runtime-tools@2.9.2)(@swc/helpers@0.5.23)
     optionalDependencies:
