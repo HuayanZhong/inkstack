@@ -222,8 +222,8 @@ catalogs:
       specifier: ^10.1.0
       version: 10.1.0
     dotenv-cli:
-      specifier: ^11.0.0
-      version: 11.0.0
+      specifier: ^11.1.0
+      version: 11.1.0
     eslint-plugin-turbo:
       specifier: ^2.11.10
       version: 2.11.10
@@ -453,7 +453,7 @@ importers:
         version: 7.2.1
       dotenv-cli:
         specifier: catalog:dev
-        version: 11.0.0
+        version: 11.1.0
       supertest:
         specifier: catalog:dev
         version: 7.3.1
@@ -520,7 +520,7 @@ importers:
         version: 19.3.0(@types/react@19.3.0)
       dotenv-cli:
         specifier: catalog:dev
-        version: 11.0.0
+        version: 11.1.0
       postcss:
         specifier: catalog:dev
         version: 8.5.32
@@ -590,7 +590,7 @@ importers:
         version: 7.2.1
       dotenv-cli:
         specifier: catalog:dev
-        version: 11.0.0
+        version: 11.1.0
       socket.io-client:
         specifier: catalog:dev
         version: 4.8.4
@@ -654,7 +654,7 @@ importers:
         version: 19.3.0(@types/react@19.3.0)
       dotenv-cli:
         specifier: catalog:dev
-        version: 11.0.0
+        version: 11.1.0
       jsdom:
         specifier: catalog:dev
         version: 30.1.3(@noble/hashes@1.8.0)
@@ -4157,8 +4157,8 @@ packages:
     resolution: {integrity: sha512-tE7ztYzXHIeyvc7N+hR3oi7FIbf/NIjVP9hmAt3yMXzrQ072/fpjGLx2GxNxGxUl5V73MEqYzioOMoVhGMJ5cA==}
     engines: {node: '>=10'}
 
-  dotenv-cli@11.0.0:
-    resolution: {integrity: sha512-r5pA8idbk7GFWuHEU7trSTflWcdBpQEK+Aw17UrSHjS6CReuhrrPcyC3zcQBPQvhArRHnBo/h6eLH1fkCvNlww==}
+  dotenv-cli@11.1.0:
+    resolution: {integrity: sha512-YUBODAS0puvSc9bGdu07o1GSouVn63xDazqZqvT99Hta4nPqZ1jTdBcz12dDdxSC9jYbVlpWlnu0IJaMR8TIEQ==}
     hasBin: true
 
   dotenv-expand@12.0.3:
@@ -9223,7 +9223,7 @@ snapshots:
     dependencies:
       is-obj: 2.0.0
 
-  dotenv-cli@11.0.0:
+  dotenv-cli@11.1.0:
     dependencies:
       cross-spawn: 7.0.6
       dotenv: 17.4.2
