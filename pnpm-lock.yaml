@@ -180,8 +180,8 @@ catalogs:
       specifier: ^12.2.0
       version: 12.2.0
     '@rspack/cli':
-      specifier: ^2.2.9
-      version: 2.2.9
+      specifier: ^2.3.0
+      version: 2.3.0
     '@rspack/core':
       specifier: ^2.3.0
       version: 2.3.0
@@ -496,7 +496,7 @@ importers:
         version: 2.9.2(@rspack/core@2.3.0(@module-federation/runtime-tools@2.9.2)(@swc/helpers@0.5.23))(typescript@6.0.3)
       '@rspack/cli':
         specifier: catalog:dev
-        version: 2.2.9(@rspack/core@2.3.0(@module-federation/runtime-tools@2.9.2)(@swc/helpers@0.5.23))(@rspack/dev-server@2.2.2(@rspack/core@2.3.0(@module-federation/runtime-tools@2.9.2)(@swc/helpers@0.5.23)))
+        version: 2.3.0(@rspack/core@2.2.9(@module-federation/runtime-tools@2.9.2)(@swc/helpers@0.5.23))(@rspack/dev-server@2.2.2(@rspack/core@2.2.9(@module-federation/runtime-tools@2.9.2)(@swc/helpers@0.5.23)))
       '@rspack/core':
         specifier: catalog:dev
         version: 2.3.0(@module-federation/runtime-tools@2.9.2)(@swc/helpers@0.5.23)
@@ -3212,11 +3212,11 @@ packages:
   '@rspack/binding@2.3.0':
     resolution: {integrity: sha512-rh9S5xvGVs73gdqMDMYXi3SHUfCWIChlL7a8zaYF8+1HLtIgdMyxa100f1ifAKlr8VoyFUv3xrfGLBaoxwjU5g==}
 
-  '@rspack/cli@2.2.9':
-    resolution: {integrity: sha512-oaFot9B5oensD70w2ikkVRugqpXlAOUYu034JMFsAIrwurEHnoYcUJo+nw06M3Fv4Tx48QCcO7bBh0ynDiDKtw==}
+  '@rspack/cli@2.3.0':
+    resolution: {integrity: sha512-DZ9iF3BeMwb/PqUlY3sX3rZgxS7LnuGhmiyhb6zLsBMjGyTCyXZPfCB6OIf/gZyIAMdNzc3j6GLXX6hD8ysENQ==}
     hasBin: true
     peerDependencies:
-      '@rspack/core': ^2.0.0-0
+      '@rspack/core': ^2.3.0-0
       '@rspack/dev-server': ^2.0.0-0
     peerDependenciesMeta:
       '@rspack/dev-server':
@@ -8327,7 +8327,7 @@ snapshots:
       '@rspack/binding-win32-ia32-msvc': 2.3.0
       '@rspack/binding-win32-x64-msvc': 2.3.0
 
-  '@rspack/cli@2.2.9(@rspack/core@2.3.0(@module-federation/runtime-tools@2.9.2)(@swc/helpers@0.5.23))(@rspack/dev-server@2.2.2(@rspack/core@2.3.0(@module-federation/runtime-tools@2.9.2)(@swc/helpers@0.5.23)))':
+  '@rspack/cli@2.3.0(@rspack/core@2.2.9(@module-federation/runtime-tools@2.9.2)(@swc/helpers@0.5.23))(@rspack/dev-server@2.2.2(@rspack/core@2.2.9(@module-federation/runtime-tools@2.9.2)(@swc/helpers@0.5.23)))':
     dependencies:
       '@rspack/core': 2.3.0(@module-federation/runtime-tools@2.9.2)(@swc/helpers@0.5.23)
     optionalDependencies:
