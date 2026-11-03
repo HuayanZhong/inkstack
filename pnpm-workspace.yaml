@@ -22,7 +22,7 @@ catalogs:
     '@nestjs/schematics': ^12.0.10
     '@nestjs/testing': ^12.2.0
     '@rspack/cli': ^2.2.9
-    '@rspack/core': ^2.2.9
+    '@rspack/core': ^2.3.0
     '@rspack/dev-server': ^2.2.2
     '@rspack/plugin-react-refresh': ^2.0.2
     '@tailwindcss/postcss': ^4.3.3
