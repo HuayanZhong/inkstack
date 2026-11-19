@@ -11,8 +11,8 @@ catalogs:
   toolchain:
     '@fission-ai/openspec': 1.15.0
     oxfmt: 0.75.0
-    oxlint: 1.90.0
-    oxlint-tsgolint: 7.0.2005
+    oxlint: 1.94.0
+    oxlint-tsgolint: 7.0.2007
     typescript: 6.0.3
   # 开发工具与类型包，允许 minor/patch 浮动。
   dev:
